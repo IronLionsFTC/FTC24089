@@ -82,3 +82,6 @@ lint/tmp/
 
 .DS_Store
 /.idea
+
+# Miscellaneous
+Tools/EOCV-Sim-3.5.2-all.jar
