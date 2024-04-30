@@ -1,4 +1,9 @@
 package org.firstinspires.ftc.teamcode.core.state.intake;
 
-public class Objects {
+import org.firstinspires.ftc.teamcode.core.state.RobotState;
+
+public enum Objects {
+    Empty,
+    Intermediate,
+    Full
 }

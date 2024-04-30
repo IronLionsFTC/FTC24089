@@ -12,7 +12,7 @@ public class RobotState {
         public enum Objects {
             Empty,
             Intermediate,
-            Full;
+            Full
         }
 
         static Collection COLLECTION_PRESTART = Collection.Idle;
