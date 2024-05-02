@@ -23,5 +23,7 @@ public class Blinkin {
 
     public void setPattern(RevBlinkinLedDriver.BlinkinPattern _pattern) {
         pattern = _pattern;
+        leftLights.setPattern(pattern);
+        rightLights.setPattern(pattern);
     }
 }
