@@ -9,7 +9,7 @@ public class Blinkin {
     private boolean blinkinTimer = false;
     private int blinkinDelay = 2000;
 
-    private RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_NO_BLENDING;
+    private RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE;
 
     public Blinkin(HardwareMap hardwareMap) {
         leftLights = hardwareMap.get(RevBlinkinLedDriver.class, "leftLights");
@@ -19,5 +19,9 @@ public class Blinkin {
     public void reset(LinearOpMode opmode) {
         blinkinTimer = true;
         opmode.resetRuntime();
+    }
+
+    public void setPattern(RevBlinkinLedDriver.BlinkinPattern _pattern) {
+        pattern = _pattern;
     }
 }
