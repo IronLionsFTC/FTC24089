@@ -21,5 +21,25 @@ public class RobotState {
             Collecting
         }
     }
+
+    public static class Outtake {
+        public Objects objects = OBJECTS_PRESTART;
+        public Extension extension = EXTENSION_PRESTART;
+
+        static Objects OBJECTS_PRESTART = Objects.Empty;
+        public enum Objects {
+            Empty,
+            Intermediate,
+            Full
+        }
+
+        static Extension EXTENSION_PRESTART = Extension.Contracted;
+        public enum Extension {
+            Extending,
+            Extended,
+            Contracting,
+            Contracted
+        }
+    }
 }
 
