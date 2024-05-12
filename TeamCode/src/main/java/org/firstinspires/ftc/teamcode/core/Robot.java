@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 
 public class Robot {    
@@ -20,11 +21,13 @@ public class Robot {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
     public RobotState state = new RobotState();
+    public Blinkin blinkin;
 
     public Robot(HardwareMap h, Telemetry t)
     {
         hardwareMap = h;
         telemetry = t;
+        blinkin = new Blinkin(hardwareMap);
     }
 
     public class Drive {

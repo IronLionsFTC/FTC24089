@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.testing;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.core.Robot;
@@ -21,9 +22,9 @@ public class LightsTest extends LinearOpMode {
         if (isStopRequested()) {return;}
         waitForStart();
 
-        robot
+        robot.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE);
         while (opModeIsActive()) {
-
+            continue;
         }
     }
 }

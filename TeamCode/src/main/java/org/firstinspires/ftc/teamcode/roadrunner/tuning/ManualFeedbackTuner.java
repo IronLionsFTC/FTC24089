@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.TankDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
-import org.firstinspires.ftc.teamcode.roadrunner.TuningOpModes;
+import org.firstinspires.ftc.teamcode.roadrunner.tuning.TuningOpModes;
 import org.firstinspires.ftc.teamcode.roadrunner.TwoDeadWheelLocalizer;
 
 public final class ManualFeedbackTuner extends LinearOpMode {
