@@ -20,8 +20,11 @@ public class FieldCentricDrive_old extends LinearOpMode{
         DcMotorSimple rightFront = hardwareMap.get(DcMotorSimple.class, "rightFront");
         DcMotorSimple rightBack = hardwareMap.get(DcMotorSimple.class, "rightBack");
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+//        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+//        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         Deadline gamepadRateLimit = new Deadline(500, TimeUnit.MILLISECONDS);
 
@@ -35,8 +38,8 @@ public class FieldCentricDrive_old extends LinearOpMode{
         waitForStart();
 
         while (opModeIsActive()) {
-            double lx = gamepad1.left_stick_x;
-            double ly = -gamepad1.left_stick_y; // TODO changed to -ve, change back if needed
+            double lx = -gamepad1.left_stick_x;
+            double ly = gamepad1.left_stick_y; // TODO changed to -ve, change back if needed
             double rx = gamepad1.right_stick_x;
 
             double max = Math.max(Math.abs(lx) + Math.abs(ly) + Math.abs(rx), 1);
