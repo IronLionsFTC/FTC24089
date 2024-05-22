@@ -5,28 +5,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
-import java.util.concurrent.TimeUnit;
+import org.firstinspires.ftc.teamcode.core.Motors;
+
+// FTCLib
 
 @TeleOp
 public class FieldCentricDrive_old extends LinearOpMode{
     @Override
     public void runOpMode() {
-        DcMotorSimple leftFront = hardwareMap.get(DcMotorSimple.class, "leftFront");
-        DcMotorSimple leftBack = hardwareMap.get(DcMotorSimple.class, "leftBack");
-        DcMotorSimple rightFront = hardwareMap.get(DcMotorSimple.class, "rightFront");
-        DcMotorSimple rightBack = hardwareMap.get(DcMotorSimple.class, "rightBack");
+        Motors motors = new Motors(hardwareMap);
 
-//        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-//        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-//        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-//        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        Deadline gamepadRateLimit = new Deadline(500, TimeUnit.MILLISECONDS);
+        Deadline gamepadRateLimit = new Deadline(500, java.util.concurrent.TimeUnit.MILLISECONDS);
 
         IMU imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -55,10 +47,10 @@ public class FieldCentricDrive_old extends LinearOpMode{
             double adjustedLx = -ly * Math.sin(heading) + lx * Math.cos(heading);
             double adjustedLy = ly * Math.cos(heading) + lx * Math.sin(heading);
 
-            leftFront.setPower(((adjustedLy + adjustedLx + rx) / max) * drivePower);
-            leftBack.setPower(((adjustedLy - adjustedLx + rx) / max) * drivePower);
-            rightFront.setPower(((adjustedLy - adjustedLx - rx) / max) * drivePower);
-            rightBack.setPower(((adjustedLy + adjustedLx - rx) / max) * drivePower);
+            motors.leftFront.set(((adjustedLy + adjustedLx + rx) / max) * drivePower);
+            motors.leftBack.set(((adjustedLy - adjustedLx + rx) / max) * drivePower);
+            motors.rightFront.set(((adjustedLy - adjustedLx - rx) / max) * drivePower);
+            motors.rightBack.set(((adjustedLy + adjustedLx - rx) / max) * drivePower);
         }
     }
 }

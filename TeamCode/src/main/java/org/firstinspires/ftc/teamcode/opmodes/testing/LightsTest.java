@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.testing;
 
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.core.Robot;
-import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 
 public class LightsTest extends LinearOpMode {
     Robot robot;
@@ -16,8 +13,8 @@ public class LightsTest extends LinearOpMode {
     public void runOpMode() {
         robot = new Robot(hardwareMap, telemetry);
 
-        robot.drive.motors.init();
-        robot.drive.robotIMU.initIMU();
+        robot.drivetrain.motors.init();
+        robot.drivetrain.robotIMU.initIMU();
 
         if (isStopRequested()) {return;}
         waitForStart();

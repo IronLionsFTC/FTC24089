@@ -8,10 +8,6 @@ public class Vector {
 
     // Constructors
     // Raw constructors
-    public Vector() {
-        x = 0;
-        y = 0;
-    }
     public Vector(double x_, double y_) {
         x = x_;
         y = y_;
@@ -23,12 +19,11 @@ public class Vector {
     }
     // From polar form
     @NonNull
-    public static Vector from_polar_compass(double magnitude, double direction) {
+    public static Vector from_compass(double magnitude, double direction) {
         double des_x = Math.sin(Math.toRadians(direction)) * magnitude;
         double des_y = Math.cos(Math.toRadians(direction)) * magnitude;
         return new Vector(des_x, des_y);
     }
-
 
 
     // Vector interaction
@@ -56,7 +51,7 @@ public class Vector {
 
     // Unit vector
     public Vector as_unit_vec() {
-        return Vector.from_polar_compass(
+        return Vector.from_compass(
                 1,
                 direction()
         );
