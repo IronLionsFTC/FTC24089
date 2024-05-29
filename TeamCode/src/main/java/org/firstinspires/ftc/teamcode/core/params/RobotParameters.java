@@ -14,12 +14,16 @@ public class RobotParameters {
             public static final String leftBack = "leftBack";
             public static final String rightFront = "rightFront";
             public static final String rightBack = "rightBack";
+            public static final String leftIntake = "leftIntake";
+            public static final String rightIntake = "rightIntake";
         }
         public static final class Reversed {
             public static final boolean leftFront = true;
             public static final boolean leftBack = true;
             public static final boolean rightFront = false;
             public static final boolean rightBack = false;
+            public static final boolean leftIntake = true;
+            public static final boolean rightIntake = false;
         }
     }
 
