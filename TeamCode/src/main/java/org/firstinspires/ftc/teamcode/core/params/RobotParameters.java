@@ -23,6 +23,14 @@ public class RobotParameters {
         }
     }
 
+    public static final class Odometry {
+        public static final class HardwareMapNames {
+            public static final String left = RobotParameters.Motors.HardwareMapNames.leftBack;
+            public static final String right = RobotParameters.Motors.HardwareMapNames.rightBack;
+            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightFront;
+        }
+    }
+
     public static final class Movement {
         public static final double strafeCorrection = 1.1;
         public static final double speed = 0.5;

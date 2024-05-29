@@ -13,7 +13,7 @@ public class Motors {
     public Motor rightBack;
 
     public Motors(HardwareMap hardwareMap) {
-        // FTC Lib motor wrappers
+        // FTC Lib motor wrappers1
         leftFront = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftFront);
         leftBack = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftBack);
         rightFront = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightFront);

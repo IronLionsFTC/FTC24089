@@ -55,21 +55,15 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 @Config
 public final class MecanumDrive {
     public static class Params {
-        // IMU orientation
-       public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.DOWN;
-        public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
-
         // drive model parameters
-        public double inPerTick = 2200.0/28280.0; // ~0.0777934936
-        public double lateralInPerTick = 0.059443325596408025;
-        public double trackWidthTicks = 4949.553824065992;
+        public double inPerTick = 0;
+        public double lateralInPerTick = 0;
+        public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.2613417842492365;
-        public double kV = 0.0005518077045636849;
-        public double kA = 0.05;
+        public double kS = 0;
+        public double kV = 0;
+        public double kA = 0;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -130,10 +124,10 @@ public final class MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.leftFront);
+        leftBack = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.leftBack);
+        rightBack = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.rightFront);
+        rightFront = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.rightBack);
 
         leftFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
         leftBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
@@ -146,8 +140,7 @@ public final class MecanumDrive {
         rightFront.setDirection(motorDirectionReversedBool(RobotParameters.Motors.Reversed.rightFront));
         rightBack.setDirection(motorDirectionReversedBool(RobotParameters.Motors.Reversed.rightBack));
 
-        lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
-                PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
+        lazyImu = new LazyImu(hardwareMap, RobotParameters.IMU.hardwareMapName, RobotParameters.IMU.hubOrientation);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
