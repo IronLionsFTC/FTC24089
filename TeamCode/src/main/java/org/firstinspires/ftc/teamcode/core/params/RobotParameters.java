@@ -16,8 +16,8 @@ public class RobotParameters {
             public static final String rightBack = "rightBack";
         }
         public static final class Reversed {
-            public static final boolean leftFront = false;
-            public static final boolean leftBack = false;
+            public static final boolean leftFront = true;
+            public static final boolean leftBack = true;
             public static final boolean rightFront = false;
             public static final boolean rightBack = false;
         }

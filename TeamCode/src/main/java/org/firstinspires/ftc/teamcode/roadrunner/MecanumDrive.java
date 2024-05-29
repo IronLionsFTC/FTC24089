@@ -50,6 +50,7 @@ import java.lang.Math;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 @Config
 public final class MecanumDrive {
@@ -134,13 +135,16 @@ public final class MecanumDrive {
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
+        leftBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
+        rightBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
+        rightFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftFront.setDirection(motorDirectionReversedBool(RobotParameters.Motors.Reversed.leftFront));
+        leftBack.setDirection(motorDirectionReversedBool(RobotParameters.Motors.Reversed.leftBack));
+        rightFront.setDirection(motorDirectionReversedBool(RobotParameters.Motors.Reversed.rightFront));
+        rightBack.setDirection(motorDirectionReversedBool(RobotParameters.Motors.Reversed.rightBack));
 
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
@@ -150,6 +154,10 @@ public final class MecanumDrive {
         localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick);
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
+    }
+
+    private DcMotorSimple.Direction motorDirectionReversedBool(boolean input) {
+        return input ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD;
     }
 
     public void setDrivePowers(PoseVelocity2d powers) {

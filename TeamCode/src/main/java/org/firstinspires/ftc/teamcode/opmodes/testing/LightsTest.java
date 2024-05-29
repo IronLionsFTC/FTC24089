@@ -13,9 +13,6 @@ public class LightsTest extends LinearOpMode {
     public void runOpMode() {
         robot = new Robot(hardwareMap, telemetry);
 
-        robot.drivetrain.motors.init();
-        robot.drivetrain.robotIMU.initIMU();
-
         if (isStopRequested()) {return;}
         waitForStart();
 
