@@ -39,17 +39,15 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         // TODO: make sure your config has **motors** with these names (or change them)
         //   the encoders should be plugged into the slot matching the named motor
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        // Left encoder : port 3 : back left : REVERSE
+        // Left encoder
         par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.left)));
-        par0.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Right : port 0 : back right
+        par0.setDirection(RobotParameters.Odometry.Reversed.left ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
+        // Right encoder
         par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.right)));
-        // Sideways encoder : port 1 : front right : REVERSE
+        par0.setDirection(RobotParameters.Odometry.Reversed.right ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
+        // Sideways encoder
         perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.sideways)));
-        perp.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        // TODO: reverse encoder directions if needed
-        //   par0.setDirection(DcMotorSimple.Direction.REVERSE);
+        perp.setDirection(RobotParameters.Odometry.Reversed.sideways ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE);
 
         this.inPerTick = inPerTick;
 

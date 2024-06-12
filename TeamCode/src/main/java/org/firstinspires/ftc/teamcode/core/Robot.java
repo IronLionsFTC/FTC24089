@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 
 import org.firstinspires.ftc.teamcode.core.params.Controls;
+import org.firstinspires.ftc.teamcode.core.Vector;
 
 public class Robot {
     public HardwareMap hardwareMap;
