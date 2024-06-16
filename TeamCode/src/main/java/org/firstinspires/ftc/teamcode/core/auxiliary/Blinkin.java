@@ -6,10 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Blinkin {
     private RevBlinkinLedDriver leftLights, rightLights;
-    private boolean blinkinTimer = false;
-    private int blinkinDelay = 2000;
-
-    private RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE;
+    private RevBlinkinLedDriver.BlinkinPattern rightPattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+    private RevBlinkinLedDriver.BlinkinPattern leftPattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;
 
     public Blinkin(HardwareMap hardwareMap) {
         leftLights = hardwareMap.get(RevBlinkinLedDriver.class, "leftLights");
@@ -17,13 +15,23 @@ public class Blinkin {
     }
 
     public void reset(LinearOpMode opmode) {
-        blinkinTimer = true;
         opmode.resetRuntime();
     }
 
     public void setPattern(RevBlinkinLedDriver.BlinkinPattern _pattern) {
-        pattern = _pattern;
-        leftLights.setPattern(pattern);
-        rightLights.setPattern(pattern);
+        leftPattern = _pattern;
+        rightPattern = _pattern;
+        leftLights.setPattern(leftPattern);
+        rightLights.setPattern(rightPattern);
+    }
+
+    public void setRightLights(RevBlinkinLedDriver.BlinkinPattern _pattern) {
+        rightPattern = _pattern;
+        rightLights.setPattern(rightPattern);
+    }
+
+    public void setLeftLights(RevBlinkinLedDriver.BlinkinPattern _pattern) {
+        leftPattern = _pattern;
+        leftLights.setPattern(leftPattern);
     }
 }
