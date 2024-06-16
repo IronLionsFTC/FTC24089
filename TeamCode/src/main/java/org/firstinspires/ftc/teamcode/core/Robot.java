@@ -1,22 +1,19 @@
 package org.firstinspires.ftc.teamcode.core;
-
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-
 import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
-
 import org.firstinspires.ftc.teamcode.core.params.Controls;
-import org.firstinspires.ftc.teamcode.core.Vector;
+import org.firstinspires.ftc.teamcode.core.Vec2;
 
 public class Robot {
     public HardwareMap hardwareMap;
@@ -24,7 +21,7 @@ public class Robot {
 
     public RobotState state;
     public Controller controller;
-    public Blinkin blinkin;
+    public static Blinkin blinkin;
 
     public Drivetrain drivetrain;
     public RobotIMU imu;
@@ -43,62 +40,66 @@ public class Robot {
 
     public class Drivetrain {
         public Motors motors;
-        public DesiredMovements desiredMovements;
+        public MotorPowers MotorPowers;
 
         public Drivetrain(HardwareMap hardwareMap) {
             motors = new Motors(hardwareMap);
             imu = new RobotIMU(hardwareMap);
-            desiredMovements = new DesiredMovements();
+            MotorPowers = new MotorPowers();
         }
 
-        public class DesiredMovements {
+        public class MotorPowers {
             public double leftFront = 0.0;
             public double leftBack = 0.0;
             public double rightFront = 0.0;
             public double rightBack = 0.0;
+            public double leftIntake = 0.0;
+            public double rightIntake = 0.0;
         }
 
-        public void setAllPower(double power) {
-            desiredMovements.leftFront = power;
-            desiredMovements.leftBack = power;
-            desiredMovements.rightFront = power;
-            desiredMovements.rightBack = power;
+        // When power > 0, robot moves right & forward.
+        private void addFlBrDiagonal(double power) {
+            MotorPowers.leftFront += power;
+            MotorPowers.rightBack += power;
+        }
+        // When power > 9, robot moves left & backward.
+        private void addFrBlDiagonal(double power) {
+            MotorPowers.rightFront += power;
+            MotorPowers.leftBack += power;
         }
 
-        public void addFlBrDiagonal(double power) {
-            desiredMovements.leftFront += power;
-            desiredMovements.rightBack += power;
-        }
-        public void addFrBlDiagonal(double power) {
-            desiredMovements.rightFront += power;
-            desiredMovements.leftBack += power;
+        private void componentDrive(double forwardPower, double rightPower) {
+            Vec2 powerVec2 = new Vec2();
+            double r = imu.yawCorrection();
+            double movementMultiplier = 1.0;
+            double denominator = Math.abs(forwardPower) + Math.abs(rightPower);
+            powerVec2.fromComponent(rightPower, forwardPower);
+            MotorPowers.leftFront = ((rightPower * -1 + forwardPower) * movementMultiplier + r);
+            MotorPowers.rightFront = ((rightPower * -1 - forwardPower) * movementMultiplier - r);
+            MotorPowers.leftBack = ((rightPower * -1 - forwardPower) * movementMultiplier + r);
+            MotorPowers.rightBack = ((rightPower *-1 + forwardPower) * movementMultiplier - r);
         }
 
-        // TODO: check later
-        public void driveInDirection(double degrees, double power) {
-            degrees -= imu.getYawDegrees();
-            Vector driveVector;
-            if (degrees < -180) {
-                degrees += 360;
-            }
-            if (degrees > 180) {
-                degrees -= 360;
-            }
-            driveVector = Vector.from_compass(power, degrees);
-            // ^^ gives the vector in which we need to drive
-            setAllPower(driveVector.y);
-
-            addFrBlDiagonal(driveVector.x * -1);
-            addFlBrDiagonal(driveVector.x);
-            setMotorPowers();
+        private void driveInDirection(double direction, double power, boolean fieldCentric) {
+            double degrees = direction - 90;
+            if (fieldCentric) { degrees -= imu.getYawDegrees(); }
+            if (degrees > 180.0) { degrees -= 360.0; }
+            if (degrees <-180.0) { degrees += 360.0; }
+            Vec2 driveVector = new Vec2();
+            driveVector.fromPolar(power, degrees);
+            componentDrive(driveVector.y, driveVector.x);
         }
 
         public void stopMotors() {
-            setAllPower(0.0);
+            MotorPowers.leftFront = 0.0;
+            MotorPowers.leftBack = 0.0;
+            MotorPowers.rightBack = 0.0;
+            MotorPowers.rightFront = 0.0;
+            setMotorPowers();
         }
 
         // TODO: check later
-        public void calculateMovementTele(GamepadEx gamepad) {
+        public void calculateMovement(GamepadEx gamepad) {
             double mx = controller.movement_x(gamepad);
             double my = controller.movement_y(gamepad);
             double controllerR = controller.rotation(gamepad);
@@ -111,33 +112,32 @@ public class Robot {
                 imu.targetYaw -= 360;
             }
 
-            double r = imu.calculateRotationPower();
-
-            desiredMovements.leftFront = my + mx + r;//((mx + my) * movementMultiplier + r) / denominator;
-            desiredMovements.rightFront = my - mx - r;//((mx - my) * movementMultiplier - r) / denominator;
-            desiredMovements.leftBack = my - mx + r;//((mx - my) * movementMultiplier + r) / denominator;
-            desiredMovements.rightBack = my + mx - r;//((mx + my) * movementMultiplier - r) / denominator;
-
-            // Driver movement override
             if (Controls.driverOverride.isPressed(gamepad)) {
                 return;
             }
 
-            Vector controllerVector = Vector.from_components(mx, my);
-            telemetry.addData("CONTROLLER VECTOR", controllerVector.direction());
-            telemetry.update();
-            driveInDirection(controllerVector.direction(), RobotParameters.Movement.speed);
+            Vec2 controllerVec2 = new Vec2();
+            controllerVec2.fromComponent(mx, my);
+            MotorPowers.leftIntake = controller.right_trigger(gamepad);
+            MotorPowers.rightIntake = controller.right_trigger(gamepad);
+            driveInDirection(
+                    controllerVec2.direction,
+                    RobotParameters.Movement.speed * controllerVec2.magnitude,
+                    false);//Controls.Button.A.isPressed(gamepad));
+            //componentDrive(mx * 0.7, my * 0.7);
         }
 
         public void setMotorPowers() {
-            motors.leftFront.set(desiredMovements.leftFront);
-            motors.rightFront.set(desiredMovements.rightFront);
-            motors.leftBack.set(desiredMovements.leftBack);
-            motors.rightBack.set(desiredMovements.rightBack);
+            motors.leftFront.set(MotorPowers.leftFront);
+            motors.rightFront.set(MotorPowers.rightFront);
+            motors.leftBack.set(MotorPowers.leftBack);
+            motors.rightBack.set(MotorPowers.rightBack);
+            motors.leftIntake.set(MotorPowers.leftIntake);
+            motors.rightIntake.set(MotorPowers.rightIntake);
         }
 
-        public void moveTele(GamepadEx gamepad) {
-            calculateMovementTele(gamepad);
+        public void drive(GamepadEx gamepad) {
+            calculateMovement(gamepad);
             setMotorPowers();
         }
     }
@@ -171,42 +171,33 @@ public class Robot {
 
         public double calculate_PID(double kP, double kD, double currentError, double lastError) {
             // Do not change this.
-            return ((currentError * kP) + (kD * (currentError - lastError))) * -0.1;
+            return ((currentError * kP) + (kD * (currentError - lastError))) * -1;
         }
 
-        // TODO: check later
-        public double calculateRotationPower(double threshold) {
-            double currentRotation = getYawDegrees();
-            double error = targetYaw - currentRotation;
+        public double yawCorrection() {
+            double rawError = targetYaw - getYawDegrees();
+            if (rawError <= -180.0) { rawError += 360.0; }
+            if (rawError > 180.0) { rawError -= 360.0; }
 
-            if (Math.abs(error) > 180.0) {
-                if (currentRotation > 0 && targetYaw < 0) {
-                    error = (180 - currentRotation) + (180 + targetYaw);
-                } else if (currentRotation < 0 && targetYaw > 0) {
-                    error = (-180 - currentRotation) + (targetYaw - 180);
+            if (Math.abs(rawError) > RobotParameters.IMU.PIDcorrectionThreshold) {
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                // Now calculate PID.
+                double response = calculate_PID(0.75, 0.35, rawError, lastError) / 30;
+                lastError = rawError;
+                if (response > 1.0) { response = 1.0; }
+                if (response <-1.0) { response =-1.0; }
+                if (response > -0.1 && response < 0.0) {
+                    response = -0.1;
                 }
+                if (response < 0.1 && response > 0.0) {
+                    response = 0.1;
+                }
+                return response * RobotParameters.IMU.correctionMultiplier;
             }
-
-            double correction = 0;
-            if (Math.abs(error) > threshold) {
-                correction = calculate_PID(0.5, 0.5, error, lastError);
+            else {
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                return 0.0;
             }
-            correction *= RobotParameters.IMU.correctionMultiplier;
-            if (correction < -1) {
-                correction = -1;
-            }
-            if (correction > 1) {
-                correction = 1;
-            }
-
-            lastError = error;
-
-            double mt = RobotParameters.IMU.rotationMinimumThreshold;
-            return (correction > -mt && correction < mt) ? 0.0 // Handle division by zero
-                    : (correction + (Math.abs(correction) / correction) * 0.02) * RobotParameters.IMU.rotationSpeedMultiplier;
-        }
-        public double calculateRotationPower() {
-            return calculateRotationPower(RobotParameters.IMU.PIDcorrectionThreshold);
         }
     }
 }
