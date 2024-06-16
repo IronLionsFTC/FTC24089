@@ -118,9 +118,8 @@ public class Robot {
 
             Vec2 controllerVec2 = new Vec2();
             controllerVec2.fromComponent(mx, my);
-            telemetry.addData("STICK ROTATION", controllerVec2.direction);
-            MotorPowers.leftIntake = controller.r_trigger();
-            MotorPowers.rightIntake = controller.r_trigger();
+            MotorPowers.leftIntake = controller.right_trigger(gamepad);
+            MotorPowers.rightIntake = controller.right_trigger(gamepad);
             driveInDirection(
                     controllerVec2.direction,
                     RobotParameters.Movement.speed * controllerVec2.magnitude,
