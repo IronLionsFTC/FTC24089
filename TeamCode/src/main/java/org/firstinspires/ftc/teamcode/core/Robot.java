@@ -178,9 +178,19 @@ public class Robot {
             double rawError = targetYaw - getYawDegrees();
             if (rawError <= -180.0) { rawError += 360.0; }
             if (rawError > 180.0) { rawError -= 360.0; }
-
+            if (rawError >= RobotParameters.IMU.PIDcorrectionThreshold) {
+                blinkin.setRightLights(RevBlinkinLedDriver.BlinkinPattern.RED);
+                blinkin.setLeftLights(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            }
+            else if (rawError <= -RobotParameters.IMU.PIDcorrectionThreshold) {
+                blinkin.setRightLights(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                blinkin.setLeftLights(RevBlinkinLedDriver.BlinkinPattern.RED);
+            }
+            else {
+                blinkin.setRightLights(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                blinkin.setLeftLights(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            }
             if (Math.abs(rawError) > RobotParameters.IMU.PIDcorrectionThreshold) {
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 // Now calculate PID.
                 double response = calculate_PID(0.75, 0.35, rawError, lastError) / 30;
                 lastError = rawError;
@@ -195,7 +205,6 @@ public class Robot {
                 return response * RobotParameters.IMU.correctionMultiplier;
             }
             else {
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 return 0.0;
             }
         }
