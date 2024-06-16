@@ -3,42 +3,47 @@ package org.firstinspires.ftc.teamcode.core.state;
 
 public class RobotState {
     public Intake intake = new Intake();
+    public Outtake outtake = new Outtake();
 
     public static class Intake {
-        public Objects objects = OBJECTS_PRESTART;
-        public Collection collection = COLLECTION_PRESTART;
+        public Objects objects = Objects.DEFAULT;
+        public Collection collection = Collection.DEFAULT;
 
-        static Objects OBJECTS_PRESTART = Objects.Empty;
         public enum Objects {
             Empty,
             Intermediate,
-            Full
+            Full;
+
+            public static final Objects DEFAULT = Empty;
         }
 
-        static Collection COLLECTION_PRESTART = Collection.Idle;
         public enum Collection {
             Idle,
-            Collecting
+            Collecting;
+
+            public static final Collection DEFAULT = Idle;
         }
     }
 
     public static class Outtake {
-        public Objects objects = OBJECTS_PRESTART;
-        public Extension extension = EXTENSION_PRESTART;
+        public Objects objects = Objects.DEFAULT;
+        public Extension extension = Extension.DEFAULT;
 
-        static Objects OBJECTS_PRESTART = Objects.Empty;
         public enum Objects {
             Empty,
             Intermediate,
-            Full
+            Full;
+
+            public static final Objects DEFAULT = Empty;
         }
 
-        static Extension EXTENSION_PRESTART = Extension.Contracted;
         public enum Extension {
             Extending,
             Extended,
             Contracting,
-            Contracted
+            Contracted;
+
+            public static final Extension DEFAULT = Contracted;
         }
     }
 }
