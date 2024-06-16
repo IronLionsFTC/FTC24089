@@ -40,6 +40,17 @@ public final class Controls {
             return gamepad.getButton(button);
         }
     }
+    public static enum Trigger {
+        RT(GamepadKeys.Trigger.RIGHT_TRIGGER),
+        LT(GamepadKeys.Trigger.LEFT_TRIGGER);
+
+        private final GamepadKeys.Trigger trigger;
+
+        Trigger(GamepadKeys.Trigger t) { trigger = t; }
+
+        public double getValue(GamepadEx gamepad) { return gamepad.getTrigger(trigger); }
+        public boolean isPressed(GamepadEx gamepad) { return gamepad.getTrigger(trigger) > 0.75; }
+    }
 
     // Movement
     public static final JoystickAxis movementX = JoystickAxis.LX;

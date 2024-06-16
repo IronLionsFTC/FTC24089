@@ -29,7 +29,7 @@ public class RobotParameters {
 
     public static final class Movement {
         public static final double strafeCorrection = 1.1;
-        public static final double speed = 0.5;
+        public static final double speed = 1.0;
     }
 
     public static final class IMU {
@@ -39,10 +39,8 @@ public class RobotParameters {
         );
 
         public static final String hardwareMapName = "imu";
-
-        public static final double PIDcorrectionThreshold = 5.0;
+        public static final double PIDcorrectionThreshold = 3.0;
         public static final double correctionMultiplier = 1.0;
-        public static final double rotationSpeedMultiplier = 1.0;
-        public static final double rotationMinimumThreshold = 0.01;
+        public static final double rotationMinimumThreshold = 0.0;
     }
 }
