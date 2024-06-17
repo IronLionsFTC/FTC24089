@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.params.Controls;
 import org.firstinspires.ftc.teamcode.core.Vec2;
+import org.firstinspires.ftc.teamcode.core.Sensors;
 
 public class Robot {
     public HardwareMap hardwareMap;
@@ -25,6 +26,7 @@ public class Robot {
 
     public Drivetrain drivetrain;
     public RobotIMU imu;
+    public Sensors sensors;
 
     public Robot(HardwareMap h, Telemetry t) {
         hardwareMap = h;
@@ -36,6 +38,7 @@ public class Robot {
 
         drivetrain = new Drivetrain(hardwareMap);
         imu = new RobotIMU(hardwareMap);
+        sensors = new Sensors(hardwareMap);
     }
 
     public class Drivetrain {
@@ -100,6 +103,9 @@ public class Robot {
 
         // TODO: check later
         public void calculateMovement(GamepadEx gamepad) {
+
+            telemetry.addData("TouchState", sensors.testTouchSensor.isPressed());
+
             double mx = controller.movement_x(gamepad);
             double my = controller.movement_y(gamepad);
             double controllerR = controller.rotation(gamepad);
