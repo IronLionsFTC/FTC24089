@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.core.state;
 public class RobotState {
     public Intake intake = new Intake();
     public Outtake outtake = new Outtake();
+    public Drive drive = new Drive();
 
     public static class Intake {
         public Objects objects = Objects.DEFAULT;
@@ -45,6 +46,25 @@ public class RobotState {
 
             public static final Extension DEFAULT = Contracted;
         }
+    }
+
+    public static class Drive {
+        public Movement movement = Movement.DEFAULT;
+
+        public enum Movement {
+            Driving,
+            Stationary;
+
+            public static final Movement DEFAULT = Stationary;
+        }
+    }
+
+    public enum Stage {
+        TeleOp,
+        Autonomous,
+        None;
+
+        public static final Stage DEFAULT = None;
     }
 }
 
