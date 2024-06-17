@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.core;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -57,22 +56,11 @@ public class Robot {
             public double rightIntake = 0.0;
         }
 
-        // When power > 0, robot moves right & forward.
-        private void addFlBrDiagonal(double power) {
-            MotorPowers.leftFront += power;
-            MotorPowers.rightBack += power;
-        }
-        // When power > 9, robot moves left & backward.
-        private void addFrBlDiagonal(double power) {
-            MotorPowers.rightFront += power;
-            MotorPowers.leftBack += power;
-        }
-
         private void componentDrive(double forwardPower, double rightPower) {
             Vec2 powerVec2 = new Vec2();
             double r = imu.yawCorrection();
             double movementMultiplier = 1.0;
-            double denominator = Math.abs(forwardPower) + Math.abs(rightPower);
+//            double denominator = Math.abs(forwardPower) + Math.abs(rightPower);
             powerVec2.fromComponent(rightPower, forwardPower);
             MotorPowers.leftFront = ((rightPower * -1 + forwardPower) * movementMultiplier + r);
             MotorPowers.rightFront = ((rightPower * -1 - forwardPower) * movementMultiplier - r);
