@@ -64,7 +64,7 @@ public class RobotState {
         Autonomous,
         None;
 
-        public static final Stage DEFAULT = None;
+        public static final Stage DEFAULT = None; 
     }
 }
 
