@@ -56,13 +56,13 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 public final class MecanumDrive {
     public static class Params {
         // drive model parameters
-        public double inPerTick = 0;
+        public double inPerTick = (2500 / 25.4) /* (mm / inches_ratio)*/ / 33575.0 /* Ticks travelled */;
         public double lateralInPerTick = 0;
         public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
+        public double kS = 1.1698591050805778;
+        public double kV = 0.0005461564449037772;
         public double kA = 0;
 
         // path profile parameters (in inches)
@@ -126,8 +126,8 @@ public final class MecanumDrive {
 
         leftFront = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.leftFront);
         leftBack = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.leftBack);
-        rightBack = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.rightFront);
-        rightFront = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.rightBack);
+        rightBack = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.rightBack);
+        rightFront = hardwareMap.get(DcMotorEx.class, RobotParameters.Motors.HardwareMapNames.rightFront);
 
         leftFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
         leftBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour.getBehavior());
