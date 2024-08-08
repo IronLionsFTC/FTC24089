@@ -38,12 +38,12 @@ public class RobotParameters {
         public static final class HardwareMapNames {
             public static final String left = RobotParameters.Motors.HardwareMapNames.leftFront;
             public static final String right = RobotParameters.Motors.HardwareMapNames.leftBack;
-            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightFront;
+            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightBack;
         }
         public static final class Reversed {
             public static final boolean left = true;
             public static final boolean right = false;
-            public static final boolean sideways = true;
+            public static final boolean sideways = false;
         }
     }
 
