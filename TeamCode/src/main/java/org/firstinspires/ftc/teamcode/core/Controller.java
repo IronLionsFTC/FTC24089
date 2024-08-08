@@ -1,39 +1,63 @@
-package org.firstinspires.ftc.teamcode.core;
-
+package org.firstinspires.ftc.teamcode.core.params;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.core.params.Controls;
-import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+public final class Controls {
+    public static enum JoystickAxis {
+        LX,
+        LY,
+        RX,
+        RY;
 
-public class Controller {
-    public static class StickInputsRaw {
-        public static double LX(GamepadEx gamepad) {
-            return gamepad.getLeftX();
+        public double get(GamepadEx gamepad) {
+            switch (this) {
+                case LX:
+                    return gamepad.getLeftX();
+                case LY:
+                    return -gamepad.getLeftY();
+                case RX:
+                    return gamepad.getRightX();
+                case RY:
+                    return -gamepad.getRightY();
+            }
+            return 0.0;
         }
-        public static double LY(GamepadEx gamepad) {
-            return gamepad.getLeftY();
+    }
+    public static enum Button {
+        A(GamepadKeys.Button.A),
+        B(GamepadKeys.Button.B),
+        X(GamepadKeys.Button.X),
+        Y(GamepadKeys.Button.Y);
+
+        private final GamepadKeys.Button button;
+
+        Button(GamepadKeys.Button b) {
+            button = b;
         }
-        public static double RX(GamepadEx gamepad) {
-            return gamepad.getRightX();
+
+        public boolean isPressed(GamepadEx gamepad) {
+            return gamepad.getButton(button);
         }
-        public static double RY(GamepadEx gamepad) {
-            return gamepad.getRightY();
-        }
-        public static double LT(GamepadEx gamepad) { return gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER); }
-        public static double RT(GamepadEx gamepad) { return gamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER); }
+    }
+    public static enum Trigger {
+        RT(GamepadKeys.Trigger.RIGHT_TRIGGER),
+        LT(GamepadKeys.Trigger.LEFT_TRIGGER);
+
+        private final GamepadKeys.Trigger trigger;
+
+        Trigger(GamepadKeys.Trigger t) { trigger = t; }
+
+        public double getValue(GamepadEx gamepad) { return gamepad.getTrigger(trigger); }
+        public boolean isPressed(GamepadEx gamepad) { return gamepad.getTrigger(trigger) > 0.75; }
     }
 
-    public double right_trigger(GamepadEx gamepad) { return Controls.Trigger.RT.getValue(gamepad);}
-    public double left_trigger(GamepadEx gamepad) { return Controls.Trigger.LT.getValue(gamepad); }
-    public double movement_x(GamepadEx gamepad) {
-        return Controls.movementX.get(gamepad);
-    }
-    public double movement_y(GamepadEx gamepad) {
-        return Controls.movementY.get(gamepad);
-    }
-    public double rotation(GamepadEx gamepad) {
-        return Controls.rotationAxis.get(gamepad);
-    }
+    // Movement
+    public static final JoystickAxis movementX = JoystickAxis.LX;
+    public static final JoystickAxis movementY = JoystickAxis.LY;
+    // Rotation
+    public static final JoystickAxis rotationAxis = JoystickAxis.RX;
+    // Yaw correction
+    public static final Button resetYaw = Button.A;
+    public static final Button driverOverride = Button.B;
 }
