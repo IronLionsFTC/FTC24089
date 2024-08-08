@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.core;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.params.Controls;
 import org.firstinspires.ftc.teamcode.core.Vec2;
 import org.firstinspires.ftc.teamcode.core.Sensors;
+import org.firstinspires.ftc.teamcode.core.state.Servos;
 
 public class Robot {
     public HardwareMap hardwareMap;
@@ -26,6 +29,7 @@ public class Robot {
     public Drivetrain drivetrain;
     public RobotIMU imu;
     public Sensors sensors;
+    public States states;
 
     public Robot(HardwareMap h, Telemetry t) {
         hardwareMap = h;
@@ -38,16 +42,34 @@ public class Robot {
         drivetrain = new Drivetrain(hardwareMap);
         imu = new RobotIMU(hardwareMap);
         sensors = new Sensors(hardwareMap);
+        states = new States();
+    }
+
+    public class States{
+        public class InTake {
+            public boolean isRaised = false;
+        }
+        public class OutTake {
+            public boolean isRaised = false;
+        }
     }
 
     public class Drivetrain {
         public Motors motors;
+        public Servos servos;
         public MotorPowers MotorPowers;
+        public ServoPositions ServoPositions;
+        public PairPositions PairPositions;
 
         public Drivetrain(HardwareMap hardwareMap) {
             motors = new Motors(hardwareMap);
+            servos = new Servos(hardwareMap);
             imu = new RobotIMU(hardwareMap);
             MotorPowers = new MotorPowers();
+            ServoPositions = new ServoPositions();
+            PairPositions = new PairPositions();
+            motors.rightSlide.resetEncoder();
+            motors.leftSlide.resetEncoder();
         }
 
         public class MotorPowers {
@@ -57,6 +79,23 @@ public class Robot {
             public double rightBack = 0.0;
             public double leftIntake = 0.0;
             public double rightIntake = 0.0;
+            public double leftSlide = 0.0;
+            public double rightSlide = 0.0;
+        }
+
+        public class PairPositions {
+            public double outTake = 0.0;
+            public double outTakeLastError = 0.0;
+        }
+
+        public class ServoPositions {
+            public double rightIntakeServo = 0.0;
+            public double leftIntakeServo =  0.0;
+        }
+
+        public void setIntakeServos(double degreesUp) {
+            ServoPositions.rightIntakeServo = -degreesUp;
+            ServoPositions.leftIntakeServo  =  degreesUp;
         }
 
         private void componentDrive(double forwardPower, double rightPower) {
@@ -66,9 +105,9 @@ public class Robot {
 //            double denominator = Math.abs(forwardPower) + Math.abs(rightPower);
             powerVec2.fromComponent(rightPower, forwardPower);
             MotorPowers.leftFront = ((rightPower * -1 + forwardPower) * movementMultiplier + r);
-            MotorPowers.rightFront = ((rightPower * -1 - forwardPower) * movementMultiplier - r);
-            MotorPowers.leftBack = ((rightPower * -1 - forwardPower) * movementMultiplier + r);
-            MotorPowers.rightBack = ((rightPower *-1 + forwardPower) * movementMultiplier - r);
+            MotorPowers.rightFront = ((rightPower + forwardPower) * movementMultiplier - r);
+            MotorPowers.leftBack = ((rightPower + forwardPower) * movementMultiplier + r);
+            MotorPowers.rightBack = ((rightPower * -1 + forwardPower) * movementMultiplier - r);
         }
 
         private void driveInDirection(double direction, double power, boolean fieldCentric) {
@@ -89,16 +128,31 @@ public class Robot {
             setMotorPowers();
         }
 
+        public void movePairs() {
+            // 0.0 <= TargetDegrees <= 1.0
+            double targetDegrees = PairPositions.outTake * RobotParameters.maxOutTakeEncoder;
+            double currentDegrees = (motors.leftSlide.getCurrentPosition() + motors.rightSlide.getCurrentPosition()) * 0.5;
+            double error = targetDegrees - currentDegrees;
+            // If for whatever reason the slides can't go all the way down
+            // then ensure they aren't pulling fruitlessly.
+            if (error < -10 || error > 0) {
+                double response = imu.calculate_PID(0.75, 0.35, error, PairPositions.outTakeLastError);
+                // If not moving down, add the feed-forward to hold weight.
+                if (targetDegrees < 10.0 && response > -0.1) {
+                    response += RobotParameters.slideWeightCompensation;
+                }
+                MotorPowers.rightSlide = response;
+                MotorPowers.leftSlide = response;
+            }
+        }
+
         // TODO: check later
         public void calculateMovement(GamepadEx gamepad) {
-
-            telemetry.addData("TouchState", sensors.testTouchSensor.isPressed());
-
             double mx = controller.movement_x(gamepad);
             double my = controller.movement_y(gamepad);
             double controllerR = controller.rotation(gamepad);
 
-            imu.targetYaw -= controllerR * 2.0; // Assuming -1 -> 1
+            //imu.targetYaw -= controllerR * 2.0; // Assuming -1 -> 1
             if (imu.targetYaw < -180) {
                 imu.targetYaw += 360;
             }
@@ -110,15 +164,14 @@ public class Robot {
                 return;
             }
 
-            Vec2 controllerVec2 = new Vec2();
-            controllerVec2.fromComponent(mx, my);
-            MotorPowers.leftIntake = controller.right_trigger(gamepad);
-            MotorPowers.rightIntake = controller.right_trigger(gamepad);
-            driveInDirection(
-                    controllerVec2.direction,
-                    RobotParameters.Movement.speed * controllerVec2.magnitude,
-                    false);//Controls.Button.A.isPressed(gamepad));
-            //componentDrive(mx * 0.7, my * 0.7);
+            double intakePower = 0.0;
+            if (gamepad.getButton(GamepadKeys.Button.X)) {
+                intakePower = 1.0;
+            }
+            setIntakeServos(controller.rotation(gamepad) * 30);
+            MotorPowers.leftIntake = intakePower;
+            MotorPowers.rightIntake = intakePower;
+            componentDrive(my * 0.7, mx * 0.7);
         }
 
         public void setMotorPowers() {
@@ -128,10 +181,18 @@ public class Robot {
             motors.rightBack.set(MotorPowers.rightBack);
             motors.leftIntake.set(MotorPowers.leftIntake);
             motors.rightIntake.set(MotorPowers.rightIntake);
+            motors.leftSlide.set(MotorPowers.leftSlide);
+            motors.rightSlide.set(MotorPowers.rightSlide);
+        }
+
+        public void setServoPositions() {
+            servos.rightIntakeServo.set(ServoPositions.rightIntakeServo);
+            servos.leftIntakeServo.set(ServoPositions.leftIntakeServo);
         }
 
         public void drive(GamepadEx gamepad) {
             calculateMovement(gamepad);
+            setServoPositions();
             setMotorPowers();
         }
     }
