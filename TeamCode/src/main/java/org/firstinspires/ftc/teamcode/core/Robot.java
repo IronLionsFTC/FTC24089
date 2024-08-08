@@ -152,7 +152,7 @@ public class Robot {
             double my = controller.movement_y(gamepad);
             double controllerR = controller.rotation(gamepad);
 
-            //imu.targetYaw -= controllerR * 2.0; // Assuming -1 -> 1
+            imu.targetYaw -= controllerR * 2.0; // Assuming -1 -> 1
             if (imu.targetYaw < -180) {
                 imu.targetYaw += 360;
             }
@@ -168,7 +168,7 @@ public class Robot {
             if (gamepad.getButton(GamepadKeys.Button.X)) {
                 intakePower = 1.0;
             }
-            setIntakeServos(controller.rotation(gamepad) * 30);
+            setIntakeServos(controller.left_trigger(gamepad) * 30);
             MotorPowers.leftIntake = intakePower;
             MotorPowers.rightIntake = intakePower;
             componentDrive(my * 0.7, mx * 0.7);
