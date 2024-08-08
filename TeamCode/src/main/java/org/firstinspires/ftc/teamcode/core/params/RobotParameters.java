@@ -5,7 +5,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
 public class RobotParameters {
     private RobotParameters(){} // Hide the constructor
-
+    public static final double maxOutTakeEncoder = 500.0;     // Degrees of movement which fully extends slides.
+    public static final double slideWeightCompensation = 0.1; // Do not go above ~0.5.
     public static final class Motors {
         public static final Motor.ZeroPowerBehavior zeroPowerBehaviour = Motor.ZeroPowerBehavior.BRAKE;
 
@@ -16,14 +17,20 @@ public class RobotParameters {
             public static final String rightBack = "rightBack";
             public static final String leftIntake = "leftIntake";
             public static final String rightIntake = "rightIntake";
+            public static final String leftSlide = "leftSlide";
+            public static final String rightSlide = "rightSlide";
+            public static final String leftIntakeServo = "leftIntakeServo";
+            public static final String rightIntakeServo = "rightIntakeServo";
         }
         public static final class Reversed {
-            public static final boolean leftFront = true;
+            public static final boolean leftFront = false;
             public static final boolean leftBack = true;
-            public static final boolean rightFront = false;
+            public static final boolean rightFront = true;
             public static final boolean rightBack = false;
             public static final boolean leftIntake = true;
             public static final boolean rightIntake = false;
+            public static final boolean leftSlide = true;
+            public static final boolean rightSlide = false;
         }
     }
 
