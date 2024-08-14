@@ -136,13 +136,17 @@ public class Robot {
             // If for whatever reason the slides can't go all the way down
             // then ensure they aren't pulling fruitlessly.
             if (error < -10 || error > 0) {
-                double response = imu.calculate_PID(0.75, 0.35, error, PairPositions.outTakeLastError);
+                double response = imu.calculate_PID(0.45, 0.25, error, PairPositions.outTakeLastError);
                 // If not moving down, add the feed-forward to hold weight.
-                if (targetDegrees < 10.0 && response > -0.1) {
+                if (targetDegrees > 10.0 && response > -0.1) {
                     response += RobotParameters.slideWeightCompensation;
                 }
-                MotorPowers.rightSlide = response;
-                MotorPowers.leftSlide = response;
+                MotorPowers.rightSlide = response * 0.5;
+                MotorPowers.leftSlide = response * 0.5;
+            }
+            if (error < 0 && currentDegrees < 60) {
+                MotorPowers.rightSlide = 0.0;
+                MotorPowers.leftSlide = 0.0;
             }
         }
 
@@ -150,9 +154,11 @@ public class Robot {
         public void calculateMovement(GamepadEx gamepad) {
             double mx = controller.movement_x(gamepad);
             double my = controller.movement_y(gamepad);
-            double controllerR = controller.rotation(gamepad);
+            double controllerR = controller.yawRotation(gamepad);
+            double controllerR2 = controller.pitchRotation(gamepad);
 
             imu.targetYaw -= controllerR * 2.0; // Assuming -1 -> 1
+
             if (imu.targetYaw < -180) {
                 imu.targetYaw += 360;
             }
@@ -168,7 +174,13 @@ public class Robot {
             if (gamepad.getButton(GamepadKeys.Button.X)) {
                 intakePower = 1.0;
             }
-            setIntakeServos(controller.left_trigger(gamepad) * 30);
+            if (gamepad.getButton(GamepadKeys.Button.Y)) {
+                PairPositions.outTake = 200.0;
+            } else {
+                PairPositions.outTake = 0.0;
+            }
+            controller.updateKeyTracker(gamepad);
+            setIntakeServos(controllerR2 * 20);
             MotorPowers.leftIntake = intakePower;
             MotorPowers.rightIntake = intakePower;
             componentDrive(my * 0.7, mx * 0.7);
@@ -193,6 +205,7 @@ public class Robot {
         public void drive(GamepadEx gamepad) {
             calculateMovement(gamepad);
             setServoPositions();
+            movePairs();
             setMotorPowers();
         }
     }
@@ -257,7 +270,7 @@ public class Robot {
                 if (response < 0.1 && response > 0.0) {
                     response = 0.1;
                 }
-                return response * RobotParameters.IMU.correctionMultiplier;
+                return response * RobotParameters.IMU.correctionMultiplier * -1.0;
             }
             else {
                 return 0.0;

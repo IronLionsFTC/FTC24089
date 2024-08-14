@@ -56,7 +56,8 @@ public final class Controls {
     public static final JoystickAxis movementX = JoystickAxis.LX;
     public static final JoystickAxis movementY = JoystickAxis.LY;
     // Rotation
-    public static final JoystickAxis rotationAxis = JoystickAxis.RX;
+    public static final JoystickAxis rotationPitchAxis = JoystickAxis.RX;
+    public static final JoystickAxis rotationYawAxis = JoystickAxis.RY;
     // Yaw correction
     public static final Button resetYaw = Button.A;
     public static final Button driverOverride = Button.B;
