@@ -145,16 +145,15 @@ public class Robot {
             double error = targetDegrees - currentDegrees;
             // If for whatever reason the slides can't go all the way down
             // then ensure they aren't pulling fruitlessly.
-            if (error < -10 || error > 0) {
-                double response = imu.calculate_PID(0.45, 0.25, error, PairPositions.outTakeLastError);
+            if (currentDegrees > 20 || error > 0) {
+                double response = imu.calculate_PID(0.65, 0.25, error, PairPositions.outTakeLastError);
                 // If not moving down, add the feed-forward to hold weight.
                 if (targetDegrees > 10.0 && response > -0.1) {
                     response += RobotParameters.slideWeightCompensation;
                 }
                 MotorPowers.rightSlide = response * 0.5;
                 MotorPowers.leftSlide = response * 0.5;
-            }
-            if (error < 0 && currentDegrees < 60) {
+            } else {
                 MotorPowers.rightSlide = 0.0;
                 MotorPowers.leftSlide = 0.0;
             }
@@ -202,19 +201,19 @@ public class Robot {
             }
 
             double intakePower = 0.0;
-            if (gamepad.getButton(GamepadKeys.Button.X)) {
-                intakePower = 1.0;
+            if (controller.xPress == 1.0) {
+                intakePower = 1.0 - MotorPowers.leftIntake;
             }
-            if (gamepad.getButton(GamepadKeys.Button.Y)) {
-                PairPositions.outTake = 200.0;
-            } else {
-                PairPositions.outTake = 0.0;
+            if (controller.yPress == 1.0) {
+                PairPositions.outTake = 200.0 - PairPositions.outTake;
             }
             controller.updateKeyTracker(gamepad);
-            setIntakeServos(controllerR2 * 20);
+            if (controller.aPress == 1.0) {
+                setIntakeServos(20.0 - ServoPositions.leftIntakeServo);
+            }
             MotorPowers.leftIntake = intakePower;
             MotorPowers.rightIntake = intakePower;
-            componentDrive(my * 0.7, mx * 0.7);
+            componentDrive(my, mx);
 
             // Experimental position tracking
             calculateMovementVectorFromWheelRotations();
