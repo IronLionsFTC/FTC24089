@@ -23,10 +23,10 @@ public class RobotParameters {
             public static final String rightIntakeServo = "rightIntakeServo";
         }
         public static final class Reversed {
-            public static final boolean leftFront = false;
-            public static final boolean leftBack = false;
-            public static final boolean rightFront = true;
-            public static final boolean rightBack = true;
+            public static final boolean leftFront = true;
+            public static final boolean leftBack = true;
+            public static final boolean rightFront = false;
+            public static final boolean rightBack = false;
             public static final boolean leftIntake = true;
             public static final boolean rightIntake = false;
             public static final boolean leftSlide = true;
@@ -38,12 +38,12 @@ public class RobotParameters {
         public static final class HardwareMapNames {
             public static final String left = RobotParameters.Motors.HardwareMapNames.leftFront;
             public static final String right = RobotParameters.Motors.HardwareMapNames.leftBack;
-            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightFront;
+            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightBack;
         }
         public static final class Reversed {
             public static final boolean left = true;
             public static final boolean right = false;
-            public static final boolean sideways = true;
+            public static final boolean sideways = false;
         }
     }
 
