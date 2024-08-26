@@ -80,8 +80,5 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
-.DS_Store
-/.idea
-
-# Miscellaneous
-Tools/EOCV-Sim-3.5.2-all.jar
+# Other
+Tools/
