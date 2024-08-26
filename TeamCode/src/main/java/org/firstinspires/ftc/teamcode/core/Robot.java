@@ -40,6 +40,7 @@ public class Robot {
         blinkin = new Blinkin(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap);
+        drivetrain.PositionTracker.position.fromComponent(0.0, 0.0);
         imu = new RobotIMU(hardwareMap);
         sensors = new Sensors(hardwareMap);
         states = new States();
@@ -60,6 +61,7 @@ public class Robot {
         public MotorPowers MotorPowers;
         public ServoPositions ServoPositions;
         public PairPositions PairPositions;
+        public PositionTracker PositionTracker;
 
         public Drivetrain(HardwareMap hardwareMap) {
             motors = new Motors(hardwareMap);
@@ -70,6 +72,14 @@ public class Robot {
             PairPositions = new PairPositions();
             motors.rightSlide.resetEncoder();
             motors.leftSlide.resetEncoder();
+        }
+
+        public class PositionTracker {
+            public Vec2 position = new Vec2();
+            public double fr = 0.0;
+            public double fl = 0.0;
+            public double br = 0.0;
+            public double bl = 0.0;
         }
 
         public class MotorPowers {
@@ -149,6 +159,27 @@ public class Robot {
             }
         }
 
+        public void calculateMovementVectorFromWheelRotations() {
+            double w1Rad = Math.toRadians(motors.leftFront.getCurrentPosition() - PositionTracker.fl);
+            PositionTracker.fl = motors.leftFront.getCurrentPosition();
+            double w2Rad = Math.toRadians(motors.rightFront.getCurrentPosition() - PositionTracker.fr);
+            PositionTracker.fr = motors.rightFront.getCurrentPosition();
+            double w3Rad = Math.toRadians(motors.leftBack.getCurrentPosition() - PositionTracker.bl);
+            PositionTracker.bl = motors.leftBack.getCurrentPosition();
+            double w4Rad = Math.toRadians(motors.rightBack.getCurrentPosition() - PositionTracker.br);
+            PositionTracker.br = motors.rightBack.getCurrentPosition();
+            double distanceW1 = RobotParameters.radius * w1Rad;
+            double distanceW2 = RobotParameters.radius * w2Rad;
+            double distanceW3 = RobotParameters.radius * w3Rad;
+            double distanceW4 = RobotParameters.radius * w4Rad;
+            double dx = (distanceW1 - distanceW2 - distanceW3 + distanceW4) / 4.0;
+            double dy = (distanceW1 + distanceW2 - distanceW3 - distanceW4) / 4.0;
+            Vec2 displacement = new Vec2();
+            displacement.fromComponent(dx, dy);
+            // At this point add handling for if the robot is not in the same direction as when it started but im too lazy rn
+            PositionTracker.position = PositionTracker.position.add(displacement);
+        }
+
         // TODO: check later
         public void calculateMovement(GamepadEx gamepad) {
             double mx = controller.movement_x(gamepad);
@@ -183,6 +214,9 @@ public class Robot {
             MotorPowers.leftIntake = intakePower;
             MotorPowers.rightIntake = intakePower;
             componentDrive(my, mx);
+
+            // Experimental position tracking
+            calculateMovementVectorFromWheelRotations();
         }
 
         public void setMotorPowers() {

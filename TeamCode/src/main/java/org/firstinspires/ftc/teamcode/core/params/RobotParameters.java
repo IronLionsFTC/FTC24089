@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
 public class RobotParameters {
     private RobotParameters(){} // Hide the constructor
+    public static final double radius = 0.96;
     public static final double maxOutTakeEncoder = 500.0;     // Degrees of movement which fully extends slides.
     public static final double slideWeightCompensation = 0.1; // Do not go above ~0.5.
     public static final class Motors {
