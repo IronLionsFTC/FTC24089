@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.NanoTimer;
 
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+
 /**
  * This is the ThreeWheelLocalizer class. This class extends the Localizer superclass and is a
  * localizer that uses the three wheel odometry set up. The diagram below, which is modified from
@@ -84,15 +86,13 @@ public class ThreeWheelLocalizer extends Localizer {
 
         hardwareMap = map;
 
-        // TODO: replace these with your encoder ports
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftRear"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightFront"));
-        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "strafeEncoder"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.left));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.right));
+        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.sideways));
 
-        // TODO: reverse any encoders necessary
-        leftEncoder.setDirection(Encoder.REVERSE);
-        rightEncoder.setDirection(Encoder.REVERSE);
-        strafeEncoder.setDirection(Encoder.FORWARD);
+        leftEncoder.setDirection(RobotParameters.Odometry.Reversed.left ? Encoder.REVERSE : Encoder.FORWARD);
+        rightEncoder.setDirection(RobotParameters.Odometry.Reversed.right ? Encoder.REVERSE : Encoder.FORWARD);
+        strafeEncoder.setDirection(RobotParameters.Odometry.Reversed.sideways ? Encoder.REVERSE : Encoder.FORWARD);
 
         setStartPose(setStartPose);
         timer = new NanoTimer();
