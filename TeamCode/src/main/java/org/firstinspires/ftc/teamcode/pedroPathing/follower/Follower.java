@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierPoint;
@@ -167,9 +168,10 @@ public class Follower {
         rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
         rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
 
-        // TODO: Make sure that this is the direction your motors need to be reversed in.
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(RobotParameters.Motors.Reversed.leftFront ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
+        leftRear.setDirection(RobotParameters.Motors.Reversed.leftBack ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
+        rightFront.setDirection(RobotParameters.Motors.Reversed.rightFront ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
+        rightRear.setDirection(RobotParameters.Motors.Reversed.rightBack ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 

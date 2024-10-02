@@ -18,11 +18,9 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
  * This is the ThreeWheelLocalizer class. This class extends the Localizer superclass and is a
  * localizer that uses the three wheel odometry set up. The diagram below, which is modified from
  * Road Runner, shows a typical set up.
- *
  * The view is from the top of the robot looking downwards.
  *
  * left on robot is the y positive direction
- *
  * forward on robot is the x positive direction
  *
  *    /--------------\
