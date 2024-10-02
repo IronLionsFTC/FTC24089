@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Sensors {
-    public RevColorSensorV3 testColourSensor;
-    public TouchSensor testTouchSensor;
-    public TouchSensor testMagSensor;
+    public RevColorSensorV3 intakeColorSensor;
 
     public Sensors(HardwareMap hardwareMap) {
-        testColourSensor = hardwareMap.get(RevColorSensorV3.class, "testColour");
-        testTouchSensor = hardwareMap.get(TouchSensor.class, "testTouch");
-        testMagSensor = hardwareMap.get(TouchSensor.class, "testMag");
+        intakeColorSensor = hardwareMap.get(RevColorSensorV3.class, "intakecolor");
     }
 }
+
+/*
+testTouchSensor = hardwareMap.get(TouchSensor.class, "testTouch");
+testMagSensor = hardwareMap.get(TouchSensor.class, "testMag");
+*/
