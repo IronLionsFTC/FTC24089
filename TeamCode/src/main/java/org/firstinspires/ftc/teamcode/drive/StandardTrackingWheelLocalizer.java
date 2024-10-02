@@ -5,9 +5,14 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.util.Encoder;
+
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +32,11 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 0;
-    public static double WHEEL_RADIUS = 2; // in
+    public static double TICKS_PER_REV = 2000;
+    public static double WHEEL_RADIUS = 3.78 / 2; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
+    // TODO: set these values
     public static double LATERAL_DISTANCE = 10; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
 
@@ -48,11 +54,13 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         lastEncPositions = lastTrackingEncPositions;
         lastEncVels = lastTrackingEncVels;
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.left));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.right));
+        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotParameters.Odometry.HardwareMapNames.sideways));
 
-        // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
+        leftEncoder.setDirection(RobotParameters.Odometry.Reversed.left ? Encoder.Direction.REVERSE : Encoder.Direction.FORWARD);
+        rightEncoder.setDirection(RobotParameters.Odometry.Reversed.right ? Encoder.Direction.REVERSE : Encoder.Direction.FORWARD);
+        frontEncoder.setDirection(RobotParameters.Odometry.Reversed.sideways ? Encoder.Direction.REVERSE : Encoder.Direction.FORWARD);
     }
 
     public static double encoderTicksToInches(double ticks) {
