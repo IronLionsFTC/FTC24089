@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 public class Servos {
-    public CRServo leftIntakeServo;
-    public CRServo rightIntakeServo;
+    public CRServo bucketServo;
+    public CRServo armServo;
 
     public Servos(HardwareMap hardwareMap) {
-        leftIntakeServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftIntakeServo);
-        rightIntakeServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightIntakeServo);
+        bucketServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.bucketServo);
+        armServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.armServo);
     }
 }

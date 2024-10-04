@@ -22,8 +22,10 @@ public class RobotParameters {
             public static final String rightIntake = "rightIntake";
             public static final String leftSlide = "leftSlide";
             public static final String rightSlide = "rightSlide";
-            public static final String leftIntakeServo = "leftIntakeServo";
-            public static final String rightIntakeServo = "rightIntakeServo";
+
+            // New
+            public static final String bucketServo = "BucketServo";
+            public static final String armServo = "ArmServo";
         }
         public static final class Reversed {
             public static final boolean leftFront = true;

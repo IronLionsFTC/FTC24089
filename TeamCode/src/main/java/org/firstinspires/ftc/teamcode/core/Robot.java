@@ -99,13 +99,8 @@ public class Robot {
         }
 
         public class ServoPositions {
-            public double rightIntakeServo = 0.0;
-            public double leftIntakeServo =  0.0;
-        }
-
-        public void setIntakeServos(double degreesUp) {
-            ServoPositions.rightIntakeServo = -degreesUp;
-            ServoPositions.leftIntakeServo  =  degreesUp;
+            public double armServo = 0.0;
+            public double bucketServo =  0.0;
         }
 
         private void componentDrive(double forwardPower, double rightPower) {
@@ -207,10 +202,8 @@ public class Robot {
             if (controller.yPress == 1.0) {
                 PairPositions.outTake = 200.0 - PairPositions.outTake;
             }
+            telemetry.addData("armServo", servos.armServo.getCurrentPosition());
             controller.updateKeyTracker(gamepad);
-            if (controller.aPress == 1.0) {
-                setIntakeServos(20.0 - ServoPositions.leftIntakeServo);
-            }
             MotorPowers.leftIntake = intakePower;
             MotorPowers.rightIntake = intakePower;
             componentDrive(my, mx);
@@ -231,8 +224,8 @@ public class Robot {
         }
 
         public void setServoPositions() {
-            servos.rightIntakeServo.set(ServoPositions.rightIntakeServo);
-            servos.leftIntakeServo.set(ServoPositions.leftIntakeServo);
+            servos.bucketServo.set(ServoPositions.bucketServo);
+            servos.armServo.set(ServoPositions.armServo);
         }
 
         public void drive(GamepadEx gamepad) {
