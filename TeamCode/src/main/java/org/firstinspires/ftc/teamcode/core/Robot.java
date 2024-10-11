@@ -12,20 +12,21 @@ import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.params.Controls;
-import org.firstinspires.ftc.teamcode.core.state.Servos;
+import org.firstinspires.ftc.teamcode.core.Servos;
+import org.firstinspires.ftc.teamcode.core.state.RobotState;
+import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
 public class Robot {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
 
-    public RobotState state;
     public Controller controller;
     public static Blinkin blinkin;
 
     public Drivetrain drivetrain;
     public RobotIMU imu;
     public Sensors sensors;
-    public States states;
+    public RobotState state = new RobotState();
 
     public Robot(HardwareMap h, Telemetry t) {
         hardwareMap = h;
@@ -39,16 +40,6 @@ public class Robot {
         // drivetrain.PositionTracker.position.fromComponent(0.0, 0.0);
         imu = new RobotIMU(hardwareMap);
         sensors = new Sensors(hardwareMap);
-        states = new States();
-    }
-
-    public class States{
-        public class InTake {
-            public boolean isRaised = false;
-        }
-        public class OutTake {
-            public boolean isRaised = false;
-        }
     }
 
     public class Drivetrain {
@@ -151,44 +142,33 @@ public class Robot {
 
         // TODO: check later
         public void calculateMovement(GamepadEx gamepad) {
+
+            // Track number of frames each control has been pressed, made for toggles.
+            controller.updateKeyTracker(gamepad);
             double mx = controller.movement_x(gamepad);
             double my = controller.movement_y(gamepad);
             double controllerR = controller.yawRotation(gamepad);
             double controllerR2 = controller.pitchRotation(gamepad);
 
-            imu.targetYaw -= controllerR * 2.0; // Assuming -1 -> 1
+            imu.targetYaw -= controllerR * 2.0; // TODO: Fix joystick axis using Y instead of X
 
-            if (imu.targetYaw < -180) {
-                imu.targetYaw += 360;
-            }
-            if (imu.targetYaw > 180) {
-                imu.targetYaw -= 360;
-            }
+            // Wrap target rotation.
+            if (imu.targetYaw < -180) { imu.targetYaw += 360; }
+            if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
 
-            if (Controls.driverOverride.isPressed(gamepad)) {
-                return;
-            }
+            // TODO: Make sure this isn't going to happen mid game.
+            if (Controls.driverOverride.isPressed(gamepad)) { return; }
 
-            double intakePower = 0.0;
-            if (controller.xPress == 1.0) {
-                intakePower = 1.0 - motors.powers.leftIntake;
-            }
-            if (controller.yPress == 1.0) {
-                motors.slidePositions.outTake = 200.0 - motors.slidePositions.outTake;
-            }
+            // Toggle the intake rollers.
+            if (controller.xPress == 1.0) { state.intake.toggle(); }
 
-            controller.updateKeyTracker(gamepad);
-
+            // Toggle the arm raising.
             if (controller.aPress == 1.0) {
-                if (servos.positions.armServo == RobotParameters.ServoBounds.armServoLower) {
+                state.outtake.toggle();
+                if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) {
                     servos.positions.armServo = RobotParameters.ServoBounds.armServoUpper;
                 } else {
                     servos.positions.armServo = RobotParameters.ServoBounds.armServoLower;
-                }
-                if (servos.positions.bucketServo == RobotParameters.ServoBounds.bucketServoLower) {
-                    servos.positions.bucketServo = RobotParameters.ServoBounds.bucketServoUpper;
-                } else {
-                    servos.positions.bucketServo = RobotParameters.ServoBounds.bucketServoLower;
                 }
             }
 
@@ -208,8 +188,9 @@ public class Robot {
             moveArm();
 
             // Update servos / motors
-            servos.setPositions();
-            motors.setPowers();
+            servos.setPositions(state.outtake.outtakeState); // <- Normal Servos
+            servos.setPowers(state.intake.intakeState); //                              <- CR Servos (intake rollers)
+            motors.setPowers(); //                              <- Drive, outTake / inTake slides.
         }
     }
 

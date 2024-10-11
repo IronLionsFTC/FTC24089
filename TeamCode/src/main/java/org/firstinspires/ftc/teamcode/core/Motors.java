@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.core;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 public class Motors {
