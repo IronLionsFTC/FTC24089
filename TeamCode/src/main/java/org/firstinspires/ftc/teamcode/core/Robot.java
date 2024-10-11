@@ -1,9 +1,4 @@
 package org.firstinspires.ftc.teamcode.core;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,15 +7,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
 
 import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.params.Controls;
-import org.firstinspires.ftc.teamcode.core.Vec2;
-import org.firstinspires.ftc.teamcode.core.Sensors;
 import org.firstinspires.ftc.teamcode.core.state.Servos;
 
 public class Robot {
@@ -63,16 +54,13 @@ public class Robot {
     public class Drivetrain {
         public Motors motors;
         public Servos servos;
-        public MotorPowers MotorPowers;
-        public PairPositions PairPositions;
         public PositionTracker PositionTracker;
 
         public Drivetrain(HardwareMap hardwareMap) {
             motors = new Motors(hardwareMap);
             servos = new Servos(hardwareMap);
             imu = new RobotIMU(hardwareMap);
-            MotorPowers = new MotorPowers();
-            PairPositions = new PairPositions();
+
             //motors.rightSlide.resetEncoder();
             //motors.leftSlide.resetEncoder();
         }
@@ -85,32 +73,15 @@ public class Robot {
             public double bl = 0.0;
         }
 
-        public class MotorPowers {
-            public double leftFront = 0.0;
-            public double leftBack = 0.0;
-            public double rightFront = 0.0;
-            public double rightBack = 0.0;
-            public double leftIntake = 0.0;
-            public double rightIntake = 0.0;
-            public double leftSlide = 0.0;
-            public double rightSlide = 0.0;
-        }
-
-        public class PairPositions {
-            public double outTake = 0.0;
-            public double outTakeLastError = 0.0;
-        }
-
         private void componentDrive(double forwardPower, double rightPower) {
             Vec2 powerVec2 = new Vec2();
             double r = -imu.yawCorrection();
             double movementMultiplier = 1.0;
-//            double denominator = Math.abs(forwardPower) + Math.abs(rightPower);
             powerVec2.fromComponent(rightPower, forwardPower);
-            MotorPowers.leftFront = ((rightPower + forwardPower) * movementMultiplier + r);
-            MotorPowers.rightFront = ((-rightPower + forwardPower) * movementMultiplier - r);
-            MotorPowers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
-            MotorPowers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
+            motors.powers.leftFront = ((rightPower + forwardPower) * movementMultiplier + r);
+            motors.powers.rightFront = ((-rightPower + forwardPower) * movementMultiplier - r);
+            motors.powers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
+            motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
 
         private void driveInDirection(double direction, double power, boolean fieldCentric) {
@@ -123,32 +94,24 @@ public class Robot {
             componentDrive(driveVector.y, driveVector.x);
         }
 
-        public void stopMotors() {
-            MotorPowers.leftFront = 0.0;
-            MotorPowers.leftBack = 0.0;
-            MotorPowers.rightBack = 0.0;
-            MotorPowers.rightFront = 0.0;
-            setMotorPowers();
-        }
-
-        public void movePairs() {
+        public void moveSlides() {
             // 0.0 <= TargetDegrees <= 1.0
-            double targetDegrees = PairPositions.outTake * RobotParameters.maxOutTakeEncoder;
+            double targetDegrees = motors.slidePositions.outTake * RobotParameters.maxOutTakeEncoder;
             double currentDegrees = (motors.leftSlide.getCurrentPosition() + motors.rightSlide.getCurrentPosition()) * 0.5;
             double error = targetDegrees - currentDegrees;
             // If for whatever reason the slides can't go all the way down
             // then ensure they aren't pulling fruitlessly.
             if (currentDegrees > 20 || error > 0) {
-                double response = imu.calculate_PID(0.65, 0.25, error, PairPositions.outTakeLastError);
+                double response = imu.calculate_PID(0.65, 0.25, error, motors.slidePositions.outTakeLastError);
                 // If not moving down, add the feed-forward to hold weight.
                 if (targetDegrees > 10.0 && response > -0.1) {
                     response += RobotParameters.slideWeightCompensation;
                 }
-                MotorPowers.rightSlide = response * 0.5;
-                MotorPowers.leftSlide = response * 0.5;
+                motors.powers.rightSlide = response * 0.5;
+                motors.powers.leftSlide = response * 0.5;
             } else {
-                MotorPowers.rightSlide = 0.0;
-                MotorPowers.leftSlide = 0.0;
+                motors.powers.rightSlide = 0.0;
+                motors.powers.leftSlide = 0.0;
             }
         }
 
@@ -208,10 +171,10 @@ public class Robot {
 
             double intakePower = 0.0;
             if (controller.xPress == 1.0) {
-                intakePower = 1.0 - MotorPowers.leftIntake;
+                intakePower = 1.0 - motors.powers.leftIntake;
             }
             if (controller.yPress == 1.0) {
-                PairPositions.outTake = 200.0 - PairPositions.outTake;
+                motors.slidePositions.outTake = 200.0 - motors.slidePositions.outTake;
             }
 
             controller.updateKeyTracker(gamepad);
@@ -237,32 +200,16 @@ public class Robot {
             // calculateMovementVectorFromWheelRotations();
         }
 
-        public void setMotorPowers() {
-            motors.leftFront.set(MotorPowers.leftFront);
-            motors.rightFront.set(MotorPowers.rightFront);
-            motors.leftBack.set(MotorPowers.leftBack);
-            motors.rightBack.set(MotorPowers.rightBack);
-            // motors.leftIntake.set(MotorPowers.leftIntake);
-            // motors.rightIntake.set(MotorPowers.rightIntake);
-            // motors.leftSlide.set(MotorPowers.leftSlide);
-            // motors.rightSlide.set(MotorPowers.rightSlide);
-        }
-
-        public void setServoPositions() {
-            servos.armServo.setPosition(servos.positions.armCurrent);
-            double bucketPos = servos.positions.armCurrent * 0.6;
-            if (bucketPos > RobotParameters.ServoBounds.bucketServoLower) {
-                bucketPos = RobotParameters.ServoBounds.bucketServoLower;
-            }
-            servos.bucketServo.setPosition(bucketPos);
-        }
-
         public void drive(GamepadEx gamepad) {
+            // Calculate drive movement
             calculateMovement(gamepad);
-            // movePairs();
+
+            // Calculate ARM / BUCKET movement
             moveArm();
-            setServoPositions();
-            setMotorPowers();
+
+            // Update servos / motors
+            servos.setPositions();
+            motors.setPowers();
         }
     }
 

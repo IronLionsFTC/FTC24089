@@ -36,4 +36,13 @@ public class Servos {
     public class CRServoPowers {
         public double intake = 0.0;
     }
+
+    public void setPositions() {
+        armServo.setPosition(positions.armCurrent);
+        double bucketPos = positions.armCurrent * 0.6;
+        if (bucketPos > RobotParameters.ServoBounds.bucketServoLower) {
+            bucketPos = RobotParameters.ServoBounds.bucketServoLower;
+        }
+        bucketServo.setPosition(bucketPos);
+    }
 }
