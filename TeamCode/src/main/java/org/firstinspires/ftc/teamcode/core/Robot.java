@@ -65,7 +65,6 @@ public class Robot {
         public Servos servos;
         public MotorPowers MotorPowers;
         public PairPositions PairPositions;
-        public ServoPositions ServoPositions;
         public PositionTracker PositionTracker;
 
         public Drivetrain(HardwareMap hardwareMap) {
@@ -74,7 +73,6 @@ public class Robot {
             imu = new RobotIMU(hardwareMap);
             MotorPowers = new MotorPowers();
             PairPositions = new PairPositions();
-            ServoPositions = new ServoPositions();
             //motors.rightSlide.resetEncoder();
             //motors.leftSlide.resetEncoder();
         }
@@ -101,13 +99,6 @@ public class Robot {
         public class PairPositions {
             public double outTake = 0.0;
             public double outTakeLastError = 0.0;
-        }
-
-        public class ServoPositions {
-            public double armServo = RobotParameters.ServoBounds.armServoLower;
-            public double bucketServo = 0.0;
-            public double armCurrent = armServo;
-            public double armError = 0.0;
         }
 
         private void componentDrive(double forwardPower, double rightPower) {
@@ -162,17 +153,16 @@ public class Robot {
         }
 
         public void moveArm() {
-            double error = ServoPositions.armServo - ServoPositions.armCurrent;
-            double response = imu.calculate_PID(0.03, 0.1, error, ServoPositions.armError);
-            ServoPositions.armError = error;
+            double error = servos.positions.armServo - servos.positions.armCurrent;
+            double response = imu.calculate_PID(0.03, 0.1, error, servos.positions.armError);
+            servos.positions.armError = error;
             response *= 0.6;
-            ServoPositions.armCurrent += response;
-            if (ServoPositions.armCurrent > RobotParameters.ServoBounds.armServoUpper) {
-                ServoPositions.armCurrent = RobotParameters.ServoBounds.armServoUpper;
-            } else if (ServoPositions.armCurrent < RobotParameters.ServoBounds.armServoLower) {
-                ServoPositions.armCurrent = RobotParameters.ServoBounds.armServoLower;
+            servos.positions.armCurrent += response;
+            if (servos.positions.armCurrent > RobotParameters.ServoBounds.armServoUpper) {
+                servos.positions.armCurrent = RobotParameters.ServoBounds.armServoUpper;
+            } else if (servos.positions.armCurrent < RobotParameters.ServoBounds.armServoLower) {
+                servos.positions.armCurrent = RobotParameters.ServoBounds.armServoLower;
             }
-            telemetry.addData("error", ServoPositions.armError);
         }
 
         public void calculateMovementVectorFromWheelRotations() {
@@ -227,15 +217,15 @@ public class Robot {
             controller.updateKeyTracker(gamepad);
 
             if (controller.aPress == 1.0) {
-                if (ServoPositions.armServo == RobotParameters.ServoBounds.armServoLower) {
-                    ServoPositions.armServo = RobotParameters.ServoBounds.armServoUpper;
+                if (servos.positions.armServo == RobotParameters.ServoBounds.armServoLower) {
+                    servos.positions.armServo = RobotParameters.ServoBounds.armServoUpper;
                 } else {
-                    ServoPositions.armServo = RobotParameters.ServoBounds.armServoLower;
+                    servos.positions.armServo = RobotParameters.ServoBounds.armServoLower;
                 }
-                if (ServoPositions.bucketServo == RobotParameters.ServoBounds.bucketServoLower) {
-                    ServoPositions.bucketServo = RobotParameters.ServoBounds.bucketServoUpper;
+                if (servos.positions.bucketServo == RobotParameters.ServoBounds.bucketServoLower) {
+                    servos.positions.bucketServo = RobotParameters.ServoBounds.bucketServoUpper;
                 } else {
-                    ServoPositions.bucketServo = RobotParameters.ServoBounds.bucketServoLower;
+                    servos.positions.bucketServo = RobotParameters.ServoBounds.bucketServoLower;
                 }
             }
 
@@ -259,8 +249,8 @@ public class Robot {
         }
 
         public void setServoPositions() {
-            servos.armServo.setPosition(ServoPositions.armCurrent);
-            double bucketPos = ServoPositions.armCurrent * 0.6;
+            servos.armServo.setPosition(servos.positions.armCurrent);
+            double bucketPos = servos.positions.armCurrent * 0.6;
             if (bucketPos > RobotParameters.ServoBounds.bucketServoLower) {
                 bucketPos = RobotParameters.ServoBounds.bucketServoLower;
             }

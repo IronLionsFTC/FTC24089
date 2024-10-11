@@ -23,9 +23,13 @@ public class RobotParameters {
             public static final String leftSlide = "leftSlide";
             public static final String rightSlide = "rightSlide";
 
-            // New
-            public static final String bucketServo = "BucketServo";
-            public static final String armServo = "ArmServo";
+            // Servo Motors
+            public static final String bucketServo = "BucketServo";  // Port 1 ?
+            public static final String armServo = "ArmServo";        // Port 0 ?
+
+            // CR Servo Motors
+            public static final String intakeServoA = "intakeServoA"; // Port 2
+            public static final String intakeServoB = "intakeServoB"; // Port 3
         }
         public static final class Reversed {
             public static final boolean leftFront = true;
