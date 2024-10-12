@@ -1,4 +1,8 @@
 package org.firstinspires.ftc.teamcode.core;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,19 +18,20 @@ import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.params.Controls;
 import org.firstinspires.ftc.teamcode.core.Servos;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
+import org.firstinspires.ftc.teamcode.core.state.intake.Intake;
+import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
 public class Robot {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
-
     public Controller controller;
     public static Blinkin blinkin;
-
     public Drivetrain drivetrain;
     public RobotIMU imu;
     public Sensors sensors;
     public RobotState state = new RobotState();
+    public PID_settings pidSettings = new PID_settings();
 
     public Robot(HardwareMap h, Telemetry t) {
         hardwareMap = h;
@@ -39,7 +44,32 @@ public class Robot {
         drivetrain = new Drivetrain(hardwareMap);
         // drivetrain.PositionTracker.position.fromComponent(0.0, 0.0);
         imu = new RobotIMU(hardwareMap);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         sensors = new Sensors(hardwareMap);
+    }
+    @Config
+    public static class PID_settings {
+        public static double ticks_in_degree = 700.0 / 180.0;
+        public static double outtakeSlide_p = 0.003;
+        public static double outtakeSlide_i = 0.0;
+        public static double outtakeSlide_d = 0.0001;
+        public static double outtakeSlide_f = 0.1;
+
+        public static double outtakeArm_p = 0.05;
+        public static double outtakeArm_i = 0.0;
+        public static double outtakeArm_d = 0.0;
+        public static double outtakeArm_f = 0.0;
+
+        public static double intakeSlide_p = 0.02;
+        public static double intakeSlide_i = 0.0;
+        public static double intakeSlide_d = 0.0;
+        public static double intakeSlide_f = 0.0;
+
+        public static double servoPos = 0.0;
+
+        public PIDController outtakeSlideController = new PIDController(outtakeSlide_p, outtakeSlide_i, outtakeSlide_d);
+        public PIDController outtakeArmController = new PIDController(outtakeArm_p, outtakeArm_i, outtakeArm_d);
+        public PIDController intakeSlideController = new PIDController(intakeSlide_d, intakeSlide_i, intakeSlide_d);
     }
 
     public class Drivetrain {
@@ -51,9 +81,6 @@ public class Robot {
             motors = new Motors(hardwareMap);
             servos = new Servos(hardwareMap);
             imu = new RobotIMU(hardwareMap);
-
-            //motors.rightSlide.resetEncoder();
-            //motors.leftSlide.resetEncoder();
         }
 
         public class PositionTracker {
@@ -85,38 +112,55 @@ public class Robot {
             componentDrive(driveVector.y, driveVector.x);
         }
 
-        public void moveSlides() {
-            // 0.0 <= TargetDegrees <= 1.0
-            double targetDegrees = motors.slidePositions.outTake * RobotParameters.maxOutTakeEncoder;
-            double currentDegrees = (motors.leftSlide.getCurrentPosition() + motors.rightSlide.getCurrentPosition()) * 0.5;
-            double error = targetDegrees - currentDegrees;
-            // If for whatever reason the slides can't go all the way down
-            // then ensure they aren't pulling fruitlessly.
-            if (currentDegrees > 20 || error > 0) {
-                double response = imu.calculate_PID(0.65, 0.25, error, motors.slidePositions.outTakeLastError);
-                // If not moving down, add the feed-forward to hold weight.
-                if (targetDegrees > 10.0 && response > -0.1) {
-                    response += RobotParameters.slideWeightCompensation;
-                }
-                motors.powers.rightSlide = response * 0.5;
-                motors.powers.leftSlide = response * 0.5;
+        public void moveOuttake() {
+            pidSettings.outtakeSlideController.setPID(pidSettings.outtakeSlide_p, pidSettings.outtakeSlide_i, pidSettings.outtakeSlide_d);
+            pidSettings.outtakeArmController.setPID(pidSettings.outtakeArm_p, pidSettings.outtakeArm_i, pidSettings.outtakeArm_d);
+            double slideTarget = 0.0;
+            double armTarget = 0.0;
+            if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) {
+                slideTarget = 2500.0;
+                armTarget = RobotParameters.ServoBounds.armServoUpper;
             } else {
-                motors.powers.rightSlide = 0.0;
-                motors.powers.leftSlide = 0.0;
+                slideTarget = 0.0;
+                armTarget = 0.0;
             }
+            double outtakeSlidePos = (motors.leftOuttakeSlide.getCurrentPosition() + motors.rightOuttakeSlide.getCurrentPosition()) * 0.5;
+            double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
+            double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / pidSettings.ticks_in_degree)) * pidSettings.outtakeSlide_f;
+            double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
+            if (slideTarget <= 10.0 && outtakeSlidePos < 100) { outtakeSlidePower = 0.0; }
+            motors.powers.leftOuttakeSlide = outtakeSlidePower;
+            motors.powers.rightOuttakeSlide = outtakeSlidePower;
+
+            double outtakeArmPos = servos.armServo.getPosition();
+            double outtakeArmResponse = pidSettings.outtakeArmController.calculate(outtakeArmPos, armTarget);
+            double outtakeArmFeedForward = Math.cos(Math.toRadians(armTarget / pidSettings.ticks_in_degree)) * pidSettings.outtakeArm_f;
+            double outtakeArmPower = outtakeArmResponse + outtakeArmFeedForward;
+            servos.positions.armCurrent += outtakeArmPower;
         }
 
-        public void moveArm() {
-            double error = servos.positions.armServo - servos.positions.armCurrent;
-            double response = imu.calculate_PID(0.03, 0.1, error, servos.positions.armError);
-            servos.positions.armError = error;
-            response *= 0.6;
-            servos.positions.armCurrent += response;
-            if (servos.positions.armCurrent > RobotParameters.ServoBounds.armServoUpper) {
-                servos.positions.armCurrent = RobotParameters.ServoBounds.armServoUpper;
-            } else if (servos.positions.armCurrent < RobotParameters.ServoBounds.armServoLower) {
-                servos.positions.armCurrent = RobotParameters.ServoBounds.armServoLower;
+        public void moveIntake() {
+            servos.intakeLiftServo.set(pidSettings.servoPos);
+            pidSettings.intakeSlideController.setPID(pidSettings.intakeSlide_p, pidSettings.intakeSlide_i, pidSettings.intakeSlide_d);
+            double intakeTarget = 0.0;
+            if (state.intake.intakeState == IntakeState.Folded) {
+                intakeTarget = 0.0;
+            } else if (state.intake.intakeState == IntakeState.Retracted) {
+                intakeTarget = 60.0;
+            } else if (state.intake.intakeState == IntakeState.Extended) {
+                intakeTarget = 100.0;
+            } else if (state.intake.intakeState == IntakeState.Collecting) {
+                intakeTarget = 100.0;
+            } else if (state.intake.intakeState == IntakeState.Depositing) {
+                intakeTarget = 35.0;
             }
+            double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
+            double error = Math.abs(intakeTarget - intakeSlidePos);
+            double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget);
+            if (intakeTarget < 5 && intakeSlidePos <= 10) { intakeSlideResponse = 0.0; }
+            if (error < 5) { intakeSlideResponse = 0.0; }
+            motors.powers.leftIntakeSlide = intakeSlideResponse;
+            motors.powers.rightIntakeSlide = intakeSlideResponse;
         }
 
         public void calculateMovementVectorFromWheelRotations() {
@@ -162,16 +206,8 @@ public class Robot {
             // Toggle the intake rollers.
             if (controller.xPress == 1.0) { state.intake.toggle(); }
 
-            // Toggle the arm raising.
-            if (controller.aPress == 1.0) {
-                state.outtake.toggle();
-                if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) {
-                    servos.positions.armServo = RobotParameters.ServoBounds.armServoUpper;
-                } else {
-                    servos.positions.armServo = RobotParameters.ServoBounds.armServoLower;
-                }
-            }
-
+            // Toggle OUTTAKE state.
+            if (controller.aPress == 1.0) { state.outtake.toggle(); }
 
             // MotorPowers.leftIntake = intakePower;
             // MotorPowers.rightIntake = intakePower;
@@ -183,9 +219,8 @@ public class Robot {
         public void drive(GamepadEx gamepad) {
             // Calculate drive movement
             calculateMovement(gamepad);
-
-            // Calculate ARM / BUCKET movement
-            moveArm();
+            moveOuttake();
+            moveIntake();
 
             // Update servos / motors
             servos.setPositions(state.outtake.outtakeState); // <- Normal Servos

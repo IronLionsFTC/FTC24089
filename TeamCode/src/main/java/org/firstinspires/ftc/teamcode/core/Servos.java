@@ -10,6 +10,7 @@ public class Servos {
     public Servo bucketServo;
     public Servo armServo;
 
+    public CRServo intakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
 
@@ -18,31 +19,25 @@ public class Servos {
     public Servos(HardwareMap hardwareMap) {
         bucketServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.bucketServo);
         armServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
-        intakeServoA = hardwareMap.get(CRServo.class, RobotParameters.Motors.HardwareMapNames.intakeServoA);
-        intakeServoB = hardwareMap.get(CRServo.class, RobotParameters.Motors.HardwareMapNames.intakeServoB);
+        intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
+        intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
+        intakeLiftServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
         positions = new ServoPositions();
     }
 
     public class ServoPositions {
         public double armServo = RobotParameters.ServoBounds.armServoLower;
-        public double bucketServo = 0.0;
         public double armCurrent = armServo;
-        public double armError = 0.0;
     }
 
     public void setPositions(OuttakeState outtakeState) {
-        positions.armServo = RobotParameters.ServoBounds.armServoLower;
         armServo.setPosition(positions.armCurrent);
-        if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Up) {
-            double bucketPos = positions.armCurrent * 0.6;
-            if (bucketPos > RobotParameters.ServoBounds.bucketServoLower) {
-                bucketPos = RobotParameters.ServoBounds.bucketServoLower;
-            }
-            bucketServo.setPosition(bucketPos);
+        if (outtakeState == OuttakeState.Up || outtakeState == OuttakeState.Down) {
+            bucketServo.setPosition(positions.armCurrent * 0.5 + 0.5);
         } else if (outtakeState == OuttakeState.Deposit) {
-            bucketServo.setPosition(0.0);
+            bucketServo.setPosition(0.5);
         } else {
-            bucketServo.setPosition(-0.4);
+            bucketServo.setPosition(0.0);
         }
     }
 

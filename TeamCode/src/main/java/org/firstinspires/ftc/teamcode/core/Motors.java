@@ -11,38 +11,53 @@ public class Motors {
     public Motor rightBack;
 
     // Intake motors
-    public Motor leftIntake;
-    public Motor rightIntake;
+    public Motor leftIntakeSlide;
+    public Motor rightIntakeSlide;
 
     // Outake motors
-    public Motor leftSlide;
-    public Motor rightSlide;
+    public Motor leftOuttakeSlide;
+    public Motor rightOuttakeSlide;
 
     // Motor Powers
     public MotorPowers powers;
-    public SlidePositions slidePositions;
 
     public Motors(HardwareMap hardwareMap) {
         leftFront = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftFront);
         leftBack = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftBack);
         rightFront = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightFront);
         rightBack = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightBack);
+        leftIntakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftIntakeSlide);
+        rightIntakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightIntakeSlide);
+        leftOuttakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftOuttakeSlide);
+        rightOuttakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightOuttakeSlide);
 
         // Set motor directions
         leftFront.setInverted(RobotParameters.Motors.Reversed.leftFront);
         leftBack.setInverted(RobotParameters.Motors.Reversed.leftBack);
         rightFront.setInverted(RobotParameters.Motors.Reversed.rightFront);
         rightBack.setInverted(RobotParameters.Motors.Reversed.rightBack);
+        leftOuttakeSlide.setInverted(true);
+        rightOuttakeSlide.setInverted(false);
+        leftIntakeSlide.setInverted(true);
+        rightIntakeSlide.setInverted(false);
 
         // Set braking behaviour
         leftFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         leftBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         rightFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         rightBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
+        leftIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        leftOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        rightIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+
+        rightOuttakeSlide.resetEncoder();
+        leftOuttakeSlide.resetEncoder();
+        leftIntakeSlide.resetEncoder();
+        rightIntakeSlide.resetEncoder();
 
         // Initialize Tracking Classes
         powers = new MotorPowers();
-        slidePositions = new SlidePositions();
     }
 
     public class MotorPowers {
@@ -50,17 +65,10 @@ public class Motors {
         public double leftBack = 0.0;
         public double rightFront = 0.0;
         public double rightBack = 0.0;
-        public double leftIntake = 0.0;
-        public double rightIntake = 0.0;
-        public double leftSlide = 0.0;
-        public double rightSlide = 0.0;
-    }
-
-    public class SlidePositions {
-        public double outTake = 0.0;
-        public double outTakeLastError = 0.0;
-        public double inTake = 0.0;
-        public double inTakeLastError = 0.0;
+        public double leftOuttakeSlide = 0.0;
+        public double rightOuttakeSlide = 0.0;
+        public double leftIntakeSlide = 0.0;
+        public double rightIntakeSlide = 0.0;
     }
 
     public void setPowers() {
@@ -68,6 +76,10 @@ public class Motors {
         rightFront.set(powers.rightFront);
         leftBack.set(powers.leftBack);
         rightBack.set(powers.rightBack);
+        leftOuttakeSlide.set(powers.leftOuttakeSlide);
+        rightOuttakeSlide.set(powers.rightOuttakeSlide);
+        leftIntakeSlide.set(powers.leftIntakeSlide);
+        rightIntakeSlide.set(powers.rightIntakeSlide);
     }
 
     public void stopMotors() {
