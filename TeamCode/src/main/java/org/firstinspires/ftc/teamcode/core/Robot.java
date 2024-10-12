@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
@@ -50,8 +51,8 @@ public class Robot {
     @Config
     public static class PID_settings {
         public static double ticks_in_degree = 700.0 / 180.0;
-        public static double outtakeSlide_p = 0.003;
-        public static double outtakeSlide_i = 0.0;
+        public static double outtakeSlide_p = 0.002;
+        public static double outtakeSlide_i = 0.003;
         public static double outtakeSlide_d = 0.0001;
         public static double outtakeSlide_f = 0.1;
 
@@ -60,7 +61,7 @@ public class Robot {
         public static double outtakeArm_d = 0.0;
         public static double outtakeArm_f = 0.0;
 
-        public static double intakeSlide_p = 0.02;
+        public static double intakeSlide_p = 0.1;
         public static double intakeSlide_i = 0.0;
         public static double intakeSlide_d = 0.0;
         public static double intakeSlide_f = 0.0;
@@ -118,7 +119,7 @@ public class Robot {
             double slideTarget = 0.0;
             double armTarget = 0.0;
             if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) {
-                slideTarget = 2500.0;
+                slideTarget = 2900.0;
                 armTarget = RobotParameters.ServoBounds.armServoUpper;
             } else {
                 slideTarget = 0.0;
@@ -140,25 +141,52 @@ public class Robot {
         }
 
         public void moveIntake() {
-            servos.intakeLiftServo.set(pidSettings.servoPos);
+            if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < 25 && state.intake.intakeState == IntakeState.Collecting) {
+                state.intake.intakeState = IntakeState.Evaluating;
+            }
+            // servos.intakeLiftServo.setPosition(pidSettings.servoPos);
             pidSettings.intakeSlideController.setPID(pidSettings.intakeSlide_p, pidSettings.intakeSlide_i, pidSettings.intakeSlide_d);
             double intakeTarget = 0.0;
             if (state.intake.intakeState == IntakeState.Folded) {
                 intakeTarget = 0.0;
+                servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Retracted) {
                 intakeTarget = 60.0;
+                servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Extended) {
                 intakeTarget = 100.0;
+                servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Collecting) {
                 intakeTarget = 100.0;
-            } else if (state.intake.intakeState == IntakeState.Depositing) {
-                intakeTarget = 35.0;
+                servos.intakeLiftServo.setPosition(0.0);
+            } else if (state.intake.intakeState == IntakeState.Evaluating) {
+                intakeTarget = 100.0;
+                servos.intakeLiftServo.setPosition(0.0);
+            } else if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
+                intakeTarget = 28.0;
+                servos.intakeLiftServo.setPosition(0.0);
+            }
+            if (state.intake.intakeState == IntakeState.Evaluating) {
+                double r = sensors.r();
+                double g = sensors.g();
+                double b = sensors.b();
+                if (r > (g + b) * 0.9) {
+                    state.intake.intakeState = IntakeState.Depositing;
+                }
+                else {
+                    state.intake.intakeState = IntakeState.Collecting;
+                }
+            }
+            else if (state.intake.intakeState == IntakeState.Dropping) {
+                if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) > 25) {
+                    state.intake.intakeState = IntakeState.Retracted;
+                }
             }
             double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
             double error = Math.abs(intakeTarget - intakeSlidePos);
             double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget);
             if (intakeTarget < 5 && intakeSlidePos <= 10) { intakeSlideResponse = 0.0; }
-            if (error < 5) { intakeSlideResponse = 0.0; }
+            if (error < 2) { intakeSlideResponse = 0.0; }
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
         }
@@ -214,6 +242,8 @@ public class Robot {
             componentDrive(my, mx);
             // Experimental position tracking
             // calculateMovementVectorFromWheelRotations();
+            telemetry.addData("DIST", sensors.intakeColorSensor.getDistance(DistanceUnit.MM));
+            telemetry.update();
         }
 
         public void drive(GamepadEx gamepad) {

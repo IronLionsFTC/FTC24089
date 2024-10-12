@@ -5,5 +5,7 @@ public enum IntakeState {
     Retracted,
     Extended,
     Collecting,
-    Depositing
+    Evaluating,
+    Depositing,
+    Dropping
 }

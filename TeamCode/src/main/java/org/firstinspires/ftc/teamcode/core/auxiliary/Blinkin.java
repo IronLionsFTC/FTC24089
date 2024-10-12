@@ -11,7 +11,7 @@ public class Blinkin {
 
     public Blinkin(HardwareMap hardwareMap) {
         //leftLights = hardwareMap.get(RevBlinkinLedDriver.class, "leftLights");
-        rightLights = hardwareMap.get(RevBlinkinLedDriver.class, "rightLights");
+        //rightLights = hardwareMap.get(RevBlinkinLedDriver.class, "rightLights");
     }
 
     public void reset(LinearOpMode opmode) {

@@ -10,7 +10,7 @@ public class Servos {
     public Servo bucketServo;
     public Servo armServo;
 
-    public CRServo intakeLiftServo;
+    public Servo intakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
 
@@ -21,7 +21,7 @@ public class Servos {
         armServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
         intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
         intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
-        intakeLiftServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
+        intakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
         positions = new ServoPositions();
     }
 
@@ -43,8 +43,11 @@ public class Servos {
 
     public void setPowers(IntakeState intakeState) {
         if (intakeState == IntakeState.Collecting) {
-            intakeServoA.set(1.0);
-            intakeServoB.set(1.0);
+            intakeServoA.set(0.5);
+            intakeServoB.set(0.5);
+        } else if (intakeState == IntakeState.Dropping) {
+            intakeServoA.set(-1.0);
+            intakeServoB.set(-1.0);
         } else {
             intakeServoA.set(0.0);
             intakeServoB.set(0.0);

@@ -39,7 +39,6 @@ public class BaseOpMode extends LinearOpMode
         // Main loop
         while (opModeIsActive()){
             robot.drivetrain.drive(gamepad);
-            telemetry.update();
         }
     }
 }

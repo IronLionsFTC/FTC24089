@@ -46,9 +46,9 @@ public class Motors {
         leftBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         rightFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         rightBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
-        leftIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        leftIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         leftOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        rightIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        rightIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
         rightOuttakeSlide.resetEncoder();

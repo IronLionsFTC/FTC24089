@@ -8,11 +8,10 @@ public class Sensors {
     public RevColorSensorV3 intakeColorSensor;
 
     public Sensors(HardwareMap hardwareMap) {
-        // intakeColorSensor = hardwareMap.get(RevColorSensorV3.class, "intakecolor");
+        intakeColorSensor = hardwareMap.get(RevColorSensorV3.class, "intakecolor");
     }
-}
 
-/*
-testTouchSensor = hardwareMap.get(TouchSensor.class, "testTouch");
-testMagSensor = hardwareMap.get(TouchSensor.class, "testMag");
-*/
+    public double r() { return intakeColorSensor.red() / intakeColorSensor.getRawLightDetected(); }
+    public double g() { return intakeColorSensor.green() / intakeColorSensor.getRawLightDetected(); }
+    public double b() { return intakeColorSensor.blue() / intakeColorSensor.getRawLightDetected(); }
+}
