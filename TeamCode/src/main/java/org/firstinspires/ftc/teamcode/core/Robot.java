@@ -141,30 +141,30 @@ public class Robot {
         }
 
         public void moveIntake() {
-            if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < 25 && state.intake.intakeState == IntakeState.Collecting) {
+            if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < 18 && state.intake.intakeState == IntakeState.Collecting) {
                 state.intake.intakeState = IntakeState.Evaluating;
             }
-            // servos.intakeLiftServo.setPosition(pidSettings.servoPos);
+            //servos.intakeLiftServo.setPosition(pidSettings.servoPos);
             pidSettings.intakeSlideController.setPID(pidSettings.intakeSlide_p, pidSettings.intakeSlide_i, pidSettings.intakeSlide_d);
             double intakeTarget = 0.0;
             if (state.intake.intakeState == IntakeState.Folded) {
                 intakeTarget = 0.0;
-                servos.intakeLiftServo.setPosition(0.0);
+                // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Retracted) {
                 intakeTarget = 60.0;
-                servos.intakeLiftServo.setPosition(0.0);
+                // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Extended) {
                 intakeTarget = 100.0;
-                servos.intakeLiftServo.setPosition(0.0);
+                // servos.intakeLiftServo.setPosition(0.95);
             } else if (state.intake.intakeState == IntakeState.Collecting) {
                 intakeTarget = 100.0;
-                servos.intakeLiftServo.setPosition(0.0);
+                // servos.intakeLiftServo.setPosition(0.95);
             } else if (state.intake.intakeState == IntakeState.Evaluating) {
                 intakeTarget = 100.0;
-                servos.intakeLiftServo.setPosition(0.0);
+                // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
                 intakeTarget = 28.0;
-                servos.intakeLiftServo.setPosition(0.0);
+                // servos.intakeLiftServo.setPosition(0.0);
             }
             if (state.intake.intakeState == IntakeState.Evaluating) {
                 double r = sensors.r();
