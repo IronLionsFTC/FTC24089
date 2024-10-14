@@ -25,7 +25,8 @@ public class RobotParameters {
             // Servo Motors
             public static final String bucketServo = "BucketServo";  // Port 1 ?
             public static final String armServo = "ArmServo";        // Port 0 ?
-            public static final String intakeLiftServo = "intakeLiftServo"; // Port 4
+            public static final String leftIntakeLiftServo = "leftIntakeLiftServo"; // Port e0
+            public static final String rightIntakeLiftServo = "rightIntakeLiftServo"; // Port e1
 
             // CR Servo Motors
             public static final String intakeServoA = "intakeServoA"; // Port 2

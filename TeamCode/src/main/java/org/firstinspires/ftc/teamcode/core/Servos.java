@@ -10,7 +10,8 @@ public class Servos {
     public Servo bucketServo;
     public Servo armServo;
 
-    public Servo intakeLiftServo;
+    public Servo leftIntakeLiftServo;
+    public Servo rightIntakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
 
@@ -21,7 +22,11 @@ public class Servos {
         armServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
         intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
         intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
-        intakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
+        leftIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftIntakeLiftServo);
+        rightIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightIntakeLiftServo);
+
+        // Reverse one of the intake lift motors.
+        //rightIntakeLiftServo.setDirection(Servo.Direction.REVERSE);
         positions = new ServoPositions();
     }
 
@@ -41,10 +46,10 @@ public class Servos {
         }
     }
 
-    public void setPowers(IntakeState intakeState) {
+    public void setPowers(IntakeState intakeState, double intakePower) {
         if (intakeState == IntakeState.Collecting) {
-            intakeServoA.set(0.5);
-            intakeServoB.set(0.5);
+            intakeServoA.set(intakePower);
+            intakeServoB.set(intakePower);
         } else if (intakeState == IntakeState.Dropping) {
             intakeServoA.set(-1.0);
             intakeServoB.set(-1.0);

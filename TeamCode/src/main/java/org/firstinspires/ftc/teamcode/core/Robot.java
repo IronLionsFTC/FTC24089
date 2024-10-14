@@ -58,7 +58,7 @@ public class Robot {
 
         public static double outtakeArm_p = 0.05;
         public static double outtakeArm_i = 0.0;
-        public static double outtakeArm_d = 0.0;
+        public static double outtakeArm_d = 0.001;
         public static double outtakeArm_f = 0.0;
 
         public static double intakeSlide_p = 0.1;
@@ -66,7 +66,8 @@ public class Robot {
         public static double intakeSlide_d = 0.0;
         public static double intakeSlide_f = 0.0;
 
-        public static double servoPos = 0.0;
+        public static double servoPos = 0.58;
+        public static double intakeSpeed = 0.5;
 
         public PIDController outtakeSlideController = new PIDController(outtakeSlide_p, outtakeSlide_i, outtakeSlide_d);
         public PIDController outtakeArmController = new PIDController(outtakeArm_p, outtakeArm_i, outtakeArm_d);
@@ -96,6 +97,12 @@ public class Robot {
             Vec2 powerVec2 = new Vec2();
             double r = -imu.yawCorrection();
             double movementMultiplier = 1.0;
+            if (state.intake.intakeState == IntakeState.Collecting) {
+                movementMultiplier = 0.3;
+            }
+            if (state.outtake.outtakeState == OuttakeState.Up) {
+                movementMultiplier = 0.2;
+            }
             powerVec2.fromComponent(rightPower, forwardPower);
             motors.powers.leftFront = ((rightPower + forwardPower) * movementMultiplier + r);
             motors.powers.rightFront = ((-rightPower + forwardPower) * movementMultiplier - r);
@@ -118,9 +125,12 @@ public class Robot {
             pidSettings.outtakeArmController.setPID(pidSettings.outtakeArm_p, pidSettings.outtakeArm_i, pidSettings.outtakeArm_d);
             double slideTarget = 0.0;
             double armTarget = 0.0;
-            if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) {
-                slideTarget = 2900.0;
-                armTarget = RobotParameters.ServoBounds.armServoUpper;
+            if ((state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) && state.intake.intakeState == IntakeState.Retracted) {
+                double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
+                if (intakeSlidePos > 40) {
+                    slideTarget = 2950.0;
+                    armTarget = RobotParameters.ServoBounds.armServoUpper;
+                }
             } else {
                 slideTarget = 0.0;
                 armTarget = 0.0;
@@ -144,28 +154,36 @@ public class Robot {
             if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < 18 && state.intake.intakeState == IntakeState.Collecting) {
                 state.intake.intakeState = IntakeState.Evaluating;
             }
-            //servos.intakeLiftServo.setPosition(pidSettings.servoPos);
             pidSettings.intakeSlideController.setPID(pidSettings.intakeSlide_p, pidSettings.intakeSlide_i, pidSettings.intakeSlide_d);
             double intakeTarget = 0.0;
+            double intakeLift = 0.0;
             if (state.intake.intakeState == IntakeState.Folded) {
                 intakeTarget = 0.0;
-                // servos.intakeLiftServo.setPosition(0.0);
+                intakeLift = 0.0;
             } else if (state.intake.intakeState == IntakeState.Retracted) {
                 intakeTarget = 60.0;
+                intakeLift = 0.0;
                 // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Extended) {
                 intakeTarget = 100.0;
+                intakeLift = 0.0;
                 // servos.intakeLiftServo.setPosition(0.95);
             } else if (state.intake.intakeState == IntakeState.Collecting) {
                 intakeTarget = 100.0;
+                intakeLift = pidSettings.servoPos;
                 // servos.intakeLiftServo.setPosition(0.95);
             } else if (state.intake.intakeState == IntakeState.Evaluating) {
                 intakeTarget = 100.0;
+                intakeLift = pidSettings.servoPos;
                 // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
                 intakeTarget = 28.0;
+                intakeLift = 0.0;
                 // servos.intakeLiftServo.setPosition(0.0);
             }
+
+            servos.leftIntakeLiftServo.setPosition(intakeLift);
+            servos.rightIntakeLiftServo.setPosition(1.0 - intakeLift);
             if (state.intake.intakeState == IntakeState.Evaluating) {
                 double r = sensors.r();
                 double g = sensors.g();
@@ -177,16 +195,26 @@ public class Robot {
                     state.intake.intakeState = IntakeState.Collecting;
                 }
             }
-            else if (state.intake.intakeState == IntakeState.Dropping) {
-                if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) > 25) {
+            if (state.intake.intakeState == IntakeState.Depositing) {
+                if (state.outtake.outtakeState == OuttakeState.Up) {
+                    state.intake.intakeState = IntakeState.Dropping;
+                }
+            }
+            if (state.intake.intakeState == IntakeState.Dropping) {
+                if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) > 20.0) {
                     state.intake.intakeState = IntakeState.Retracted;
                 }
             }
             double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
-            double error = Math.abs(intakeTarget - intakeSlidePos);
+            double error = (intakeTarget - intakeSlidePos);
             double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget);
             if (intakeTarget < 5 && intakeSlidePos <= 10) { intakeSlideResponse = 0.0; }
-            if (error < 2) { intakeSlideResponse = 0.0; }
+            if (Math.abs(error) < 2) { intakeSlideResponse = 0.0; }
+            if (error < 0) {
+                if (intakeSlideResponse > 0.3) {
+                    intakeSlideResponse = 0.3;
+                }
+            }
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
         }
@@ -222,7 +250,7 @@ public class Robot {
             double controllerR = controller.yawRotation(gamepad);
             double controllerR2 = controller.pitchRotation(gamepad);
 
-            imu.targetYaw -= controllerR * 2.0; // TODO: Fix joystick axis using Y instead of X
+            imu.targetYaw -= controllerR2 * 8.0; // TODO: Fix joystick axis using Y instead of X
 
             // Wrap target rotation.
             if (imu.targetYaw < -180) { imu.targetYaw += 360; }
@@ -232,7 +260,14 @@ public class Robot {
             if (Controls.driverOverride.isPressed(gamepad)) { return; }
 
             // Toggle the intake rollers.
-            if (controller.xPress == 1.0) { state.intake.toggle(); }
+            if (controller.xPress == 1.0) {
+                if (state.intake.intakeState == IntakeState.Collecting) {
+                    state.intake.intakeState = IntakeState.Retracted;
+                }
+                else{
+                    state.intake.toggle();
+                }
+            }
 
             // Toggle OUTTAKE state.
             if (controller.aPress == 1.0) { state.outtake.toggle(); }
@@ -254,7 +289,7 @@ public class Robot {
 
             // Update servos / motors
             servos.setPositions(state.outtake.outtakeState); // <- Normal Servos
-            servos.setPowers(state.intake.intakeState); //                              <- CR Servos (intake rollers)
+            servos.setPowers(state.intake.intakeState, pidSettings.intakeSpeed); //                              <- CR Servos (intake rollers)
             motors.setPowers(); //                              <- Drive, outTake / inTake slides.
         }
     }
