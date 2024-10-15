@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,7 +39,6 @@ public class BaseOpMode extends LinearOpMode
         // Main loop
         while (opModeIsActive()){
             robot.drivetrain.drive(gamepad);
-            telemetry.update();
         }
     }
 }

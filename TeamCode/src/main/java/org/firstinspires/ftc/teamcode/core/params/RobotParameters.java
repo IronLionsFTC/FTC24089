@@ -8,8 +8,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
 public class RobotParameters {
     private RobotParameters(){} // Hide the constructor
     public static final double radius = 0.96;
-    public static final double maxOutTakeEncoder = 500.0;     // Degrees of movement which fully extends slides.
-    public static final double slideWeightCompensation = 0.1; // Do not go above ~0.5.
+    public static final double slideWeightCompensation = 0.6; // Do not go above ~0.5.
     public static final class Motors {
         public static final Motor.ZeroPowerBehavior zeroPowerBehaviour = Motor.ZeroPowerBehavior.BRAKE;
 
@@ -18,14 +17,20 @@ public class RobotParameters {
             public static final String leftBack = "leftBack";
             public static final String rightFront = "rightFront";
             public static final String rightBack = "rightBack";
-            public static final String leftIntake = "leftIntake";
-            public static final String rightIntake = "rightIntake";
-            public static final String leftSlide = "leftSlide";
-            public static final String rightSlide = "rightSlide";
+            public static final String leftIntakeSlide = "leftIntakeSlide";
+            public static final String rightIntakeSlide = "rightIntakeSlide";
+            public static final String leftOuttakeSlide = "leftOuttakeSlide";
+            public static final String rightOuttakeSlide = "rightOuttakeSlide";
 
-            // New
-            public static final String bucketServo = "BucketServo";
-            public static final String armServo = "ArmServo";
+            // Servo Motors
+            public static final String bucketServo = "BucketServo";  // Port 1 ?
+            public static final String armServo = "ArmServo";        // Port 0 ?
+            public static final String leftIntakeLiftServo = "leftIntakeLiftServo"; // Port e0
+            public static final String rightIntakeLiftServo = "rightIntakeLiftServo"; // Port e1
+
+            // CR Servo Motors
+            public static final String intakeServoA = "intakeServoA"; // Port 2
+            public static final String intakeServoB = "intakeServoB"; // Port 3
         }
         public static final class Reversed {
             public static final boolean leftFront = true;
@@ -64,8 +69,19 @@ public class RobotParameters {
         );
 
         public static final String hardwareMapName = "imu";
-        public static final double PIDcorrectionThreshold = 3.0;
+        public static final double PIDcorrectionThreshold = 5.0;
         public static final double correctionMultiplier = 1.0;
         public static final double rotationMinimumThreshold = 0.0;
+    }
+
+    public static final class ServoBounds {
+        public static final double armServoLower = 0.0;
+        public static final double armServoUpper = 1.0;
+        public static final double bucketServoLower = 0.7;
+        public static final double bucketServoUpper = 0.0;
+    }
+
+    public static final class SlideBounds {
+        public static final double outtake = 2500;
     }
 }
