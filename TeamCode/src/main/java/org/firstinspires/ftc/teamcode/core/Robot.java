@@ -161,7 +161,15 @@ public class Robot {
                 intakeTarget = 0.0;
                 intakeLift = 0.0;
             } else if (state.intake.intakeState == IntakeState.Retracted) {
-                intakeTarget = 60.0;
+                if (state.outtake.outtakeState != OuttakeState.Down) {
+                    intakeTarget = 60.0;
+                } else {
+                    if (motors.rightOuttakeSlide.getCurrentPosition() < 30.0 && motors.leftOuttakeSlide.getCurrentPosition() < 30.0) {
+                        intakeTarget = 0.0;
+                    } else {
+                        intakeTarget = 70.0;
+                    }
+                }
                 intakeLift = 0.0;
                 // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Extended) {
