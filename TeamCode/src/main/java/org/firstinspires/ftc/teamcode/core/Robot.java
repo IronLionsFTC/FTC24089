@@ -66,7 +66,7 @@ public class Robot {
         public static double intakeSlide_d = 0.0;
         public static double intakeSlide_f = 0.0;
 
-        public static double servoPos = 0.58;
+        public static double servoPos = 0.0;
         public static double intakeSpeed = 0.5;
 
         public PIDController outtakeSlideController = new PIDController(outtakeSlide_p, outtakeSlide_i, outtakeSlide_d);
@@ -189,6 +189,8 @@ public class Robot {
                 intakeLift = 0.0;
                 // servos.intakeLiftServo.setPosition(0.0);
             }
+
+            intakeLift = pidSettings.servoPos;
 
             servos.leftIntakeLiftServo.setPosition(intakeLift);
             servos.rightIntakeLiftServo.setPosition(1.0 - intakeLift);
