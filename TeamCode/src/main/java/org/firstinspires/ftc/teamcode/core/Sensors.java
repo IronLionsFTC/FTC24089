@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.core;
+import com.arcrobotics.ftclib.kinematics.Odometry;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,6 +10,7 @@ public class Sensors {
 
     public Sensors(HardwareMap hardwareMap) {
         intakeColorSensor = hardwareMap.get(RevColorSensorV3.class, "intakecolor");
+        intakeColorSensor.enableLed(true);
     }
 
     public double r() { return intakeColorSensor.red() / intakeColorSensor.getRawLightDetected(); }

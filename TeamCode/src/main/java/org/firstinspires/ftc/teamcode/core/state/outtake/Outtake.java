@@ -10,7 +10,7 @@ public class Outtake {
             outtakeState = OuttakeState.Up;
         } else if (outtakeState == OuttakeState.Up) {
             outtakeState = OuttakeState.Deposit;
-        } else {
+        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Passthrough) {
             outtakeState = OuttakeState.Down;
         }
     }

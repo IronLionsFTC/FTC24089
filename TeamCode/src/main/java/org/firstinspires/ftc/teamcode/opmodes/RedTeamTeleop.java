@@ -1,17 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
-
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-
-// Custom
 import org.firstinspires.ftc.teamcode.core.Robot;
+import org.firstinspires.ftc.teamcode.core.state.Team;
 
 @TeleOp
-public class BaseOpMode extends LinearOpMode
+public class RedTeamTeleop extends LinearOpMode
 {
     Robot robot;
     GamepadEx gamepad;
@@ -19,16 +14,13 @@ public class BaseOpMode extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry, Team.Red);
         gamepad = new GamepadEx(gamepad1);
 
         //////////////////////////////////////////
         // Runs when the init button is pressed //
         //////////////////////////////////////////
 
-        // code here
-
-        // Do not touch
         if (isStopRequested()) return;
         waitForStart();
 
@@ -38,7 +30,9 @@ public class BaseOpMode extends LinearOpMode
 
         // Main loop
         while (opModeIsActive()){
-            robot.drivetrain.drive(gamepad);
+            if (robot.drivetrain.drive(gamepad)) {
+                terminateOpModeNow();
+            }
         }
     }
 }

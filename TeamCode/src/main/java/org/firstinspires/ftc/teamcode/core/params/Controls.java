@@ -28,7 +28,11 @@ public final class Controls {
         A(GamepadKeys.Button.A),
         B(GamepadKeys.Button.B),
         X(GamepadKeys.Button.X),
-        Y(GamepadKeys.Button.Y);
+        Y(GamepadKeys.Button.Y),
+        U(GamepadKeys.Button.DPAD_UP),
+        D(GamepadKeys.Button.DPAD_DOWN),
+        R(GamepadKeys.Button.DPAD_RIGHT),
+        L(GamepadKeys.Button.DPAD_LEFT);
 
         private final GamepadKeys.Button button;
 
@@ -40,6 +44,7 @@ public final class Controls {
             return gamepad.getButton(button);
         }
     }
+
     public static enum Trigger {
         RT(GamepadKeys.Trigger.RIGHT_TRIGGER),
         LT(GamepadKeys.Trigger.LEFT_TRIGGER);
@@ -58,7 +63,4 @@ public final class Controls {
     // Rotation
     public static final JoystickAxis rotationPitchAxis = JoystickAxis.RX;
     public static final JoystickAxis rotationYawAxis = JoystickAxis.RY;
-    // Yaw correction
-    public static final Button resetYaw = Button.A;
-    public static final Button driverOverride = Button.B;
 }
