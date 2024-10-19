@@ -56,9 +56,9 @@ public class Robot {
         public static double outtakeSlide_d = 0.0001;
         public static double outtakeSlide_f = 0.1;
 
-        public static double outtakeArm_p = 0.05;
+        public static double outtakeArm_p = 0.0;
         public static double outtakeArm_i = 0.0;
-        public static double outtakeArm_d = 0.001;
+        public static double outtakeArm_d = 0.0;
         public static double outtakeArm_f = 0.0;
 
         public static double intakeSlide_p = 0.1;
@@ -66,7 +66,9 @@ public class Robot {
         public static double intakeSlide_d = 0.0;
         public static double intakeSlide_f = 0.0;
 
-        public static double servoPos = 0.0;
+        public static double clawPos = 0.0;
+        public static double armPos = 0.0;
+        public static double intakePosition = 0.56;
         public static double intakeSpeed = 0.5;
 
         public PIDController outtakeSlideController = new PIDController(outtakeSlide_p, outtakeSlide_i, outtakeSlide_d);
@@ -143,14 +145,15 @@ public class Robot {
             motors.powers.leftOuttakeSlide = outtakeSlidePower;
             motors.powers.rightOuttakeSlide = outtakeSlidePower;
 
-            double outtakeArmPos = servos.armServo.getPosition();
-            double outtakeArmResponse = pidSettings.outtakeArmController.calculate(outtakeArmPos, armTarget);
+            double outtakeArmPos = servos.armServo.getCurrentPosition();
+            double outtakeArmResponse = pidSettings.outtakeArmController.calculate(outtakeArmPos, pidSettings.armPos);
             double outtakeArmFeedForward = Math.cos(Math.toRadians(armTarget / pidSettings.ticks_in_degree)) * pidSettings.outtakeArm_f;
             double outtakeArmPower = outtakeArmResponse + outtakeArmFeedForward;
-            servos.positions.armCurrent += outtakeArmPower;
+            servos.armServo.set(outtakeArmPower);
         }
 
         public void moveIntake() {
+            servos.bucketServo.setPosition(pidSettings.clawPos);
             if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < 18 && state.intake.intakeState == IntakeState.Collecting) {
                 state.intake.intakeState = IntakeState.Evaluating;
             }
@@ -164,7 +167,7 @@ public class Robot {
                 if (state.outtake.outtakeState != OuttakeState.Down) {
                     intakeTarget = 60.0;
                 } else {
-                    if (motors.rightOuttakeSlide.getCurrentPosition() < 30.0 && motors.leftOuttakeSlide.getCurrentPosition() < 30.0) {
+                    if (motors.rightOuttakeSlide.getCurrentPosition() < 75.0 && motors.leftOuttakeSlide.getCurrentPosition() < 75.0) {
                         intakeTarget = 0.0;
                     } else {
                         intakeTarget = 70.0;
@@ -178,11 +181,11 @@ public class Robot {
                 // servos.intakeLiftServo.setPosition(0.95);
             } else if (state.intake.intakeState == IntakeState.Collecting) {
                 intakeTarget = 100.0;
-                intakeLift = pidSettings.servoPos;
+                intakeLift = pidSettings.intakePosition;
                 // servos.intakeLiftServo.setPosition(0.95);
             } else if (state.intake.intakeState == IntakeState.Evaluating) {
                 intakeTarget = 100.0;
-                intakeLift = pidSettings.servoPos;
+                intakeLift = pidSettings.intakePosition;
                 // servos.intakeLiftServo.setPosition(0.0);
             } else if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
                 intakeTarget = 28.0;
@@ -190,10 +193,8 @@ public class Robot {
                 // servos.intakeLiftServo.setPosition(0.0);
             }
 
-            intakeLift = pidSettings.servoPos;
-
-            servos.leftIntakeLiftServo.setPosition(intakeLift);
-            servos.rightIntakeLiftServo.setPosition(1.0 - intakeLift);
+            servos.leftIntakeLiftServo.setPosition(1.0 - intakeLift);
+            servos.rightIntakeLiftServo.setPosition(intakeLift);
             if (state.intake.intakeState == IntakeState.Evaluating) {
                 double r = sensors.r();
                 double g = sensors.g();
@@ -287,7 +288,7 @@ public class Robot {
             componentDrive(my, mx);
             // Experimental position tracking
             // calculateMovementVectorFromWheelRotations();
-            telemetry.addData("DIST", sensors.intakeColorSensor.getDistance(DistanceUnit.MM));
+            telemetry.addData("armPosition", servos.armServo.getCurrentPosition());
             telemetry.update();
         }
 
@@ -298,7 +299,7 @@ public class Robot {
             moveIntake();
 
             // Update servos / motors
-            servos.setPositions(state.outtake.outtakeState); // <- Normal Servos
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors); // <- Normal Servos
             servos.setPowers(state.intake.intakeState, pidSettings.intakeSpeed); //                              <- CR Servos (intake rollers)
             motors.setPowers(); //                              <- Drive, outTake / inTake slides.
         }
