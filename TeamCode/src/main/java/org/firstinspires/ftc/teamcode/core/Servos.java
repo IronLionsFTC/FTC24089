@@ -38,7 +38,7 @@ public class Servos {
             } else {
                 armServo.setPosition(0.0);
             }
-        } else {
+        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up) {
             if (outtakeState == OuttakeState.Deposit) {
                 bucketServo.setPosition(0.0);
             } else if (motors.leftIntakeSlide.getCurrentPosition() > 35.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
@@ -47,6 +47,17 @@ public class Servos {
                 bucketServo.setPosition(0.1);
             }
             armServo.setPosition(1.0);
+        } else if (outtakeState == OuttakeState.Passthrough || outtakeState == OuttakeState.PassthroughDeposit) {
+            if (motors.leftIntakeSlide.getCurrentPosition() > 40) {
+                armServo.setPosition(1.0);
+            } else {
+                armServo.setPosition(0.18);
+            }
+            if (outtakeState == OuttakeState.PassthroughDeposit) {
+                bucketServo.setPosition(0.1);
+            } else {
+                bucketServo.setPosition(0.27);
+            }
         }
     }
 
