@@ -75,13 +75,47 @@ public class RobotParameters {
     }
 
     public static final class ServoBounds {
-        public static final double armServoLower = 0.0;
-        public static final double armServoUpper = 1.0;
-        public static final double bucketServoLower = 0.7;
-        public static final double bucketServoUpper = 0.0;
+        public static final double armDown = 0.0;
+        public static final double armUp = 1.0;
+        public static final double bucketOpen = 0.1; // Parallel
+        public static final double bucketClosed = 0.27; // Gripping
+        public static final double intakeFolded = 0.0;
+        public static final double intakeDown = 0.56; // Just above tiles
     }
 
     public static final class SlideBounds {
-        public static final double outtake = 2500;
+        public static final double outtakeDown = 0.0;
+        public static final double outtakeUp = 2950.0;
+        public static final double intakeIn = 0.0;
+        public static final double intakeClearance = 70.0; // Allow outtake to freely move without clipping
+        public static final double intakeExtended = 100.0;
+        public static final double intakeTransfer = 28.0;  // Position where transfer is most consistent
+    }
+
+    public static final class Thresholds {
+        public static final double intakeSamplePresent = 25.0; // mm where sample is present  (if less than)
+        public static final double intakeClearanceForOuttakeMovement = 40.0; // When to start moving outtake
+        public static final double outtakeMinimumHeightToNotWorryAboutIntake = 800.0;
+        public static final double outtakeHeightToRetractIntakeUpper = 900.0; // When outtake reaches this height, retract intake
+        public static final double outtakeHeightToRetractIntakeLower = 100.0; //  ^^^
+    }
+
+    public static final class PIDConstants {
+        // Feedforward
+        public static final double ticksInDegree = 8.33;
+
+        // Outtake Slide Settings
+        public static final double intakeSlideP = 0.002;
+        public static final double intakeSlideI = 0.003;
+        public static final double intakeSlideD = 0.0001;
+        public static final double intakeSlideF = 0.1;
+
+        // Spinning Intake Speed
+        public static final double intakeSpeed = 0.25;
+
+        // Yaw Correction Settings
+        public static final double yawP = 0.03;
+        public static final double yawI = 0.05;
+        public static final double yawD = 0.001;
     }
 }

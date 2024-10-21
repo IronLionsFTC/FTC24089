@@ -13,6 +13,11 @@ public class Controller {
     public int aPress = 0;
     public int xPress = 0;
 
+    public int uPress = 0;
+    public int dPress = 0;
+    public int rPress = 0;
+    public int lPress = 0;
+
     public static class StickInputsRaw {
         public static double LX(GamepadEx gamepad) {
             return gamepad.getLeftX();
@@ -61,5 +66,13 @@ public class Controller {
         else { aPress = 0; }
         if (Controls.Button.B.isPressed(gamepad)) { bPress += 1; }
         else { bPress = 0; }
+        if (Controls.Button.U.isPressed(gamepad)) { uPress += 1; }
+        else { uPress = 0; }
+        if (Controls.Button.D.isPressed(gamepad)) { dPress += 1; }
+        else { dPress = 0; }
+        if (Controls.Button.R.isPressed(gamepad)) { rPress += 1; }
+        else { rPress = 0; }
+        if (Controls.Button.L.isPressed(gamepad)) { lPress += 1; }
+        else { lPress = 0; }
     }
 }

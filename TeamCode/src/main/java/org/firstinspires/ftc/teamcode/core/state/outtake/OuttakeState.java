@@ -4,5 +4,7 @@ public enum OuttakeState {
     Folded,
     Down,
     Up,
-    Deposit
+    Deposit,
+    Passthrough, // Just quickly jump out the back without moving sides
+    PassthroughDeposit // Drop without moving slides
 }
