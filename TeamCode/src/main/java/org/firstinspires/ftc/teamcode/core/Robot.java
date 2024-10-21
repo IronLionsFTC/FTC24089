@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
+import org.firstinspires.ftc.teamcode.opmodes.TuneIntakePID;
 
 public class Robot {
     public Team team;
@@ -40,7 +41,6 @@ public class Robot {
         blinkin = new Blinkin(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap);
-        // drivetrain.PositionTracker.position.fromComponent(0.0, 0.0);
         imu = new RobotIMU(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         sensors = new Sensors(hardwareMap);
@@ -51,16 +51,16 @@ public class Robot {
         public static double intakeSlide_p = 0.05;
         public static double intakeSlide_i = 0.05;
         public static double intakeSlide_d = 0.001;
-        public static double intakeSlide_f = 0.0;
-
-        public static double clawPos = 0.0;
-        public static double armPos = 0.0;
-        public static double intakePosition = 0.56;
 
         public PIDController outtakeSlideController = new PIDController(
                 RobotParameters.PIDConstants.intakeSlideP,
                 RobotParameters.PIDConstants.intakeSlideI,
                 RobotParameters.PIDConstants.intakeSlideD);
+        public PIDController armController = new PIDController(
+                RobotParameters.PIDConstants.armP,
+                RobotParameters.PIDConstants.armI,
+                RobotParameters.PIDConstants.armD
+        );
         public PIDController intakeSlideController = new PIDController(intakeSlide_d, intakeSlide_i, intakeSlide_d);
         public PIDController yawController = new PIDController(
                 RobotParameters.PIDConstants.yawP,
@@ -129,6 +129,13 @@ public class Robot {
             double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
             double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.intakeSlideF;
             double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
+
+            // Move the arm
+            double position = sensors.getArmPosition();
+            double response = pidSettings.armController.calculate(position, servos.positions.armServo);
+            double power = Math.cos(Math.toRadians(servos.positions.armServo / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.armF;
+            servos.armServo.set(response);
+
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
             if (slideTarget <= 10.0 && outtakeSlidePos < 30) { outtakeSlidePower = 0.0; }
             motors.powers.leftOuttakeSlide = outtakeSlidePower;
@@ -147,7 +154,7 @@ public class Robot {
             double intakeLift = RobotParameters.ServoBounds.intakeFolded;
             if (state.intake.intakeState == IntakeState.Folded) {
                 intakeTarget = RobotParameters.SlideBounds.intakeIn;;
-                intakeLift = RobotParameters.ServoBounds.intakeDown;
+                intakeLift = RobotParameters.ServoBounds.intakeFolded;
             } else if (state.intake.intakeState == IntakeState.Retracted || state.intake.intakeState == IntakeState.Folded) {
                 if (state.outtake.outtakeState != OuttakeState.Down) {
                     intakeTarget = RobotParameters.SlideBounds.intakeClearance;

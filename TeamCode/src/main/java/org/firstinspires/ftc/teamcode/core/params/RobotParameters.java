@@ -117,5 +117,12 @@ public class RobotParameters {
         public static final double yawP = 0.03;
         public static final double yawI = 0.05;
         public static final double yawD = 0.001;
+
+        // Arm Settings
+        public static final double armP = 0.004;
+        public static final double armI = 0.0;
+        public static final double armD = 0.001;
+        public static final double armF = 0.0;
+        // power should be F * sin(angle / 4)
     }
 }

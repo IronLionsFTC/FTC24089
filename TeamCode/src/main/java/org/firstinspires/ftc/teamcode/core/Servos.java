@@ -1,29 +1,25 @@
 package org.firstinspires.ftc.teamcode.core;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
 public class Servos {
     public Servo bucketServo;
-    public Servo armServo;
+    public CRServo armServo;
 
     public Servo leftIntakeLiftServo;
     public Servo rightIntakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
 
+    public Positions positions;
+
     public Servos(HardwareMap hardwareMap) {
         bucketServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.bucketServo);
-        armServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
+        armServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.armServo);
         intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
         intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
         leftIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftIntakeLiftServo);
@@ -34,9 +30,9 @@ public class Servos {
         if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
             bucketServo.setPosition(0.1);
             if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                armServo.setPosition(0.18);
+                positions.armServo = 0.18;
             } else {
-                armServo.setPosition(0.0);
+                positions.armServo = 0.0;
             }
         } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up) {
             if (outtakeState == OuttakeState.Deposit) {
@@ -46,12 +42,12 @@ public class Servos {
             } else {
                 bucketServo.setPosition(0.1);
             }
-            armServo.setPosition(1.0);
+            positions.armServo = 1.0;
         } else if (outtakeState == OuttakeState.Passthrough || outtakeState == OuttakeState.PassthroughDeposit) {
             if (motors.leftIntakeSlide.getCurrentPosition() > 40) {
-                armServo.setPosition(1.0);
+                positions.armServo = 1.0;
             } else {
-                armServo.setPosition(0.18);
+                positions.armServo = 0.18;
             }
             if (outtakeState == OuttakeState.PassthroughDeposit) {
                 bucketServo.setPosition(0.1);
@@ -72,5 +68,9 @@ public class Servos {
             intakeServoA.set(0.0);
             intakeServoB.set(0.0);
         }
+    }
+
+    public class Positions {
+        public double armServo = 0.0;
     }
 }
