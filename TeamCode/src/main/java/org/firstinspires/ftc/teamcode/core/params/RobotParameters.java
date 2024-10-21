@@ -46,9 +46,9 @@ public class RobotParameters {
 
     public static final class Odometry { // Last verified 13/6/24 8:21AM
         public static final class HardwareMapNames {
-            public static final String left = RobotParameters.Motors.HardwareMapNames.leftFront;
-            public static final String right = RobotParameters.Motors.HardwareMapNames.leftBack;
-            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightBack;
+            public static final String left = RobotParameters.Motors.HardwareMapNames.rightBack;
+            public static final String right = RobotParameters.Motors.HardwareMapNames.leftFront;
+            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightFront;
         }
         public static final class Reversed {
             public static final boolean left = true;
