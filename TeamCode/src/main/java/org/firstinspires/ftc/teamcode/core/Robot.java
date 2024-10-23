@@ -309,7 +309,7 @@ public class Robot {
 
             // Update servos / motors
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors);
-            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed);
+            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors);
             motors.setPowers();
             return false;
         }

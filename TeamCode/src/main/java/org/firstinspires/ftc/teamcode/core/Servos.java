@@ -49,13 +49,16 @@ public class Servos {
         }
     }
 
-    public void setPowers(IntakeState intakeState, double intakePower) {
+    public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors) {
         if (intakeState == IntakeState.Collecting) {
             intakeServoA.set(intakePower);
             intakeServoB.set(intakePower);
         } else if (intakeState == IntakeState.Dropping) {
             intakeServoA.set(-0.3);
             intakeServoB.set(-0.3);
+        } else if (intakeState == IntakeState.Depositing && sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
+            intakeServoA.set(-0.15);
+            intakeServoB.set(-0.15);
         } else {
             intakeServoA.set(0.0);
             intakeServoB.set(0.0);
