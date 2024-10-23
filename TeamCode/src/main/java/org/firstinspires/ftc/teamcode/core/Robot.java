@@ -250,7 +250,9 @@ public class Robot {
             if (rawError <= -180.0) { rawError += 360.0; }
             if (rawError > 180.0) { rawError -= 360.0; }
             double response = pidSettings.yawController.calculate(rawError, 0.0);
-            return response;
+			if Math.abs(reponse) < 0.1 {
+				return 0.0;
+			} else { return response; }
         }
 
         public boolean calculateMovement(GamepadEx gamepad) { // true -> STOP false -> CONTINUE
@@ -264,11 +266,11 @@ public class Robot {
 
             imu.targetYaw -= controllerR2 * 4.0;
 
-            // Wrap target rotation.
+            // Wrap target rotation
             if (imu.targetYaw < -180) { imu.targetYaw += 360; }
             if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
 
-            // Toggle the intake rollers.
+            // Toggle the intake state
             if (controller.xPress == 1.0) {
                 if (state.intake.intakeState == IntakeState.Collecting) {
                     state.intake.intakeState = IntakeState.Retracted;
