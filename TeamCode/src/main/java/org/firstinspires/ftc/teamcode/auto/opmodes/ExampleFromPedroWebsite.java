@@ -1,6 +1,5 @@
-/*\package org.firstinspires.ftc.teamcode.competition.autonomous;
-
-
+/*
+// package org.firstinspires.ftc.teamcode.competition.autonomous;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_AUTO_AVOID_POSITION;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_IN_POSITION;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_OUT_POSITION;
