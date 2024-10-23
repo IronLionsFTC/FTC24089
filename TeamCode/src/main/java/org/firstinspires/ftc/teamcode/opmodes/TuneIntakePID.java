@@ -13,14 +13,16 @@ public class TuneIntakePID extends LinearOpMode
 {
     @Config
     public static class ArmTargetPosition {
-        public static double T = 0.0;
+        public static double intakeT = 0.0; // 0.49
+        public static double armT = 0.0;    // 0.64 top, 0.0 bottom, 0.09 transfer
     }
 
     @Override
     public void runOpMode() throws InterruptedException
     {
         Servo arm = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
-
+        Servo intakeA = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftIntakeLiftServo);
+        Servo intakeB = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightIntakeLiftServo);
         //////////////////////////////////////////
         // Runs when the init button is pressed //
         //////////////////////////////////////////
@@ -34,7 +36,9 @@ public class TuneIntakePID extends LinearOpMode
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         // Main loop
         while (opModeIsActive()){
-            arm.setPosition(ArmTargetPosition.T);
+            arm.setPosition(ArmTargetPosition.armT);
+            intakeA.setPosition(1.0 - ArmTargetPosition.intakeT);
+            intakeB.setPosition(ArmTargetPosition.intakeT);
         }
     }
 }

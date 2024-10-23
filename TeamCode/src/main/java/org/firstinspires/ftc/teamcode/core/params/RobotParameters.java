@@ -76,11 +76,12 @@ public class RobotParameters {
 
     public static final class ServoBounds {
         public static final double armDown = 0.0;
-        public static final double armUp = 1.0;
+        public static final double armUp = 0.64;
+        public static final double armTransfer = 0.09;
         public static final double bucketOpen = 0.1; // Parallel
         public static final double bucketClosed = 0.27; // Gripping
         public static final double intakeFolded = 0.0;
-        public static final double intakeDown = 0.56; // Just above tiles
+        public static final double intakeDown = 0.49; // Just above tiles
     }
 
     public static final class SlideBounds {

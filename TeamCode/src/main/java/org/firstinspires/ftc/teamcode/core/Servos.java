@@ -29,9 +29,9 @@ public class Servos {
         if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
             bucketServo.setPosition(0.1);
             if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                positions.armServo = 40.0;
+                armServo.setPosition(RobotParameters.ServoBounds.armTransfer);
             } else {
-                positions.armServo = 0.0;
+                armServo.setPosition(RobotParameters.ServoBounds.armDown);
             }
         } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up) {
             if (outtakeState == OuttakeState.Deposit) {
