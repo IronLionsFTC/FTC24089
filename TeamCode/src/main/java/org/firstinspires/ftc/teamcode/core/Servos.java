@@ -39,9 +39,13 @@ public class Servos {
             } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
             } else {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen);
+                bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer);
             }
-            armServo.setPosition(RobotParameters.ServoBounds.armUp);
+            if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
+                armServo.setPosition(RobotParameters.ServoBounds.armUp);
+            } else {
+                armServo.setPosition(RobotParameters.ServoBounds.armTransfer);
+            }
         }
     }
 
@@ -50,8 +54,8 @@ public class Servos {
             intakeServoA.set(intakePower);
             intakeServoB.set(intakePower);
         } else if (intakeState == IntakeState.Dropping) {
-            intakeServoA.set(-1.0);
-            intakeServoB.set(-1.0);
+            intakeServoA.set(-0.3);
+            intakeServoB.set(-0.3);
         } else {
             intakeServoA.set(0.0);
             intakeServoB.set(0.0);
