@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode.core;
-import com.arcrobotics.ftclib.kinematics.Odometry;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Team;
-import org.firstinspires.ftc.teamcode.opmodes.TuneIntakePID;
 
 public class Sensors {
     public RevColorSensorV3 intakeColorSensor;

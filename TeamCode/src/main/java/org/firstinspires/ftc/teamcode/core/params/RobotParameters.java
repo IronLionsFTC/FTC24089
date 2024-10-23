@@ -76,7 +76,7 @@ public class RobotParameters {
 
     public static final class ServoBounds {
         public static final double armDown = 0.0;
-        public static final double armUp = 0.64;
+        public static final double armUp = 0.62;
         public static final double armTransfer = 0.09;
         public static final double bucketOpen = 0.1; // Parallel
         public static final double bucketClosed = 0.27; // Gripping
@@ -99,8 +99,8 @@ public class RobotParameters {
         public static final double outtakeMinimumHeightToNotWorryAboutIntake = 800.0;
         public static final double outtakeHeightToRetractIntakeUpper = 900.0; // When outtake reaches this height, retract intake
         public static final double outtakeHeightToRetractIntakeLower = 100.0; //  ^^^
-
-        public static final double colourThresh = 4.0; // Num loop cycles to be confident that a sample is there
+        public static final double colourFilter = 1.2; // Higher the stricter
+        public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
     }
 
     public static final class PIDConstants {

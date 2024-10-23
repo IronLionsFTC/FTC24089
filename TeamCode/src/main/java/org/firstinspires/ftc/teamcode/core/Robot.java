@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+import org.firstinspires.ftc.teamcode.core.state.Colour;
+import org.firstinspires.ftc.teamcode.core.state.ColourProfile;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
@@ -31,6 +33,7 @@ public class Robot {
     public Sensors sensors;
     public RobotState state = new RobotState();
     public PID_settings pidSettings = new PID_settings();
+    public ColourProfile intakeColour;
 
     public Robot(HardwareMap h, Telemetry t, Team colour) {
         hardwareMap = h;
@@ -44,6 +47,7 @@ public class Robot {
         imu = new RobotIMU(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         sensors = new Sensors(hardwareMap);
+        intakeColour = new ColourProfile(sensors);
         team = colour;
     }
     @Config
@@ -132,8 +136,10 @@ public class Robot {
         }
 
         public void moveIntake() {
+            // Constantly check for inputs even if not in evaluation mode
+            intakeColour.update(sensors);
             // If there is a sample present in the intake and the intake is spinning, evaluate the colour in this loop cycle.
-            if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < RobotParameters.Thresholds.intakeSamplePresent
+            if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < RobotParameters.Thresholds.intakeSamplePresent * 1.5 // Give a bit of range before attempting a detection
                     && state.intake.intakeState == IntakeState.Collecting) {
                 state.intake.intakeState = IntakeState.Evaluating;
             }
@@ -191,8 +197,10 @@ public class Robot {
             servos.rightIntakeLiftServo.setPosition(intakeLift);
 
             if (state.intake.intakeState == IntakeState.Evaluating) {
-                // If a sample is being moved through intake, measure colour
-                if (sensors.isMatch(team)) {
+                Colour currentColour = intakeColour.classify();
+                if ((currentColour == Colour.Red || currentColour == Colour.Yellow) && team == Team.Red) {
+                    state.intake.intakeState = IntakeState.Depositing;
+                } else if ((currentColour == Colour.Blue || currentColour == Colour.Yellow) && team == Team.Blue) {
                     state.intake.intakeState = IntakeState.Depositing;
                 } else {
                     state.intake.intakeState = IntakeState.Collecting;
