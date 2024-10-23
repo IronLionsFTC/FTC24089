@@ -139,7 +139,7 @@ public class Robot {
             // Constantly check for inputs even if not in evaluation mode
             intakeColour.update(sensors);
             // If there is a sample present in the intake and the intake is spinning, evaluate the colour in this loop cycle.
-            if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < RobotParameters.Thresholds.intakeSamplePresent * 1.5 // Give a bit of range before attempting a detection
+            if (sensors.d() < RobotParameters.Thresholds.intakeSamplePresent * 1.5 // Give a bit of range before attempting a detection
                     && state.intake.intakeState == IntakeState.Collecting) {
                 state.intake.intakeState = IntakeState.Evaluating;
             }
@@ -218,7 +218,7 @@ public class Robot {
             // Then it must be in the outtake, thus move the intake out of the way
             // which allows the outtake to move
             if (state.intake.intakeState == IntakeState.Dropping) {
-                if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) > RobotParameters.Thresholds.intakeSamplePresent) {
+                if (sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
                     state.intake.intakeState = IntakeState.Retracted;
                 }
             }

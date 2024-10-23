@@ -24,7 +24,7 @@ public class ColourProfile {
         else { blueCount = 0; }
         if (b * 2.0 < (r + g) && g > r * colourFilter) { yellowCount += 1; }
         else { yellowCount = 0; }
-        if (sensors.intakeColorSensor.getDistance(DistanceUnit.MM) < RobotParameters.Thresholds.intakeSamplePresent) { proxCount += 1; }
+        if (sensors.d() < RobotParameters.Thresholds.intakeSamplePresent) { proxCount += 1; }
     }
 
     public void update(Sensors sensors) {

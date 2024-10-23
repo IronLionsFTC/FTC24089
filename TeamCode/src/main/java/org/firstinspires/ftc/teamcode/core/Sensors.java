@@ -24,26 +24,7 @@ public class Sensors {
     public double r() { return intakeColorSensor.red() / intakeColorSensor.getRawLightDetected(); }
     public double g() { return intakeColorSensor.green() / intakeColorSensor.getRawLightDetected(); }
     public double b() { return intakeColorSensor.blue() / intakeColorSensor.getRawLightDetected(); }
-
-    public boolean isMatch(Team team) {
-        double r = r();
-        double b = b();
-        double g = g();
-        if (b > (r + g) * 1.2) {
-            bCount += 1.0;
-        } else { bCount = 0.0; }
-        if (r > (b + g) * 1.2) {
-            rCount += 1.0;
-        } else { rCount = 0.0; }
-        if (intakeColorSensor.getDistance(DistanceUnit.MM) < 20.0) {
-            count += 1.0;
-        } else { count = 0.0; }
-        if (team == Team.Blue) {
-            return (bCount >= RobotParameters.Thresholds.colourThresh && count >= RobotParameters.Thresholds.colourThresh);
-        } else {
-            return (rCount >= RobotParameters.Thresholds.colourThresh && count >= RobotParameters.Thresholds.colourThresh);
-        }
-    }
+    public double d() { return intakeColorSensor.getDistance(DistanceUnit.MM); }
 
     public double getArmPosition() {
         double voltage = armcoder.getVoltage();
