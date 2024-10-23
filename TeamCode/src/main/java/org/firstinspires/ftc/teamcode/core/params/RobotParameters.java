@@ -81,7 +81,7 @@ public class RobotParameters {
         public static final double bucketOpen = 0.1; // Parallel
         public static final double bucketClosed = 0.27; // Gripping
         public static final double intakeFolded = 0.0;
-        public static final double intakeDown = 0.49; // Just above tiles
+        public static final double intakeDown = 0.47; // Just above tiles
     }
 
     public static final class SlideBounds {
@@ -90,15 +90,17 @@ public class RobotParameters {
         public static final double intakeIn = 0.0;
         public static final double intakeClearance = 70.0; // Allow outtake to freely move without clipping
         public static final double intakeExtended = 100.0;
-        public static final double intakeTransfer = 28.0;  // Position where transfer is most consistent
+        public static final double intakeTransfer = 48.0;  // Position where transfer is most consistent
     }
 
     public static final class Thresholds {
-        public static final double intakeSamplePresent = 25.0; // mm where sample is present  (if less than)
-        public static final double intakeClearanceForOuttakeMovement = 40.0; // When to start moving outtake
+        public static final double intakeSamplePresent = 20.0; // mm where sample is present  (if less than)
+        public static final double intakeClearanceForOuttakeMovement = 60.0; // When to start moving outtake
         public static final double outtakeMinimumHeightToNotWorryAboutIntake = 800.0;
         public static final double outtakeHeightToRetractIntakeUpper = 900.0; // When outtake reaches this height, retract intake
         public static final double outtakeHeightToRetractIntakeLower = 100.0; //  ^^^
+
+        public static final double colourThresh = 4.0; // Num loop cycles to be confident that a sample is there
     }
 
     public static final class PIDConstants {

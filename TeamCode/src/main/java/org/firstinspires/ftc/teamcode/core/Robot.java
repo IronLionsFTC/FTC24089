@@ -192,28 +192,10 @@ public class Robot {
 
             if (state.intake.intakeState == IntakeState.Evaluating) {
                 // If a sample is being moved through intake, measure colour
-                double r = sensors.r();
-                double g = sensors.g();
-                double b = sensors.b();
-
-                if (team == Team.Red) {
-                    // Red or yellow
-                    if (r > (g + b) || ((r + g) > b * 2.0 && r < g)) {
-                        // Transfer to outtake
-                        state.intake.intakeState = IntakeState.Depositing;
-                    } else {
-                        // If blue, continue intaking
-                        state.intake.intakeState = IntakeState.Collecting;
-                    }
+                if (sensors.isMatch(team)) {
+                    state.intake.intakeState = IntakeState.Depositing;
                 } else {
-                    // Blue or yellow
-                    if (b > (r + g) || ((r + g) > b * 2.0 && r < g)) {
-                        // Transfer to outtake
-                        state.intake.intakeState = IntakeState.Depositing;
-                    } else {
-                        // If red, continue intaking
-                        state.intake.intakeState = IntakeState.Collecting;
-                    }
+                    state.intake.intakeState = IntakeState.Collecting;
                 }
             }
             // Wait for driver to outtake before dropping sample
@@ -250,7 +232,7 @@ public class Robot {
             if (rawError <= -180.0) { rawError += 360.0; }
             if (rawError > 180.0) { rawError -= 360.0; }
             double response = pidSettings.yawController.calculate(rawError, 0.0);
-			if Math.abs(reponse) < 0.1 {
+			if (Math.abs(response) < 0.1) {
 				return 0.0;
 			} else { return response; }
         }

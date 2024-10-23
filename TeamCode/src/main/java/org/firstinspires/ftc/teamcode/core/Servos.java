@@ -35,24 +35,13 @@ public class Servos {
             }
         } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up) {
             if (outtakeState == OuttakeState.Deposit) {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen * 0.5); // Give some leeway to make sure it doesn't get stuck
-            } else if (motors.leftIntakeSlide.getCurrentPosition() > 35.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
-            } else {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
-            }
-            armServo.setPosition(RobotParameters.ServoBounds.armUp);
-        } else if (outtakeState == OuttakeState.Passthrough || outtakeState == OuttakeState.PassthroughDeposit) {
-            if (motors.leftIntakeSlide.getCurrentPosition() > 40.0) {
-                armServo.setPosition(RobotParameters.ServoBounds.armUp);
-            } else {
-                armServo.setPosition(RobotParameters.ServoBounds.armTransfer);
-            }
-            if (outtakeState == OuttakeState.PassthroughDeposit) {
+                bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen); // Give some leeway to make sure it doesn't get stuck
+            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
             } else {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen);
             }
+            armServo.setPosition(RobotParameters.ServoBounds.armUp);
         }
     }
 
