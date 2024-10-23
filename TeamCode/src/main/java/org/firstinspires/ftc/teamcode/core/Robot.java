@@ -301,8 +301,6 @@ public class Robot {
             if (controller.aPress == 1.0) { state.outtake.toggle(); }
             componentDrive(my, mx);
 
-            telemetry.addData("pos", sensors.getArmPosition());
-            telemetry.addData("tar", servos.positions.armServo);
             telemetry.update();
 
             // EMERGENCY STOP

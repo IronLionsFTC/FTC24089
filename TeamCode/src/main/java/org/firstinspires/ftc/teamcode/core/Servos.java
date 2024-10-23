@@ -41,12 +41,12 @@ public class Servos {
             } else {
                 bucketServo.setPosition(0.1);
             }
-            positions.armServo = 325.0;
+            positions.armServo = RobotParameters.ServoBounds.armUp;
         } else if (outtakeState == OuttakeState.Passthrough || outtakeState == OuttakeState.PassthroughDeposit) {
             if (motors.leftIntakeSlide.getCurrentPosition() > 40.0) {
-                positions.armServo = 1.0;
+                positions.armServo = RobotParameters.ServoBounds.armUp;
             } else {
-                positions.armServo = 40.0;
+                positions.armServo = RobotParameters.ServoBounds.armTransfer;
             }
             if (outtakeState == OuttakeState.PassthroughDeposit) {
                 bucketServo.setPosition(0.1);
