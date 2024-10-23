@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.competition.autonomous;
+/*\package org.firstinspires.ftc.teamcode.competition.autonomous;
 
 
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_AUTO_AVOID_POSITION;
@@ -434,12 +434,12 @@ public class BlueLeftInnerAuto extends OpMode {
                 break;
             case 213:
                 setPathState(214);
-/*
+
 if (pathTimer.getElapsedTime() > OUTTAKE_CLAW_DROP_TIME) {
 twoPersonDrive.setOuttakeArmInterpolation(OUTTAKE_ARM_OUT_POSITION, 300);
 setPathState(214);
 }
-*/
+
                 break;
             case 214:
                 if (twoPersonDrive.outtakeArmAtTargetPosition()) {
@@ -576,12 +576,12 @@ setPathState(214);
                 break;
             case 313:
                 setPathState(314);
-/*
+
 if (pathTimer.getElapsedTime() > OUTTAKE_CLAW_DROP_TIME) {
 twoPersonDrive.setOuttakeArmInterpolation(OUTTAKE_ARM_OUT_POSITION, 300);
 setPathState(314);
 }
-*/
+
                 break;
             case 314:
                 if (twoPersonDrive.outtakeArmAtTargetPosition()) {
@@ -756,7 +756,7 @@ setPathState(314);
             } else {
                 rearDistanceSensorDisconnected = true;
             }
-/*
+
 // too close
 if (distance < 0.5)
 follower.poseUpdater.setYOffset(follower.poseUpdater.getYOffset() + distanceSensorDecimationTimer.getElapsedTimeSeconds() * 1.5);
@@ -772,7 +772,7 @@ follower.poseUpdater.setYOffset(follower.poseUpdater.getYOffset() - (distance - 
 
 if (Math.abs(follower.poseUpdater.getYOffset()) > 1.5)
 follower.poseUpdater.setYOffset(1.5 * MathFunctions.getSign(follower.poseUpdater.getYOffset()));
-*/
+
 //telemetry.addData("rear distance value", distance);
             distanceSensorDecimationTimer.resetTimer();
         }
@@ -916,3 +916,4 @@ follower.poseUpdater.setYOffset(1.5 * MathFunctions.getSign(follower.poseUpdater
     public void stop() {
     }
 }
+*/

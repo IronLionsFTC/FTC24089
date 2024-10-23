@@ -8,29 +8,28 @@ import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
 public class Servos {
     public Servo bucketServo;
-    public CRServo armServo;
-
+    public Servo armServo;
     public Servo leftIntakeLiftServo;
     public Servo rightIntakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
-
     public Positions positions;
 
     public Servos(HardwareMap hardwareMap) {
         bucketServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.bucketServo);
-        armServo = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.armServo);
+        armServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
         intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
         intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
         leftIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftIntakeLiftServo);
         rightIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightIntakeLiftServo);
+        positions = new Positions();
     }
 
     public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors) {
         if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
             bucketServo.setPosition(0.1);
             if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                positions.armServo = 0.18;
+                positions.armServo = 40.0;
             } else {
                 positions.armServo = 0.0;
             }
@@ -42,12 +41,12 @@ public class Servos {
             } else {
                 bucketServo.setPosition(0.1);
             }
-            positions.armServo = 1.0;
+            positions.armServo = 325.0;
         } else if (outtakeState == OuttakeState.Passthrough || outtakeState == OuttakeState.PassthroughDeposit) {
-            if (motors.leftIntakeSlide.getCurrentPosition() > 40) {
+            if (motors.leftIntakeSlide.getCurrentPosition() > 40.0) {
                 positions.armServo = 1.0;
             } else {
-                positions.armServo = 0.18;
+                positions.armServo = 40.0;
             }
             if (outtakeState == OuttakeState.PassthroughDeposit) {
                 bucketServo.setPosition(0.1);

@@ -56,11 +56,6 @@ public class Robot {
                 RobotParameters.PIDConstants.intakeSlideP,
                 RobotParameters.PIDConstants.intakeSlideI,
                 RobotParameters.PIDConstants.intakeSlideD);
-        public PIDController armController = new PIDController(
-                RobotParameters.PIDConstants.armP,
-                RobotParameters.PIDConstants.armI,
-                RobotParameters.PIDConstants.armD
-        );
         public PIDController intakeSlideController = new PIDController(intakeSlide_d, intakeSlide_i, intakeSlide_d);
         public PIDController yawController = new PIDController(
                 RobotParameters.PIDConstants.yawP,
@@ -129,12 +124,6 @@ public class Robot {
             double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
             double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.intakeSlideF;
             double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
-
-            // Move the arm
-            double position = sensors.getArmPosition();
-            double response = pidSettings.armController.calculate(position, servos.positions.armServo);
-            double power = Math.cos(Math.toRadians(servos.positions.armServo / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.armF;
-            servos.armServo.set(response);
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
             if (slideTarget <= 10.0 && outtakeSlidePos < 30) { outtakeSlidePower = 0.0; }
@@ -273,7 +262,7 @@ public class Robot {
             double controllerR = controller.yawRotation(gamepad);
             double controllerR2 = controller.pitchRotation(gamepad);
 
-            imu.targetYaw -= controllerR2 * 8.0; // TODO: Fix joystick axis using Y instead of X
+            imu.targetYaw -= controllerR2 * 4.0;
 
             // Wrap target rotation.
             if (imu.targetYaw < -180) { imu.targetYaw += 360; }
@@ -311,6 +300,10 @@ public class Robot {
             // Toggle OUTTAKE state.
             if (controller.aPress == 1.0) { state.outtake.toggle(); }
             componentDrive(my, mx);
+
+            telemetry.addData("pos", sensors.getArmPosition());
+            telemetry.addData("tar", servos.positions.armServo);
+            telemetry.update();
 
             // EMERGENCY STOP
             return (controller.bPress > 0);
