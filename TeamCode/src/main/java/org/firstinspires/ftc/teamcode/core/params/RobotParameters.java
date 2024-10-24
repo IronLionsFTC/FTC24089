@@ -51,9 +51,9 @@ public class RobotParameters {
             public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightFront;
         }
         public static final class Reversed {
-            public static final boolean left = true;
+            public static final boolean left = false;
             public static final boolean right = false;
-            public static final boolean sideways = false;
+            public static final boolean sideways = true;
         }
     }
 
