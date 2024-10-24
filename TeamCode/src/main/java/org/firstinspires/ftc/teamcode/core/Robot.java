@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
@@ -19,7 +18,6 @@ import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
-import org.firstinspires.ftc.teamcode.opmodes.TuneIntakePID;
 
 public class Robot {
     public Team team;
@@ -96,8 +94,8 @@ public class Robot {
                 movementMultiplier = 0.2;
             }
             powerVec2.fromComponent(rightPower, forwardPower);
-            motors.powers.leftFront = ((rightPower + forwardPower) * movementMultiplier + r);
-            motors.powers.rightFront = ((-rightPower + forwardPower) * movementMultiplier - r);
+            motors.powers.leftFront = ((-rightPower + forwardPower) * movementMultiplier - r);
+            motors.powers.rightFront = ((rightPower + forwardPower) * movementMultiplier + r);
             motors.powers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
