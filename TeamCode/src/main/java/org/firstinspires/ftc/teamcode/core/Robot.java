@@ -94,8 +94,8 @@ public class Robot {
                 movementMultiplier = 0.2;
             }
             powerVec2.fromComponent(rightPower, forwardPower);
-            motors.powers.leftFront = ((rightPower + forwardPower) * movementMultiplier + r);
-            motors.powers.rightFront = ((-rightPower + forwardPower) * movementMultiplier - r);
+            motors.powers.leftFront = ((-rightPower + forwardPower) * movementMultiplier - r);
+            motors.powers.rightFront = ((rightPower + forwardPower) * movementMultiplier + r);
             motors.powers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
