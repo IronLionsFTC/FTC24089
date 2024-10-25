@@ -41,7 +41,7 @@ public class Servos {
             } else {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer);
             }
-            if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
+            if (motors.leftOuttakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.outtakeUp - 100.0) {
                 armServo.setPosition(RobotParameters.ServoBounds.armUp);
             } else {
                 armServo.setPosition(RobotParameters.SystemsTuning.armTransfer);
