@@ -79,8 +79,8 @@ public class RobotParameters {
         public static final double armDown = 0.0;
         public static final double armUp = 0.65;
         public static final double armTransfer = 0.19;
-        public static final double bucketOpen = 0.1; // Parallel
-        public static final double bucketTransfer = 0.12;
+        public static final double bucketOpen = 0.07; // Parallel
+        public static final double bucketTransfer = 0.08;
         public static final double bucketClosed = 0.27; // Gripping
         public static final double intakeFolded = 0.0;
         public static final double intakeDown = 0.47; // Just above tiles
@@ -92,7 +92,7 @@ public class RobotParameters {
         public static final double intakeIn = 0.0;
         public static final double intakeClearance = 70.0; // Allow outtake to freely move without clipping
         public static final double intakeExtended = 100.0;
-        public static final double intakeTransfer = 37.0;  // Position where transfer is most consistent
+        public static final double intakeTransfer = 45.0;  // Position where transfer is most consistent
     }
 
     public static final class Thresholds {
@@ -117,7 +117,7 @@ public class RobotParameters {
 
         // Spinning Intake Speed
         public static final double intakeSpeed = 0.3;
-        public static final double reverseIntakeSpeed = 0.5;
+        public static final double reverseIntakeSpeed = 0.2;
 
         // Yaw Correction Settings
         public static final double yawP = 0.03;

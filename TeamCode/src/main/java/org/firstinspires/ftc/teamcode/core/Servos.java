@@ -33,10 +33,10 @@ public class Servos {
             } else {
                 armServo.setPosition(RobotParameters.ServoBounds.armDown);
             }
-        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up) {
-            if (outtakeState == OuttakeState.Deposit) {
+        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up || outtakeState == OuttakeState.PassthroughDeposit) {
+            if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer); // Give some leeway to make sure it doesn't get stuck
-            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
+            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance || motors.leftOuttakeSlide.getCurrentPosition() > 300.0) {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
             } else {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer);
