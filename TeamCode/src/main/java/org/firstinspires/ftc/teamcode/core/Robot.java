@@ -185,7 +185,7 @@ public class Robot {
                 intakeLift = RobotParameters.ServoBounds.intakeDown;
             } else if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
                 // Transferring sample from intake -> outtake
-                intakeTarget = RobotParameters.SlideBounds.intakeTransfer;
+                intakeTarget = RobotParameters.SystemsTuning.intakeTransfer;
                 intakeLift = RobotParameters.ServoBounds.intakeFolded;
             }
 

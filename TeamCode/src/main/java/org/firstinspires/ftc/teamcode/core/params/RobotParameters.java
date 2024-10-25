@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.core.params;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
@@ -79,7 +80,7 @@ public class RobotParameters {
         public static final double armUp = 0.65;
         public static final double armTransfer = 0.19;
         public static final double bucketOpen = 0.1; // Parallel
-        public static final double bucketTransfer = 0.16;
+        public static final double bucketTransfer = 0.12;
         public static final double bucketClosed = 0.27; // Gripping
         public static final double intakeFolded = 0.0;
         public static final double intakeDown = 0.47; // Just above tiles
@@ -122,5 +123,12 @@ public class RobotParameters {
         public static final double yawP = 0.03;
         public static final double yawI = 0.05;
         public static final double yawD = 0.001;
+    }
+
+    @Config
+    public static class SystemsTuning {
+        public static double armTransfer = ServoBounds.armTransfer;
+        public static double intakeTransfer = SlideBounds.intakeTransfer;
+        public static double reverseIntakeSpeed = PIDConstants.reverseIntakeSpeed;
     }
 }
