@@ -50,7 +50,7 @@ public class Servos {
         }
     }
 
-    public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors) {
+    public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors, boolean cancelIntake) {
         if (Math.abs(intakeOverridePower) < 0.1) {
             if (intakeState == IntakeState.Collecting) {
                 intakeServoA.set(intakePower);
@@ -68,6 +68,10 @@ public class Servos {
         } else {
             intakeServoA.set(intakeOverridePower);
             intakeServoB.set(intakeOverridePower);
+        }
+        if (cancelIntake) {
+            intakeServoA.set(0.0);
+            intakeServoB.set(0.0);
         }
     }
 }

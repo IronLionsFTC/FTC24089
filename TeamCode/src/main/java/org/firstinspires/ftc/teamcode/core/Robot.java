@@ -274,7 +274,7 @@ public class Robot {
 
             if (controller.uPress >= 1) {
                 mx = 0.0;
-                my = -0.3;
+                my = -0.4;
             }
 
             if (controller.rPress >= 1) {
@@ -332,7 +332,7 @@ public class Robot {
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors);
-            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors);
+            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
             motors.setPowers();
             return false;
         }
