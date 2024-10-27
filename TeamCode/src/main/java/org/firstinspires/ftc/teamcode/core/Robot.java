@@ -255,7 +255,11 @@ public class Robot {
             imu.targetYaw -= controllerR2 * 6.0;
 
             if (Math.abs(controllerR2) < 0.01) {
-                imu.targetYaw = imu.getYawDegrees();
+                if (controller.lastYawWasAnalog) {
+                    imu.targetYaw = imu.getYawDegrees();
+                }
+            } else {
+                controller.lastYawWasAnalog = true;
             }
 
             // Toggle the intake state
@@ -289,10 +293,12 @@ public class Robot {
 
             else if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
                 imu.targetYaw -= 45.0;
+                controller.lastYawWasAnalog = false;
             }
 
             else if (controller.rbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
                 imu.targetYaw += 45.0;
+                controller.lastYawWasAnalog = false;
             }
 
             // Wrap target rotation

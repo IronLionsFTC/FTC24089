@@ -21,6 +21,10 @@ public class Controller {
     public int lbPress = 0;
     public int rbPress = 0;
 
+    // Basically, override yaw correction to stop from over rotating when a joystick rotation is made,
+    // do not cut off the yaw correction if the last input was NOT a joystick rotation
+    public boolean lastYawWasAnalog = true;
+
     public static class StickInputsRaw {
         public static double LX(GamepadEx gamepad) {
             return gamepad.getLeftX();
