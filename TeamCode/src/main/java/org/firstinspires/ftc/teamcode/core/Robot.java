@@ -252,11 +252,11 @@ public class Robot {
             double controllerR = controller.yawRotation(gamepad);
             double controllerR2 = controller.pitchRotation(gamepad);
 
-            imu.targetYaw -= controllerR2 * 4.0;
+            imu.targetYaw -= controllerR2 * 6.0;
 
-            // Wrap target rotation
-            if (imu.targetYaw < -180) { imu.targetYaw += 360; }
-            if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
+            if (Math.abs(controllerR2) < 0.01) {
+                imu.targetYaw = imu.getYawDegrees();
+            }
 
             // Toggle the intake state
             if (controller.xPress == 1.0) {
@@ -286,6 +286,18 @@ public class Robot {
                 state.intake.intakeState = IntakeState.Dropping;
                 state.outtake.outtakeState = OuttakeState.Passthrough;
             }
+
+            else if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+                imu.targetYaw -= 45.0;
+            }
+
+            else if (controller.rbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+                imu.targetYaw += 45.0;
+            }
+
+            // Wrap target rotation
+            if (imu.targetYaw < -180) { imu.targetYaw += 360; }
+            if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
 
             // Toggle OUTTAKE state.
             if (controller.aPress == 1.0) { state.outtake.toggle(); }

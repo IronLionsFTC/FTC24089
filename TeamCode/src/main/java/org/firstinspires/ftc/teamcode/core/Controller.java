@@ -18,6 +18,9 @@ public class Controller {
     public int rPress = 0;
     public int lPress = 0;
 
+    public int lbPress = 0;
+    public int rbPress = 0;
+
     public static class StickInputsRaw {
         public static double LX(GamepadEx gamepad) {
             return gamepad.getLeftX();
@@ -74,5 +77,9 @@ public class Controller {
         else { rPress = 0; }
         if (Controls.Button.L.isPressed(gamepad)) { lPress += 1; }
         else { lPress = 0; }
+        if (Controls.Button.LB.isPressed(gamepad)) { rbPress += 1; }
+        else { rbPress = 0; }
+        if (Controls.Button.RB.isPressed(gamepad)) { lbPress += 1; }
+        else { lbPress = 0; }
     }
 }
