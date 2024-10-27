@@ -297,6 +297,10 @@ public class Robot {
                 state.outtake.outtakeState = OuttakeState.Passthrough;
             }
 
+            if (controller.yPress == 1 && state.outtake.outtakeState == OuttakeState.Passthrough) {
+                state.outtake.outtakeState = OuttakeState.PassthroughDeposit;
+            }
+
             if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
                 imu.targetYaw -= 45.0;
                 controller.lastYawWasAnalog = false;

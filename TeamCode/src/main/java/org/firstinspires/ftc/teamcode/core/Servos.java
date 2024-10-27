@@ -48,6 +48,9 @@ public class Servos {
                 armServo.setPosition(RobotParameters.SystemsTuning.armTransfer);
             }
         }
+        if (outtakeState == OuttakeState.PassthroughDeposit) {
+            armServo.setPosition(RobotParameters.ServoBounds.armUp);
+        }
     }
 
     public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors, boolean cancelIntake) {
