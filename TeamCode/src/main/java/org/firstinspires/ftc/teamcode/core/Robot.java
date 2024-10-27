@@ -257,6 +257,7 @@ public class Robot {
             if (Math.abs(controllerR2) < 0.01) {
                 if (controller.lastYawWasAnalog) {
                     imu.targetYaw = imu.getYawDegrees();
+                    controller.lastYawWasAnalog = false;
                 }
             } else {
                 controller.lastYawWasAnalog = true;
@@ -286,17 +287,22 @@ public class Robot {
                 my = 0.0;
             }
 
+            if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+                imu.targetYaw = 0.0;
+                controller.lastYawWasAnalog = false;
+            }
+
             if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Depositing) {
                 state.intake.intakeState = IntakeState.Dropping;
                 state.outtake.outtakeState = OuttakeState.Passthrough;
             }
 
-            else if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+            if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
                 imu.targetYaw -= 45.0;
                 controller.lastYawWasAnalog = false;
             }
 
-            else if (controller.rbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+            if (controller.rbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
                 imu.targetYaw += 45.0;
                 controller.lastYawWasAnalog = false;
             }
@@ -324,6 +330,7 @@ public class Robot {
             moveIntake();
 
             // Update servos / motors
+            servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors);
             motors.setPowers();

@@ -14,6 +14,7 @@ public class Servos {
     public Servo rightIntakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
+    public double intakeOverridePower = 0.0;
 
 	// Initialize the motors with hardwaremap
     public Servos(HardwareMap hardwareMap) {
@@ -50,18 +51,23 @@ public class Servos {
     }
 
     public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors) {
-        if (intakeState == IntakeState.Collecting) {
-            intakeServoA.set(intakePower);
-            intakeServoB.set(intakePower);
-        } else if (intakeState == IntakeState.Dropping) {
-            intakeServoA.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
-            intakeServoB.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
-        } else if (intakeState == IntakeState.Depositing && sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
-            intakeServoA.set(-0.2);
-            intakeServoB.set(-0.2);
+        if (Math.abs(intakeOverridePower) < 0.1) {
+            if (intakeState == IntakeState.Collecting) {
+                intakeServoA.set(intakePower);
+                intakeServoB.set(intakePower);
+            } else if (intakeState == IntakeState.Dropping) {
+                intakeServoA.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
+                intakeServoB.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
+            } else if (intakeState == IntakeState.Depositing && sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
+                intakeServoA.set(-0.2);
+                intakeServoB.set(-0.2);
+            } else {
+                intakeServoA.set(0.0);
+                intakeServoB.set(0.0);
+            }
         } else {
-            intakeServoA.set(0.0);
-            intakeServoB.set(0.0);
+            intakeServoA.set(intakeOverridePower);
+            intakeServoB.set(intakeOverridePower);
         }
     }
 }

@@ -120,7 +120,7 @@ public class RobotParameters {
         public static final double reverseIntakeSpeed = 0.2;
 
         // Yaw Correction Settings
-        public static final double yawP = 0.03;
+        public static final double yawP = 0.015;
         public static final double yawI = 0.05;
         public static final double yawD = 0.001;
     }
