@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.core.state.outtake;
 
 public class Outtake {
-    public OuttakeState outtakeState = OuttakeState.Folded;
+    public OuttakeState outtakeState = OuttakeState.Down;
 
     public void toggle() {
         if (outtakeState == OuttakeState.Folded) {

@@ -94,8 +94,9 @@ public class Robot {
                 movementMultiplier = 0.2;
             }
             powerVec2.fromComponent(rightPower, forwardPower);
-            motors.powers.leftFront = ((-rightPower + forwardPower) * movementMultiplier - r);
-            motors.powers.rightFront = ((rightPower + forwardPower) * movementMultiplier + r);
+            // Forwards drive (front two need to be reversed)
+            motors.powers.leftFront = ((rightPower - forwardPower) * movementMultiplier + r);
+            motors.powers.rightFront = ((-rightPower - forwardPower) * movementMultiplier - r);
             motors.powers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
@@ -184,7 +185,7 @@ public class Robot {
                 intakeLift = RobotParameters.ServoBounds.intakeDown;
             } else if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
                 // Transferring sample from intake -> outtake
-                intakeTarget = RobotParameters.SlideBounds.intakeTransfer;
+                intakeTarget = RobotParameters.SystemsTuning.intakeTransfer;
                 intakeLift = RobotParameters.ServoBounds.intakeFolded;
             }
 
@@ -251,11 +252,16 @@ public class Robot {
             double controllerR = controller.yawRotation(gamepad);
             double controllerR2 = controller.pitchRotation(gamepad);
 
-            imu.targetYaw -= controllerR2 * 4.0;
+            imu.targetYaw -= controllerR2 * 6.0;
 
-            // Wrap target rotation
-            if (imu.targetYaw < -180) { imu.targetYaw += 360; }
-            if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
+            if (Math.abs(controllerR2) < 0.01) {
+                if (controller.lastYawWasAnalog) {
+                    imu.targetYaw = imu.getYawDegrees();
+                    controller.lastYawWasAnalog = false;
+                }
+            } else {
+                controller.lastYawWasAnalog = true;
+            }
 
             // Toggle the intake state
             if (controller.xPress == 1.0) {
@@ -268,7 +274,7 @@ public class Robot {
 
             if (controller.uPress >= 1) {
                 mx = 0.0;
-                my = -0.3;
+                my = -0.4;
             }
 
             if (controller.rPress >= 1) {
@@ -281,10 +287,33 @@ public class Robot {
                 my = 0.0;
             }
 
+            if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+                imu.targetYaw = 0.0;
+                controller.lastYawWasAnalog = false;
+            }
+
             if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Depositing) {
                 state.intake.intakeState = IntakeState.Dropping;
                 state.outtake.outtakeState = OuttakeState.Passthrough;
             }
+
+            if (controller.yPress == 1 && state.outtake.outtakeState == OuttakeState.Passthrough) {
+                state.outtake.outtakeState = OuttakeState.PassthroughDeposit;
+            }
+
+            if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+                imu.targetYaw -= 45.0;
+                controller.lastYawWasAnalog = false;
+            }
+
+            if (controller.rbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+                imu.targetYaw += 45.0;
+                controller.lastYawWasAnalog = false;
+            }
+
+            // Wrap target rotation
+            if (imu.targetYaw < -180) { imu.targetYaw += 360; }
+            if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
 
             // Toggle OUTTAKE state.
             if (controller.aPress == 1.0) { state.outtake.toggle(); }
@@ -305,8 +334,9 @@ public class Robot {
             moveIntake();
 
             // Update servos / motors
+            servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors);
-            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors);
+            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
             motors.setPowers();
             return false;
         }

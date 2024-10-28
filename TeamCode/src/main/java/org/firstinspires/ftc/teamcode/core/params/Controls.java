@@ -32,7 +32,9 @@ public final class Controls {
         U(GamepadKeys.Button.DPAD_UP),
         D(GamepadKeys.Button.DPAD_DOWN),
         R(GamepadKeys.Button.DPAD_RIGHT),
-        L(GamepadKeys.Button.DPAD_LEFT);
+        L(GamepadKeys.Button.DPAD_LEFT),
+        LB(GamepadKeys.Button.LEFT_BUMPER),
+        RB(GamepadKeys.Button.RIGHT_BUMPER);
 
         private final GamepadKeys.Button button;
 

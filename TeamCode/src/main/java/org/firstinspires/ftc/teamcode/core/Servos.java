@@ -14,6 +14,7 @@ public class Servos {
     public Servo rightIntakeLiftServo;
     public CRServo intakeServoA;
     public CRServo intakeServoB;
+    public double intakeOverridePower = 0.0;
 
 	// Initialize the motors with hardwaremap
     public Servos(HardwareMap hardwareMap) {
@@ -29,37 +30,49 @@ public class Servos {
         if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
             bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen);
             if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                armServo.setPosition(RobotParameters.ServoBounds.armTransfer);
+                armServo.setPosition(RobotParameters.SystemsTuning.armTransfer);
             } else {
                 armServo.setPosition(RobotParameters.ServoBounds.armDown);
             }
-        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up) {
-            if (outtakeState == OuttakeState.Deposit) {
+        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up || outtakeState == OuttakeState.PassthroughDeposit) {
+            if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer); // Give some leeway to make sure it doesn't get stuck
-            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
+            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance || motors.leftOuttakeSlide.getCurrentPosition() > 300.0) {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
             } else {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer);
             }
-            if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 200.0) {
+            if (motors.leftOuttakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.outtakeUp - 100.0) {
                 armServo.setPosition(RobotParameters.ServoBounds.armUp);
             } else {
-                armServo.setPosition(RobotParameters.ServoBounds.armTransfer);
+                armServo.setPosition(RobotParameters.SystemsTuning.armTransfer);
             }
+        }
+        if (outtakeState == OuttakeState.PassthroughDeposit) {
+            armServo.setPosition(RobotParameters.ServoBounds.armUp);
         }
     }
 
-    public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors) {
-        if (intakeState == IntakeState.Collecting) {
-            intakeServoA.set(intakePower);
-            intakeServoB.set(intakePower);
-        } else if (intakeState == IntakeState.Dropping) {
-            intakeServoA.set(-0.3);
-            intakeServoB.set(-0.3);
-        } else if (intakeState == IntakeState.Depositing && sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
-            intakeServoA.set(-RobotParameters.PIDConstants.reverseIntakeSpeed);
-            intakeServoB.set(-RobotParameters.PIDConstants.reverseIntakeSpeed);
+    public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors, boolean cancelIntake) {
+        if (Math.abs(intakeOverridePower) < 0.1) {
+            if (intakeState == IntakeState.Collecting) {
+                intakeServoA.set(intakePower);
+                intakeServoB.set(intakePower);
+            } else if (intakeState == IntakeState.Dropping) {
+                intakeServoA.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
+                intakeServoB.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
+            } else if (intakeState == IntakeState.Depositing && sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
+                intakeServoA.set(-0.2);
+                intakeServoB.set(-0.2);
+            } else {
+                intakeServoA.set(0.0);
+                intakeServoB.set(0.0);
+            }
         } else {
+            intakeServoA.set(intakeOverridePower);
+            intakeServoB.set(intakeOverridePower);
+        }
+        if (cancelIntake) {
             intakeServoA.set(0.0);
             intakeServoB.set(0.0);
         }
