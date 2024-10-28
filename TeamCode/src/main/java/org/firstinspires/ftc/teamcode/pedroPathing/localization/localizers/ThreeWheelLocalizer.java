@@ -57,7 +57,7 @@ public class ThreeWheelLocalizer extends Localizer {
     private double totalHeading;
     public static double FORWARD_TICKS_TO_INCHES = 0.00052189;//8192 * 1.37795 * 2 * Math.PI * 0.5008239963;
     public static double STRAFE_TICKS_TO_INCHES = 0.00052189;//8192 * 1.37795 * 2 * Math.PI * 0.5018874659;
-    public static double TURN_TICKS_TO_RADIANS = 0.0653;//8192 * 1.37795 * 2 * Math.PI * 0.5;
+    public static double TURN_TICKS_TO_RADIANS = 0.03516 ;//8192 * 1.37795 * 2 * Math.PI * 0.5;
 
     /**
      * This creates a new ThreeWheelLocalizer from a HardwareMap, with a starting Pose at (0,0)
@@ -78,9 +78,9 @@ public class ThreeWheelLocalizer extends Localizer {
      */
     public ThreeWheelLocalizer(HardwareMap map, Pose setStartPose) {
         // TODO: make sure these are as accurate as possible
-        leftEncoderPose = new Pose(4.0, 7.0, 0);
-        rightEncoderPose = new Pose(4.0, -7.0, 0);
-        strafeEncoderPose = new Pose(1.75, 0.0, Math.toRadians(90));
+        leftEncoderPose = new Pose(RobotParameters.Odometry.CenterOffset_in.leftx, RobotParameters.Odometry.CenterOffset_in.lefty, 0); // 180mm left, 105mm forward
+        rightEncoderPose = new Pose(RobotParameters.Odometry.CenterOffset_in.rightx, RobotParameters.Odometry.CenterOffset_in.righty, 0); // 180mm right, 105mm forward
+        strafeEncoderPose = new Pose(RobotParameters.Odometry.CenterOffset_in.sidex, RobotParameters.Odometry.CenterOffset_in.sidey, 0); // 10mm left, 40mm back
 
         hardwareMap = map;
 
