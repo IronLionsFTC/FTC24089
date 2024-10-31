@@ -25,7 +25,8 @@ public class RobotParameters {
 
             // Servo Motors
             public static final String bucketServo = "BucketServo";  // Port 1 ?
-            public static final String armServo = "ArmServo";        // Port 0 ?
+            public static final String armServoA = "outtakeLiftB";        // Port 0 ?
+            public static final String armServoB = "outtakeLiftA";        // Port 0 ?
             public static final String leftIntakeLiftServo = "leftIntakeLiftServo"; // Port e0
             public static final String rightIntakeLiftServo = "rightIntakeLiftServo"; // Port e1
 
@@ -77,13 +78,13 @@ public class RobotParameters {
 
     public static final class ServoBounds {
         public static final double armDown = 0.0;
-        public static final double armUp = 0.65;
-        public static final double armTransfer = 0.19;
+        public static final double armUp = 0.6;
+        public static final double armTransfer = 0.16;
         public static final double bucketOpen = 0.07; // Parallel
         public static final double bucketTransfer = 0.08;
-        public static final double bucketClosed = 0.27; // Gripping
-        public static final double intakeFolded = 0.0;
-        public static final double intakeDown = 0.47; // Just above tiles
+        public static final double bucketClosed = 0.2; // Gripping
+        public static final double intakeFolded = 0.88;
+        public static final double intakeDown = 0.015; // Just above tiles
     }
 
     public static final class SlideBounds {
