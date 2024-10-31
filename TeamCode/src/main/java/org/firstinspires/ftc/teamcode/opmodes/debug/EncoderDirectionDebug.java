@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Team;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
 
 @TeleOp(name="EncoderDirectionDebug", group="Debug")
 public class EncoderDirectionDebug extends LinearOpMode
@@ -26,6 +27,9 @@ public class EncoderDirectionDebug extends LinearOpMode
         MotorEx encoderLeft = new MotorEx(hardwareMap, RobotParameters.Odometry.HardwareMapNames.left);
         MotorEx encoderRight = new MotorEx(hardwareMap, RobotParameters.Odometry.HardwareMapNames.right);
         MotorEx encoderSideways = new MotorEx(hardwareMap, RobotParameters.Odometry.HardwareMapNames.sideways);
+        int leftRev = RobotParameters.Odometry.Reversed.left ? -1 : 1;
+        int rightRev = RobotParameters.Odometry.Reversed.right ? -1 : 1;
+        int sidewaysRev = RobotParameters.Odometry.Reversed.sideways ? -1 : 1;
 
         //////////////////////////////////////////
         // Runs when the init button is pressed //
@@ -41,9 +45,9 @@ public class EncoderDirectionDebug extends LinearOpMode
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         // Main loop
         while (opModeIsActive()){
-            telemetry.addData("Left", encoderLeft.getCurrentPosition());
-            telemetry.addData("Right", encoderRight.getCurrentPosition());
-            telemetry.addData("Sideways", encoderSideways.getCurrentPosition());
+            telemetry.addData("Left", encoderLeft.getCurrentPosition() * leftRev);
+            telemetry.addData("Right", encoderRight.getCurrentPosition() * rightRev);
+            telemetry.addData("Sideways", encoderSideways.getCurrentPosition() * sidewaysRev);
             telemetry.update();
         }
     }
