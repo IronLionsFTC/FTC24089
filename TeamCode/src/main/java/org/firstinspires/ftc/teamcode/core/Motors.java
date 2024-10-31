@@ -72,14 +72,14 @@ public class Motors {
     }
 
     public void setPowers() {
-        if (Math.abs(powers.leftFront) > 0.1) { leftFront.set(powers.leftFront); } else { leftFront.set(0.0); }
-        if (Math.abs(powers.rightFront) > 0.1) { rightFront.set(powers.rightFront); } else { rightFront.set(0.0); }
-        if (Math.abs(powers.leftBack) > 0.1) { leftBack.set(powers.leftBack); } else { leftBack.set(0.0); }
-        if (Math.abs(powers.rightBack) > 0.1) { rightBack.set(powers.rightBack); } else { rightBack.set(0.0); }
-        if (Math.abs(powers.leftOuttakeSlide) > 0.1) { leftOuttakeSlide.set(powers.leftOuttakeSlide); } else { leftOuttakeSlide.set(0.0); }
-        if (Math.abs(powers.rightOuttakeSlide) > 0.1) { rightOuttakeSlide.set(powers.rightOuttakeSlide); } else { rightOuttakeSlide.set(0.0); }
-        if (Math.abs(powers.leftIntakeSlide) > 0.1) { leftIntakeSlide.set(powers.leftIntakeSlide); } else { leftIntakeSlide.set(0.0); }
-        if (Math.abs(powers.rightIntakeSlide) > 0.1) { rightIntakeSlide.set(powers.rightIntakeSlide); } else { rightIntakeSlide.set(0.0); }
+        leftFront.set( powers.leftFront > 0.1 ? powers.leftFront : 0.0);
+        rightFront.set(powers.rightFront > 0.1 ? powers.rightFront : 0.0);
+        leftBack.set(powers.leftBack > 0.1 ? powers.leftBack : 0.0);
+        rightBack.set(powers.rightBack > 0.1 ? powers.rightBack : 0.0);
+        leftOuttakeSlide.set(powers.leftOuttakeSlide > 0.1 ? powers.leftOuttakeSlide : 0.0);
+        rightOuttakeSlide.set(powers.rightOuttakeSlide > 0.1 ? powers.rightOuttakeSlide : 0.0);
+        leftIntakeSlide.set(powers.leftIntakeSlide > 0.1 ? powers.leftIntakeSlide : 0.0);
+        rightIntakeSlide.set(powers.rightIntakeSlide > 0.1 ? powers.rightIntakeSlide : 0.0);
     }
 
     public void stopMotors() {
