@@ -321,7 +321,7 @@ public class Robot {
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
 
-            return didCollect;
+            return didCollect || state.intake.intakeState == IntakeState.Depositing;
         }
 
         public double yawCorrection() {
