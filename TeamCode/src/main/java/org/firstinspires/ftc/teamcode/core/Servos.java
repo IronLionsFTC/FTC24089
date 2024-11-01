@@ -3,6 +3,7 @@ import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
@@ -37,50 +38,57 @@ public class Servos {
         armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armDown);
     }
 
-    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, boolean armUp, boolean retract) {
+    public void setPositions(RobotState state, Motors motors) {
         double bucketPos = 0.0;
         double armPos = 0.0;
+        double outtakePos = motors.outtakePosition();
+        double intakePos = motors.intakePosition();
+        double latchPosition = RobotParameters.ServoBounds.latchOpened;
 
-        if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
+        // Decide Arm Position
+        // When should the arm be down?
+        if (state.intake.intakeState == IntakeState.Collecting || state.intake.intakeState == IntakeState.Evaluating ||
+                state.intake.intakeState == IntakeState.Extended || state.intake.intakeState == IntakeState.Folded) {
+            armPos = RobotParameters.ServoBounds.armDown;
             bucketPos = RobotParameters.ServoBounds.bucketOpen;
-            if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                armPos = RobotParameters.ServoBounds.armTransfer;
+        }
+
+        // No matter what, transfer position if waiting to transfer.
+        if (state.intake.intakeState == IntakeState.Depositing || state.intake.intakeState == IntakeState.Dropping) {
+            armPos = RobotParameters.ServoBounds.armTransfer;
+            bucketPos = RobotParameters.ServoBounds.bucketTransfer;
+        }
+
+        // If retracted, check if normally retracted or if currently waiting to outtake.
+        if (state.intake.intakeState == IntakeState.Retracted) {
+            if ((intakePos > RobotParameters.SlideBounds.intakeClearance - 30.0 || state.outtake.retract) && state.outtake.outtakeState == OuttakeState.Waiting) {
+                armPos = RobotParameters.ServoBounds.armWait;
+                bucketPos = RobotParameters.ServoBounds.bucketClosed;
             } else {
                 armPos = RobotParameters.ServoBounds.armDown;
-            }
-        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up || outtakeState == OuttakeState.PassthroughDeposit || outtakeState == OuttakeState.Waiting) {
-            if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
-                bucketPos = 0.0;
-            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 300.0) {
-                bucketPos = RobotParameters.ServoBounds.bucketClosed;
-            } else if (outtakeState != OuttakeState.Waiting){
                 bucketPos = RobotParameters.ServoBounds.bucketTransfer;
-            }
-            if (motors.leftOuttakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.outtakeUp - 100.0) {
-                if (outtakeState != OuttakeState.Deposit) {
-                    armPos = RobotParameters.ServoBounds.armUp;
-                } else {
-                    armPos = RobotParameters.ServoBounds.armWait;
-                }
-            } else if (outtakeState == OuttakeState.Up || outtakeState == OuttakeState.Deposit) {
-                armPos = RobotParameters.ServoBounds.armWait;
-            }
-        }
-        if (outtakeState == OuttakeState.PassthroughDeposit) {
-            armPos = RobotParameters.ServoBounds.armUp;
-        }
-        if (armUp) {
-            armPos = 0.1;
-        }
-        if (outtakeState == OuttakeState.Waiting) {
-            if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || retract) {
-                armPos = RobotParameters.ServoBounds.armWait;
-                bucketPos = RobotParameters.ServoBounds.bucketClosed;
             }
         }
 
-        if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Folded) {
-            if (motors.leftIntakeSlide.getCurrentPosition() < 10.0 && motors.leftOuttakeSlide.getCurrentPosition() < RobotParameters.Thresholds.outtakeHeightToRetractIntakeLower && outtakeState != OuttakeState.Up) {
+        // Deal with raised outtake.
+        if (state.outtake.outtakeState == OuttakeState.Up) {
+            bucketPos = RobotParameters.ServoBounds.bucketClosed;
+            if (outtakePos > RobotParameters.SlideBounds.outtakeUp - 100.0) {
+                armPos = RobotParameters.ServoBounds.armUp;
+            } else {
+                armPos = RobotParameters.ServoBounds.armWait;
+            }
+        }
+
+        // Just raise arm up when the sample is dropped.
+        if (state.outtake.outtakeState == OuttakeState.Deposit) {
+            bucketPos = 0.0; // Fully open, leave no room for getting it stuck.
+            armPos = RobotParameters.ServoBounds.armDown;
+        }
+
+        // Latch position.
+        if (state.intake.intakeState == IntakeState.Retracted || state.intake.intakeState == IntakeState.Folded) {
+            if (intakePos < 10.0 && outtakePos < RobotParameters.Thresholds.outtakeHeightToRetractIntakeLower && state.outtake.outtakeState != OuttakeState.Up) {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchClosed);
             } else {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
@@ -89,21 +97,10 @@ public class Servos {
             latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
         }
 
-        if (outtakeState == OuttakeState.LevelOneHang) {
-            armPos = RobotParameters.ServoBounds.armDown - 0.05;
-        }
-
-        if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-            armPos = RobotParameters.ServoBounds.armTransfer;
-        }
-
-        if (outtakeState == OuttakeState.Up) {
-            bucketPos = RobotParameters.ServoBounds.bucketClosed;
-        }
-
-        bucketServo.setPosition(bucketPos);
+        // Apply new positions to servos.
         armServoA.setPosition(armPos);
         armServoB.setPosition(1.0 - armPos);
+        bucketServo.setPosition(bucketPos);
     }
 
     public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors, boolean cancelIntake) {

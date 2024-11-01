@@ -112,15 +112,13 @@ public class Robot {
         }
 
         public void moveOuttake() {
-            double outtakeSlidePos = (motors.leftOuttakeSlide.getCurrentPosition() + motors.rightOuttakeSlide.getCurrentPosition()) * 0.5;
+            double outtakeSlidePos = motors.outtakePosition();
             double slideTarget = RobotParameters.SlideBounds.outtakeDown;
             if ((state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) && state.intake.intakeState == IntakeState.Retracted) {
-                double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
+                double intakeSlidePos = motors.intakePosition();
                 if (intakeSlidePos > RobotParameters.Thresholds.intakeClearanceForOuttakeMovement || outtakeSlidePos > RobotParameters.Thresholds.outtakeMinimumHeightToNotWorryAboutIntake) {
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;
                 }
-            } else {
-                slideTarget = RobotParameters.SlideBounds.outtakeDown;
             }
 
             double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
@@ -328,6 +326,9 @@ public class Robot {
             }
             componentDrive(my, mx);
 
+            telemetry.addData("IS POS", motors.intakePosition());
+            telemetry.addData("OS POS", motors.outtakePosition());
+
             telemetry.update();
 
             // EMERGENCY STOP
@@ -344,9 +345,10 @@ public class Robot {
 
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, controller.yPress > 0 && state.outtake.outtakeState == OuttakeState.Deposit, state.outtake.retract);
+            servos.setPositions(state, motors);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
             motors.setPowers();
+
             return false;
         }
     }

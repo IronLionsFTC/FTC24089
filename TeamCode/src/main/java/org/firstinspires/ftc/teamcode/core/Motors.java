@@ -89,4 +89,12 @@ public class Motors {
         powers.rightFront = 0.0;
         setPowers();
     }
+
+    public double outtakePosition() {
+        return (rightOuttakeSlide.getCurrentPosition() + leftOuttakeSlide.getCurrentPosition()) * 0.5;
+    }
+
+    public double intakePosition() {
+        return (rightIntakeSlide.getCurrentPosition() + leftIntakeSlide.getCurrentPosition()) * 0.5;
+    }
 }

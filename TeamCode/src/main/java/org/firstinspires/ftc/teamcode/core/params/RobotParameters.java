@@ -95,7 +95,7 @@ public class RobotParameters {
     }
 
     public static final class ServoBounds {
-        public static final double armDown = 0.0;
+        public static final double armDown = 0.03;
         public static final double armUp = 0.57;
         public static final double armWait = 0.37;
         public static final double armTransfer = 0.13;
