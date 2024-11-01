@@ -48,6 +48,10 @@ public class Robot {
         team = colour;
     }
 
+    public void prepareTransferForPreloadedSample() {
+        state.intake.intakeState = IntakeState.Depositing;
+    }
+
     public void extendIntakeFromFoldedPosition() {
         state.intake.intakeState = IntakeState.Extended;
     }
@@ -105,6 +109,13 @@ public class Robot {
 
     public boolean areSlidesDown() {
         return state.outtake.outtakeState == OuttakeState.Down && state.intake.intakeState == IntakeState.Retracted && drivetrain.motors.outtakePosition() < 100.0;
+    }
+
+    public void moveMotorsBasedOnState() {
+        drivetrain.moveIntake();
+        drivetrain.moveOuttake();
+        drivetrain.servos.setPositions(state, drivetrain.motors);
+        drivetrain.servos.setPowers(state.intake.intakeState, 0.0, sensors, false);
     }
 
     @Config
