@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.opmodes;
 import org.firstinspires.ftc.teamcode.auto.constants.Points;
 import org.firstinspires.ftc.teamcode.auto.constants.Poses;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -27,6 +28,10 @@ public class MainAuto extends OpMode {
         this.robot = new Robot(hardwareMap, telemetry, Team.Blue);
         this.follower = new Follower(hardwareMap);
         this.follower.setStartingPose(new Pose(9.0, 41.0, Math.toRadians(-90)));
+        telemetry = new MultipleTelemetry(telemetry);
+
+        telemetry.addLine("READY");
+        telemetry.update();
     }
 
     @Override
@@ -36,15 +41,16 @@ public class MainAuto extends OpMode {
 
     @Override
     public void loop() {
-        this.robot.update_auto();
+//        this.robot.update_auto();
         this.follower.update();
         autoUpdate();
+        this.follower.update();
     }
 
 
     public void setAutoState(int n) { this.autostate = n; }
     public void setIfPathEnd(int n) {
-        if (this.follower.atParametricEnd()) { this.autostate = n; }
+        if (this.follower.isBusy()) { this.autostate = n; }
     }
     public void pause() { this.autostate *= -1; }
     public int get_next() { return Math.abs(this.autostate) + 1; }
@@ -163,6 +169,8 @@ public class MainAuto extends OpMode {
             case -13:
                 setIfPathEnd(0); // End auto
         }
+        telemetry.addData("Auto state:", autostate);
+        telemetry.update();
     }
 
     public int outtakestate = 1;
@@ -197,7 +205,7 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.outtakeClearanceIn);
                 outtakestate = -3;
             case -3:
-                if (this.follower.atParametricEnd()) {
+                if (this.follower.isBusy()) {
                     outtakestate = 4;
                 }
             case 4:
@@ -205,7 +213,7 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.outtakeClearanceOut);
                 outtakestate = -4;
             case -4:
-                if (this.follower.atParametricEnd()) {
+                if (this.follower.isBusy()) {
                     outtakestate = 5;
                 }
 
