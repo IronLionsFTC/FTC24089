@@ -22,6 +22,7 @@ public class RobotParameters {
             public static final String rightIntakeSlide = "rightIntakeSlide";
             public static final String leftOuttakeSlide = "leftOuttakeSlide";
             public static final String rightOuttakeSlide = "rightOuttakeSlide";
+            public static final String latchServo = "latchServo";
 
             // Servo Motors
             public static final String bucketServo = "BucketServo";  // Port 1 ?
@@ -102,6 +103,8 @@ public class RobotParameters {
         public static final double bucketClosed = 0.2; // Gripping
         public static final double intakeFolded = 0.88;
         public static final double intakeDown = 0.015; // Just above tiles
+        public static final double latchClosed = 0.0;
+        public static final double latchOpened = 0.0;
     }
 
     public static final class SlideBounds {

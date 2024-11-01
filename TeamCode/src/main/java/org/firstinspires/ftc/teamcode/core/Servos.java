@@ -13,6 +13,8 @@ public class Servos {
     public Servo armServoA;
     public Servo leftIntakeLiftServo;
     public Servo rightIntakeLiftServo;
+    public Servo latchServo;
+
     public CRServo intakeServoA;
     public CRServo intakeServoB;
     public double intakeOverridePower = 0.0;
@@ -22,8 +24,11 @@ public class Servos {
         bucketServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.bucketServo);
         armServoA = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServoA);
         armServoB = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServoB);
+        latchServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.latchServo);
+
         intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
         intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
+
         leftIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftIntakeLiftServo);
         rightIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightIntakeLiftServo);
         rightIntakeLiftServo.setPosition(RobotParameters.ServoBounds.intakeFolded);
@@ -64,6 +69,16 @@ public class Servos {
         }
         if (armUp) {
             armServoA.setPosition(0.1);
+        }
+
+        if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Folded) {
+            if (motors.leftIntakeSlide.getCurrentPosition() < 20.0) {
+                latchServo.setPosition(RobotParameters.ServoBounds.latchClosed);
+            } else {
+                latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
+            }
+        } else {
+            latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
         }
     }
 

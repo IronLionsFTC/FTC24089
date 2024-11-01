@@ -177,7 +177,7 @@ public class Robot {
                     // If pressing y while collecting, lift intake.
                     // - Used in situations with stacked samples
                     // - Clear an obstruction without retracting
-                    intakeLift = RobotParameters.ServoBounds.intakeDown + 0.1;
+                    intakeLift = RobotParameters.ServoBounds.intakeDown + 0.25;
                 }
             } else if (state.intake.intakeState == IntakeState.Evaluating) {
                 // Stay down ready to continue intaking when checking colour
