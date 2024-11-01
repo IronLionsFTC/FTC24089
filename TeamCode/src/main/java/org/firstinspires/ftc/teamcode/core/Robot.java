@@ -56,6 +56,10 @@ public class Robot {
         state.intake.intakeState = IntakeState.Extended;
     }
 
+    public boolean isIntakeExtended() {
+        return state.intake.intakeState == IntakeState.Extended && drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 10.0;
+    }
+
     public void foldDownIntakeAndStartCollecting() {
         state.intake.intakeState = IntakeState.Collecting;
     }
@@ -101,6 +105,7 @@ public class Robot {
 
     public void dropSample() {
         if (state.outtake.outtakeState == OuttakeState.Up) state.outtake.outtakeState = OuttakeState.Deposit;
+        moveMotorsBasedOnState();
     }
 
     public void lowerSlides() {
