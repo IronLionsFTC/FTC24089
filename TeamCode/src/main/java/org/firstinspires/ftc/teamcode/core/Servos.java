@@ -83,7 +83,7 @@ public class Servos {
         // Just raise arm up when the sample is dropped.
         if (state.outtake.outtakeState == OuttakeState.Deposit) {
             bucketPos = 0.0; // Fully open, leave no room for getting it stuck.
-            armPos = RobotParameters.ServoBounds.armDown;
+            armPos = RobotParameters.ServoBounds.armUp - 0.15;
         }
 
         // Latch position.
