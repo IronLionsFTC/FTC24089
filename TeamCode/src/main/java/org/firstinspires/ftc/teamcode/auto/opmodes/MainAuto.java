@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 
 @Autonomous(name = "Main Auto", group = "_MAIN_")
 public class MainAuto extends OpMode {
-    public int autostate = 0;
+    public int autostate = 1;
     public Follower follower;
 
     @Override
@@ -48,11 +48,13 @@ public class MainAuto extends OpMode {
 
     public void autoUpdate() {
         switch (this.autostate) {
+            // if `case` == 0 then auto is over
+            case 0:
+                return;
             // Start -> basket
             case 1:
                 this.follower.followPath(Paths.start_to_basket);
                 pause();
-                break;
             case -1:
                 nextIfPathEnd();
 
@@ -82,6 +84,84 @@ public class MainAuto extends OpMode {
 
             // Move forward onto sample
             case 5:
+                this.follower.followPath(Paths.yellow_spike.BOTTOM_intake);
+                pause();
+            case -5:
+                nextIfPathEnd();
+
+            // May need to do some checking of the intake here
+
+            // Return to outtake with the sample
+            case 6:
+                this.follower.followPath(Paths.yellow_spike.BOTTOM_return);
+                pause();
+            case -6:
+                nextIfPathEnd();
+
+            // Outtake the sample
+            case 7:
+                // Outtake the sample here
+                pause();
+            case -7:
+                // Ensure that outtake is complete and robot is ready for the next cycle
+                next();
+
+            // Same deal but for the middle spike mark
+
+            // Position to intake middle spike mark sample
+            case 8:
+                this.follower.followPath(Paths.yellow_spike.MIDDLE);
+                pause();
+            case -8:
+                nextIfPathEnd();
+
+            // Start intake
+            case 9:
+                // start intake here
+                pause();
+            case -9:
+                // MAY NOT BE NECESSARY
+                // Check if ready to intake the sample
+                next();
+
+            // Intake the sample
+            case 10:
+                this.follower.followPath(Paths.yellow_spike.MIDDLE_intake);
+                pause();
+            case -10:
+                nextIfPathEnd();
+
+            // Return to baskets to outtake the sample
+            case 11:
+                this.follower.followPath(Paths.yellow_spike.MIDDLE_return);
+                pause();
+            case -11:
+                nextIfPathEnd();
+
+            // Outtake the sample
+            case 12:
+                // Outtake the sample here
+                pause();
+            case -12:
+                // Ensure that the robot is ready to go
+                next();
+
+            // Go to park position, ready to intake in teleop
+            case 13:
+                this.follower.followPath(Paths.outtake_to_park);
+                pause();
+            case -13:
+                setIfPathEnd(0); // End auto
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
