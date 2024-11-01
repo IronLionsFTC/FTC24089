@@ -83,7 +83,7 @@ public class Robot {
             public double bl = 0.0;
         }
 
-        private void componentDrive(double forwardPower, double rightPower) {
+        public void componentDrive(double forwardPower, double rightPower) {
             Vec2 powerVec2 = new Vec2();
             double r = yawCorrection();
             double movementMultiplier = 0.7;
@@ -243,7 +243,8 @@ public class Robot {
 			} else { return response; }
         }
 
-        public boolean calculateMovement(GamepadEx gamepad) { // true -> STOP false -> CONTINUE
+        public boolean calculateMovement(GamepadEx gamepad) {
+            // true -> STOP false -> CONTINUE
 
             // Track number of frames each control has been pressed, made for toggles.
             controller.updateKeyTracker(gamepad);
