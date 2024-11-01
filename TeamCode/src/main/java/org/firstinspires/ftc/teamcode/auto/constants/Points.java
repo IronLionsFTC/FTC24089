@@ -5,5 +5,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 
 public final class Points {
     public static final Point basketOuttake = new Point(18.15, 125.8, Point.CARTESIAN);
+    public static final Point basketOuttakeCloser = new Point(17.150, 126.800, Point.CARTESIAN);
     public static final Point slantStart = new Point(9.0, 41.0, Point.CARTESIAN);
 }

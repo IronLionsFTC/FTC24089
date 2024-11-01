@@ -61,40 +61,16 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.start_to_basket);
                 pause();
             case -1:
-                setIfPathEnd(2000);
+                nextIfPathEnd();
 
             // Deposit starting sample
-            case 2000:
+            case 2:
                 robot.prepareTransferForPreloadedSample();
+                start_outtake();
                 pause();
-            case -2000:
-                if (robot.tryTransfer()) {
-                    setAutoState(-2001);
-                }
-            case -2001:
-                if (robot.transferCompleted()) {
-                    setAutoState(2002);
-                }
-            case 2002:
-                robot.extendOuttakeToTop();
-                pause();
-            case -2002:
-                if (robot.areSlidesReady()) {
-                    setAutoState(2003);
-                }
-            case 2003:
-                // TODO: adjust robot position toward basket if needed
-                // Then move on to 2004
-            case 2004:
-                robot.dropSample();
-                // TODO: make sure it is clear here and has moved back to standard position
-                setAutoState(2005);
-            case 2005:
-                robot.lowerSlides();
-                pause();
-            case -2005:
-                if (robot.areSlidesDown()) {
-                    setAutoState(3);
+            case -2:
+                if (outtake()) {
+                    next();
                 }
 
 
@@ -107,16 +83,12 @@ public class MainAuto extends OpMode {
 
             // Start intake
             case 4:
-                robot.extendIntakeFromFoldedPosition();
+                start_intake();
                 pause();
             case -4:
-                if (robot.isIntakeExtended()) {
-                    setAutoState(4001);
+                if (intake()) {
+                    next();
                 }
-            case 4001:
-                robot.foldDownIntakeAndStartCollecting();
-                setAutoState(5);
-
 
             // Move forward onto sample
             case 5:
@@ -132,40 +104,15 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.yellow_spike.BOTTOM_return);
                 pause();
             case -6:
-                setIfPathEnd(7000);
+                nextIfPathEnd();
 
             // Outtake the sample
-            case 7000:
-                robot.prepareTransferForPreloadedSample();
+            case 7:
+                start_outtake();
                 pause();
-            case -7000:
-                if (robot.tryTransfer()) {
-                    setAutoState(-7001);
-                }
-            case -7001:
-                if (robot.transferCompleted()) {
-                    setAutoState(7002);
-                }
-            case 7002:
-                robot.extendOuttakeToTop();
-                pause();
-            case -7002:
-                if (robot.areSlidesReady()) {
-                    setAutoState(7003);
-                }
-            case 7003:
-                // TODO: adjust robot position toward basket if needed
-                // Then move on to 2004
-            case 7004:
-                robot.dropSample();
-                // TODO: make sure it is clear here and has moved back to standard position
-                setAutoState(7005);
-            case 7005:
-                robot.lowerSlides();
-                pause();
-            case -7005:
-                if (robot.areSlidesDown()) {
-                    setAutoState(8);
+            case -7:
+                if (outtake()) {
+                    next();
                 }
 
             // Same deal but for the middle spike mark
@@ -179,15 +126,12 @@ public class MainAuto extends OpMode {
 
             // Start intake
             case 9:
-                robot.extendIntakeFromFoldedPosition();
+                start_intake();
                 pause();
             case -9:
-                if (robot.isIntakeExtended()) {
-                    setAutoState(9001);
+                if (intake()) {
+                    next();
                 }
-            case 9001:
-                robot.foldDownIntakeAndStartCollecting();
-                setAutoState(10);
 
             // Intake the sample
             case 10:
@@ -201,40 +145,15 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.yellow_spike.MIDDLE_return);
                 pause();
             case -11:
-                setIfPathEnd(12000);
+                nextIfPathEnd();
 
             // Outtake the sample
-            case 12000:
-                robot.prepareTransferForPreloadedSample();
+            case 12:
+                start_outtake();
                 pause();
-            case -12000:
-                if (robot.tryTransfer()) {
-                    setAutoState(-12001);
-                }
-            case -12001:
-                if (robot.transferCompleted()) {
-                    setAutoState(12002);
-                }
-            case 12002:
-                robot.extendOuttakeToTop();
-                pause();
-            case -12002:
-                if (robot.areSlidesReady()) {
-                    setAutoState(12003);
-                }
-            case 12003:
-                // TODO: adjust robot position toward basket if needed
-                // Then move on to 2004
-            case 12004:
-                robot.dropSample();
-                // TODO: make sure it is clear here and has moved back to standard position
-                setAutoState(12005);
-            case 12005:
-                robot.lowerSlides();
-                pause();
-            case -12005:
-                if (robot.areSlidesDown()) {
-                    setAutoState(13);
+            case -12:
+                if (outtake()) {
+                    next();
                 }
 
             // Go to park position, ready to intake in teleop
@@ -244,6 +163,83 @@ public class MainAuto extends OpMode {
             case -13:
                 setIfPathEnd(0); // End auto
         }
+    }
+
+    public int outtakestate = 1;
+    public Path outtakeClearanceIn;
+    public Path outtakeClearanceOut;
+    public void start_outtake() {
+        this.outtakestate = 1;
+    }
+    public boolean outtake() {
+        switch (outtakestate) {
+            // If done
+            case 0: return true;
+            // Outtake the sample
+            case 1:
+                outtakestate = -1;
+            case -1:
+                if (robot.tryTransfer()) {
+                    outtakestate = -1002;
+                }
+            case -1002:
+                if (robot.transferCompleted()) {
+                    outtakestate = 2;
+                }
+            case 2:
+                robot.extendOuttakeToTop();
+                outtakestate = -2;
+            case -2:
+                if (robot.areSlidesReady()) {
+                    outtakestate = 3;
+                }
+            case 3:
+                this.follower.followPath(Paths.outtakeClearanceIn);
+                outtakestate = -3;
+            case -3:
+                if (this.follower.atParametricEnd()) {
+                    outtakestate = 4;
+                }
+            case 4:
+                robot.dropSample();
+                this.follower.followPath(Paths.outtakeClearanceOut);
+                outtakestate = -4;
+            case -4:
+                if (this.follower.atParametricEnd()) {
+                    outtakestate = 5;
+                }
+
+            case 5:
+                robot.lowerSlides();
+                outtakestate = -5;
+            case -5:
+                if (robot.areSlidesDown()) {
+                    outtakestate = 0;
+                }
+        }
+        return false;
+    }
+
+    public int intakestate = 1;
+    public void start_intake() {
+        this.intakestate = 1;
+    }
+    public boolean intake() {
+        switch (intakestate) {
+            case 0: return true;
+
+            case 1:
+                robot.extendIntakeFromFoldedPosition();
+                intakestate = -1;
+            case -1:
+                if (robot.isIntakeExtended()) {
+                    intakestate = 2;
+                }
+            case 2:
+                robot.foldDownIntakeAndStartCollecting();
+                return true;
+        }
+        return false;
     }
 }
 
