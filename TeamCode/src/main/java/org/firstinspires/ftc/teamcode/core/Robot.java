@@ -47,6 +47,50 @@ public class Robot {
         intakeColour = new ColourProfile(sensors);
         team = colour;
     }
+
+    public void extendIntakeFromFoldedPosition() {
+        state.intake.intakeState = IntakeState.Extended;
+    }
+
+    public void foldDownIntakeAndStartCollecting() {
+        state.intake.intakeState = IntakeState.Collecting;
+    }
+
+    public boolean tryToCollectSample() {
+        return drivetrain.moveIntake();
+    }
+
+    public boolean tryTransfer() {
+        if (state.intake.intakeState == IntakeState.Depositing) {
+            // If the slides are within 5 degrees of the target position for transfer.
+            if (Math.abs(drivetrain.motors.intakePosition() - RobotParameters.SlideBounds.intakeTransfer) < 5.0) {
+                // Outtake will wait until intake has performed transfer before going up, hence 'waiting'
+                state.intake.intakeState = IntakeState.Dropping;
+                state.outtake.outtakeState = OuttakeState.Waiting;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Check if the transfer is done, then retract slides & return true to move on to next stage
+    public boolean transferCompleted() {
+        // If the intake is retracted but extended for the arm to move up, then transfer is done.
+        if (state.intake.intakeState == IntakeState.Retracted && drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeClearance - 10.0) {
+            if (state.outtake.outtakeState == OuttakeState.Waiting) {
+                state.outtake.retract = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void extendOuttakeToTop() {
+        if (state.outtake.outtakeState == OuttakeState.Waiting) {
+            state.outtake.outtakeState = OuttakeState.Up;
+        }
+    }
+
     @Config
     public static class PID_settings {
         public static double intakeSlide_p = 0.05;
@@ -83,6 +127,7 @@ public class Robot {
             public double bl = 0.0;
         }
 
+
         public void componentDrive(double forwardPower, double rightPower) {
             Vec2 powerVec2 = new Vec2();
             double r = yawCorrection();
@@ -116,7 +161,7 @@ public class Robot {
             double slideTarget = RobotParameters.SlideBounds.outtakeDown;
             if ((state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) && state.intake.intakeState == IntakeState.Retracted) {
                 double intakeSlidePos = motors.intakePosition();
-                if (intakeSlidePos > RobotParameters.Thresholds.intakeClearanceForOuttakeMovement || outtakeSlidePos > RobotParameters.Thresholds.outtakeMinimumHeightToNotWorryAboutIntake) {
+                if (intakeSlidePos > RobotParameters.Thresholds.intakeClearanceForOuttakeMovement || outtakeSlidePos > RobotParameters.Thresholds.outtakeMinimumHeightToNotWorryAboutIntake || state.outtake.retract) {
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;
                 }
             }
@@ -131,7 +176,8 @@ public class Robot {
             motors.powers.rightOuttakeSlide = outtakeSlidePower;
         }
 
-        public void moveIntake() {
+        public boolean moveIntake() {
+            boolean didCollect = false;
             // Constantly check for inputs even if not in evaluation mode
             intakeColour.update(sensors);
             // If there is a sample present in the intake and the intake is spinning, evaluate the colour in this loop cycle.
@@ -150,8 +196,7 @@ public class Robot {
                 if (state.outtake.outtakeState != OuttakeState.Down) {
                     intakeTarget = RobotParameters.SlideBounds.intakeClearance;
                 } else {
-                    if ((motors.rightOuttakeSlide.getCurrentPosition() + motors.leftOuttakeSlide.getCurrentPosition()) * 0.5
-                            < RobotParameters.Thresholds.outtakeHeightToRetractIntakeLower) {
+                    if (motors.outtakePosition() < RobotParameters.Thresholds.outtakeHeightToRetractIntakeLower) {
                         intakeTarget = RobotParameters.SlideBounds.intakeIn;
                     } else {
                         intakeTarget = RobotParameters.SlideBounds.intakeClearance;
@@ -187,6 +232,10 @@ public class Robot {
                 intakeLift = RobotParameters.ServoBounds.intakeFolded;
             }
 
+            if (state.outtake.retract && state.intake.intakeState == IntakeState.Retracted) {
+                intakeTarget = RobotParameters.SlideBounds.intakeIn;
+            }
+
             // Lift the intake to the desired position
             // DO NOT CHANGE - THE 1.0 minus is essential
             servos.leftIntakeLiftServo.setPosition(1.0 - intakeLift);
@@ -195,9 +244,11 @@ public class Robot {
             if (state.intake.intakeState == IntakeState.Evaluating) {
                 Colour currentColour = intakeColour.classify();
                 if ((currentColour == Colour.Red || currentColour == Colour.Yellow) && team == Team.Red) {
+                    didCollect = true;
                     state.intake.intakeState = IntakeState.Depositing;
                 } else if ((currentColour == Colour.Blue || currentColour == Colour.Yellow) && team == Team.Blue) {
                     state.intake.intakeState = IntakeState.Depositing;
+                    didCollect = true;
                 } else {
                     state.intake.intakeState = IntakeState.Collecting;
                 }
@@ -233,6 +284,8 @@ public class Robot {
             // Apply powers to the motors
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
+
+            return didCollect;
         }
 
         public double yawCorrection() {
