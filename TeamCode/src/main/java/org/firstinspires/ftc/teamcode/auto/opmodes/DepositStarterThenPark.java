@@ -20,16 +20,6 @@ public class DepositStarterThenPark extends OpMode {
     public int autostate = 0;
     public PathChain chain;
 
-    private boolean started = false;
-
-    public Path TestCurveBlueToRedHumanPlayer = new Path(
-            new BezierCurve(
-                    Points.blueHumanPlayerAngledPoint, // Start point
-                    new Point(130.75, 13.9, Point.CARTESIAN), // Control point
-                    Points.redHumanPlayerAngledPoint // End point
-            )
-    );
-
     public Follower follower;
 
 

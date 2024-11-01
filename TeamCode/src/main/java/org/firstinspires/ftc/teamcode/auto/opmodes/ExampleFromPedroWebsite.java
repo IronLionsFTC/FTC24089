@@ -79,7 +79,7 @@ public class BlueLeftInnerAuto extends OpMode {
     private Pose redLeftSideMiddleSpikeMark = new Pose(24.5+72,-36+72);
     private Pose redLeftSideRightSpikeMark = new Pose(36+72,-24.5+72);
     private Pose redRightSideLeftSpikeMark = new Pose(36+72, 0.5+72);
-    private Pose redRightSideMiddleSpikeMark = new Pose(24.5+72, 12+72);
+    private Pose redRightSideMiddleSpikeMark = new Pose(24.5+72, 12+72) ;
     private Pose redRightSideRightSpikeMark = new Pose(36+72, 23.5+72);
     private Pose blueLeftSideLeftSpikeMark = new Pose(-36+72, 23.5+72);
     private Pose blueLeftSideMiddleSpikeMark = new Pose(-24.5+72, 12+72);
