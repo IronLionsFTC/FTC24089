@@ -6,8 +6,8 @@ We are a small Australian team based out in the Sunshine Coast. \
 ## Team 24089
 | Member | GitHub | Role |
 | ---- | ---- | ---- |
-| Marley | [@marlstar](https://github.com/marlstar) | Autonomous programmer & Drivetrain build lead |
-| Harrison | [@hchap1](https://github.com/hchap1) | TeleOp/CV/Hardware integration programmer & Intake/Outtake build lead |
-| Taha | [@paradoxiscoding](https://github.com/paradoxiscoding) | Team coordinator & Build team |
+| Marley | [@marlstar](https://github.com/marlstar) | Autonomous programmer<br>Drivetrain build lead |
+| Harrison | [@hchap1](https://github.com/hchap1) | TeleOp/CV/Hardware integration programmer<br>Intake/Outtake build lead |
+| Taha | [@paradoxiscoding](https://github.com/paradoxiscoding) | Team coordinator<br>Build team |
 | Rowan | [@SolemenF](https://github.com/solemenf) | Outreach, logistics, portfolio, documentation |
 | Jett | _ | CAD, 3D printing, assembly |
