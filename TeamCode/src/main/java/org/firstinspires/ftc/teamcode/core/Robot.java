@@ -159,7 +159,7 @@ public class Robot {
                         intakeTarget = RobotParameters.SlideBounds.intakeClearance;
                     }
                 }
-                if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit) {
+                if (state.outtake.outtakeState == OuttakeState.Up || state.outtake.outtakeState == OuttakeState.Deposit || (state.outtake.outtakeState == OuttakeState.Waiting && state.outtake.retract)) {
                     if (motors.rightOuttakeSlide.getCurrentPosition() > RobotParameters.Thresholds.outtakeHeightToRetractIntakeUpper
                             && motors.leftOuttakeSlide.getCurrentPosition() > RobotParameters.Thresholds.outtakeHeightToRetractIntakeLower) {
                         intakeTarget = RobotParameters.SlideBounds.intakeIn;
@@ -208,7 +208,7 @@ public class Robot {
             // The outtake will wait for the sample to be dropped
             // and for the intake to be clear before moving
             if (state.intake.intakeState == IntakeState.Depositing) {
-                if (state.outtake.outtakeState == OuttakeState.Up) {
+                if (state.outtake.outtakeState == OuttakeState.Waiting) {
                     state.intake.intakeState = IntakeState.Dropping;
                 }
             }
@@ -219,6 +219,10 @@ public class Robot {
                 if (sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
                     state.intake.intakeState = IntakeState.Retracted;
                 }
+            }
+
+            if (state.outtake.outtakeState == OuttakeState.Waiting && state.outtake.retract) {
+                intakeTarget = RobotParameters.SlideBounds.intakeIn;
             }
             // Calculate average slide position
             double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
@@ -318,6 +322,10 @@ public class Robot {
 
             // Toggle OUTTAKE state.
             if (controller.aPress == 1.0) { state.outtake.toggle(); }
+            if (controller.xPress == 1.0 && state.outtake.outtakeState == OuttakeState.Waiting) {
+                state.outtake.retract = true;
+                state.intake.intakeState = IntakeState.Retracted;
+            }
             componentDrive(my, mx);
 
             telemetry.update();
@@ -336,7 +344,7 @@ public class Robot {
 
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, controller.yPress > 0 && state.outtake.outtakeState == OuttakeState.Deposit);
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, controller.yPress > 0 && state.outtake.outtakeState == OuttakeState.Deposit, state.outtake.retract);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
             motors.setPowers();
             return false;

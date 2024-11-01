@@ -37,42 +37,50 @@ public class Servos {
         armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armDown);
     }
 
-    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, boolean armUp) {
+    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, boolean armUp, boolean retract) {
+        double bucketPos = 0.0;
+        double armPos = 0.0;
+
         if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
-            bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen);
+            bucketPos = RobotParameters.ServoBounds.bucketOpen;
             if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                armServoA.setPosition(RobotParameters.SystemsTuning.armTransfer);
-                armServoB.setPosition(1.0 - RobotParameters.SystemsTuning.armTransfer);
+                armPos = RobotParameters.ServoBounds.armTransfer;
             } else {
-                armServoA.setPosition(RobotParameters.ServoBounds.armDown);
-                armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armDown);
+                armPos = RobotParameters.ServoBounds.armDown;
             }
-        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up || outtakeState == OuttakeState.PassthroughDeposit) {
+        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up || outtakeState == OuttakeState.PassthroughDeposit || outtakeState == OuttakeState.Waiting) {
             if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer); // Give some leeway to make sure it doesn't get stuck
-            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance || motors.leftOuttakeSlide.getCurrentPosition() > 300.0) {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketClosed);
-            } else {
-                bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer);
+                bucketPos = 0.0;
+            } else if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || motors.leftOuttakeSlide.getCurrentPosition() > 300.0) {
+                bucketPos = RobotParameters.ServoBounds.bucketClosed;
+            } else if (outtakeState != OuttakeState.Waiting){
+                bucketPos = RobotParameters.ServoBounds.bucketTransfer;
             }
             if (motors.leftOuttakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.outtakeUp - 100.0) {
-                armServoA.setPosition(RobotParameters.ServoBounds.armUp);
-                armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armUp);
-            } else {
-                armServoA.setPosition(RobotParameters.SystemsTuning.armTransfer);
-                armServoB.setPosition(1.0 - RobotParameters.SystemsTuning.armTransfer);
+                if (outtakeState != OuttakeState.Deposit) {
+                    armPos = RobotParameters.ServoBounds.armUp;
+                } else {
+                    armPos = RobotParameters.ServoBounds.armWait;
+                }
+            } else if (outtakeState == OuttakeState.Up || outtakeState == OuttakeState.Deposit) {
+                armPos = RobotParameters.ServoBounds.armWait;
             }
         }
         if (outtakeState == OuttakeState.PassthroughDeposit) {
-            armServoA.setPosition(RobotParameters.ServoBounds.armUp);
-            armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armUp);
+            armPos = RobotParameters.ServoBounds.armUp;
         }
         if (armUp) {
-            armServoA.setPosition(0.1);
+            armPos = 0.1;
+        }
+        if (outtakeState == OuttakeState.Waiting) {
+            if (motors.leftIntakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.intakeClearance - 10.0 || retract) {
+                armPos = RobotParameters.ServoBounds.armWait;
+                bucketPos = RobotParameters.ServoBounds.bucketClosed;
+            }
         }
 
         if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Folded) {
-            if (motors.leftIntakeSlide.getCurrentPosition() < 20.0 && motors.leftOuttakeSlide.getCurrentPosition() < 100.0) {
+            if (motors.leftIntakeSlide.getCurrentPosition() < 10.0 && motors.leftOuttakeSlide.getCurrentPosition() < RobotParameters.Thresholds.outtakeHeightToRetractIntakeLower && outtakeState != OuttakeState.Up) {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchClosed);
             } else {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
@@ -82,9 +90,20 @@ public class Servos {
         }
 
         if (outtakeState == OuttakeState.LevelOneHang) {
-            armServoA.setPosition(RobotParameters.ServoBounds.armDown - 0.05);
-            armServoB.setPosition(1.0 - (RobotParameters.ServoBounds.armDown - 0.05));
+            armPos = RobotParameters.ServoBounds.armDown - 0.05;
         }
+
+        if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
+            armPos = RobotParameters.ServoBounds.armTransfer;
+        }
+
+        if (outtakeState == OuttakeState.Up) {
+            bucketPos = RobotParameters.ServoBounds.bucketClosed;
+        }
+
+        bucketServo.setPosition(bucketPos);
+        armServoA.setPosition(armPos);
+        armServoB.setPosition(1.0 - armPos);
     }
 
     public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors, boolean cancelIntake) {
