@@ -9,9 +9,12 @@ import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 public class Servos {
 	// Define motors
     public Servo bucketServo;
-    public Servo armServo;
+    public Servo armServoB;
+    public Servo armServoA;
     public Servo leftIntakeLiftServo;
     public Servo rightIntakeLiftServo;
+    public Servo latchServo;
+
     public CRServo intakeServoA;
     public CRServo intakeServoB;
     public double intakeOverridePower = 0.0;
@@ -19,20 +22,30 @@ public class Servos {
 	// Initialize the motors with hardwaremap
     public Servos(HardwareMap hardwareMap) {
         bucketServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.bucketServo);
-        armServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServo);
+        armServoA = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServoA);
+        armServoB = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.armServoB);
+        latchServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.latchServo);
+
         intakeServoA = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoA);
         intakeServoB = new CRServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeServoB);
+
         leftIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftIntakeLiftServo);
         rightIntakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightIntakeLiftServo);
+        rightIntakeLiftServo.setPosition(RobotParameters.ServoBounds.intakeFolded);
+        leftIntakeLiftServo.setPosition(1.0 - RobotParameters.ServoBounds.intakeFolded);
+        armServoA.setPosition(RobotParameters.ServoBounds.armDown);
+        armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armDown);
     }
 
-    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors) {
+    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, boolean armUp) {
         if (outtakeState == OuttakeState.Down || outtakeState == OuttakeState.Folded) {
             bucketServo.setPosition(RobotParameters.ServoBounds.bucketOpen);
             if (intakeState == IntakeState.Depositing || intakeState == IntakeState.Dropping) {
-                armServo.setPosition(RobotParameters.SystemsTuning.armTransfer);
+                armServoA.setPosition(RobotParameters.SystemsTuning.armTransfer);
+                armServoB.setPosition(1.0 - RobotParameters.SystemsTuning.armTransfer);
             } else {
-                armServo.setPosition(RobotParameters.ServoBounds.armDown);
+                armServoA.setPosition(RobotParameters.ServoBounds.armDown);
+                armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armDown);
             }
         } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.Up || outtakeState == OuttakeState.PassthroughDeposit) {
             if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
@@ -43,13 +56,29 @@ public class Servos {
                 bucketServo.setPosition(RobotParameters.ServoBounds.bucketTransfer);
             }
             if (motors.leftOuttakeSlide.getCurrentPosition() > RobotParameters.SlideBounds.outtakeUp - 100.0) {
-                armServo.setPosition(RobotParameters.ServoBounds.armUp);
+                armServoA.setPosition(RobotParameters.ServoBounds.armUp);
+                armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armUp);
             } else {
-                armServo.setPosition(RobotParameters.SystemsTuning.armTransfer);
+                armServoA.setPosition(RobotParameters.SystemsTuning.armTransfer);
+                armServoB.setPosition(1.0 - RobotParameters.SystemsTuning.armTransfer);
             }
         }
         if (outtakeState == OuttakeState.PassthroughDeposit) {
-            armServo.setPosition(RobotParameters.ServoBounds.armUp);
+            armServoA.setPosition(RobotParameters.ServoBounds.armUp);
+            armServoB.setPosition(1.0 - RobotParameters.ServoBounds.armUp);
+        }
+        if (armUp) {
+            armServoA.setPosition(0.1);
+        }
+
+        if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Folded) {
+            if (motors.leftIntakeSlide.getCurrentPosition() < 20.0) {
+                latchServo.setPosition(RobotParameters.ServoBounds.latchClosed);
+            } else {
+                latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
+            }
+        } else {
+            latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
         }
     }
 

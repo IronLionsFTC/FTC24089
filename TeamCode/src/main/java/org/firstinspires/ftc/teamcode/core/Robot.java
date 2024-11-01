@@ -88,10 +88,10 @@ public class Robot {
             double r = yawCorrection();
             double movementMultiplier = 0.7;
             if (state.intake.intakeState == IntakeState.Collecting) {
-                movementMultiplier = 0.3;
+                movementMultiplier = 0.5;
             }
             if (state.outtake.outtakeState == OuttakeState.Up) {
-                movementMultiplier = 0.2;
+                movementMultiplier = 0.3;
             }
             powerVec2.fromComponent(rightPower, forwardPower);
             // Forwards drive (front two need to be reversed)
@@ -177,7 +177,7 @@ public class Robot {
                     // If pressing y while collecting, lift intake.
                     // - Used in situations with stacked samples
                     // - Clear an obstruction without retracting
-                    intakeLift = RobotParameters.ServoBounds.intakeDown - 0.1;
+                    intakeLift = RobotParameters.ServoBounds.intakeDown + 0.25;
                 }
             } else if (state.intake.intakeState == IntakeState.Evaluating) {
                 // Stay down ready to continue intaking when checking colour
@@ -302,12 +302,12 @@ public class Robot {
                 state.outtake.outtakeState = OuttakeState.PassthroughDeposit;
             }
 
-            if (controller.lbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+            if (controller.lbPress == 1) {
                 imu.targetYaw -= 45.0;
                 controller.lastYawWasAnalog = false;
             }
 
-            if (controller.rbPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
+            if (controller.rbPress == 1) {
                 imu.targetYaw += 45.0;
                 controller.lastYawWasAnalog = false;
             }
@@ -336,7 +336,7 @@ public class Robot {
 
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors);
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, controller.yPress > 0 && state.outtake.outtakeState == OuttakeState.Deposit);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
             motors.setPowers();
             return false;

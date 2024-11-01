@@ -13,9 +13,14 @@ public class ServoTuning extends LinearOpMode
     @Config
     public static class Tune {
         public static double intakeSpinPower = 0.0;
-        public static double intakeLiftPosition = 0.0;
-        public static double outtakeArmPosition = 0.0;
+        public static double intakeLiftPosition = 0.88;
+        public static double outtakeArmPosition = 0.68;
         public static double outtakeClawPosition = 0.0;
+
+
+        // arm down 0
+        // arm up 0.6
+        // arm transfer 0.16
     }
 
     @Override
@@ -41,7 +46,8 @@ public class ServoTuning extends LinearOpMode
             servos.intakeServoB.set(Tune.intakeSpinPower);
             servos.rightIntakeLiftServo.setPosition(Tune.intakeLiftPosition);
             servos.leftIntakeLiftServo.setPosition(1.0 - Tune.intakeLiftPosition);
-            servos.armServo.setPosition(Tune.outtakeArmPosition);
+            servos.armServoA.setPosition(Tune.outtakeArmPosition);
+            servos.armServoB.setPosition(1.0 - Tune.outtakeArmPosition);
             servos.bucketServo.setPosition(Tune.outtakeClawPosition);
         }
     }
