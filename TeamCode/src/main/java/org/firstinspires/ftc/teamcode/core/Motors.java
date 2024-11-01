@@ -72,14 +72,14 @@ public class Motors {
     }
 
     public void setPowers() {
-        leftFront.set( powers.leftFront > 0.1 ? powers.leftFront : 0.0);
-        rightFront.set(powers.rightFront > 0.1 ? powers.rightFront : 0.0);
-        leftBack.set(powers.leftBack > 0.1 ? powers.leftBack : 0.0);
-        rightBack.set(powers.rightBack > 0.1 ? powers.rightBack : 0.0);
-        leftOuttakeSlide.set(powers.leftOuttakeSlide > 0.1 ? powers.leftOuttakeSlide : 0.0);
-        rightOuttakeSlide.set(powers.rightOuttakeSlide > 0.1 ? powers.rightOuttakeSlide : 0.0);
-        leftIntakeSlide.set(powers.leftIntakeSlide > 0.1 ? powers.leftIntakeSlide : 0.0);
-        rightIntakeSlide.set(powers.rightIntakeSlide > 0.1 ? powers.rightIntakeSlide : 0.0);
+        leftFront.set(Math.abs(powers.leftFront) > 0.1 ? powers.leftFront : 0.0);
+        rightFront.set(Math.abs(powers.rightFront) > 0.1 ? powers.rightFront : 0.0);
+        leftBack.set(Math.abs(powers.leftBack) > 0.1 ? powers.leftBack : 0.0);
+        rightBack.set(Math.abs(powers.rightBack) > 0.1 ? powers.rightBack : 0.0);
+        leftOuttakeSlide.set(Math.abs(powers.leftOuttakeSlide) > 0.1 ? powers.leftOuttakeSlide : 0.0);
+        rightOuttakeSlide.set(Math.abs(powers.rightOuttakeSlide) > 0.1 ? powers.rightOuttakeSlide : 0.0);
+        leftIntakeSlide.set(Math.abs(powers.leftIntakeSlide) > 0.1 ? powers.leftIntakeSlide : 0.0);
+        rightIntakeSlide.set(Math.abs(powers.rightIntakeSlide) > 0.1 ? powers.rightIntakeSlide : 0.0);
     }
 
     public void stopMotors() {
