@@ -16,6 +16,7 @@ public class ServoTuning extends LinearOpMode
         public static double intakeLiftPosition = 0.88;
         public static double outtakeArmPosition = 0.68;
         public static double outtakeClawPosition = 0.0;
+        public static double latchPosition = 0.0;
 
 
         // arm down 0
@@ -49,6 +50,7 @@ public class ServoTuning extends LinearOpMode
             servos.armServoA.setPosition(Tune.outtakeArmPosition);
             servos.armServoB.setPosition(1.0 - Tune.outtakeArmPosition);
             servos.bucketServo.setPosition(Tune.outtakeClawPosition);
+            servos.latchServo.setPosition(Tune.latchPosition);
         }
     }
 }

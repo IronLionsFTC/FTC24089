@@ -6,5 +6,7 @@ public enum OuttakeState {
     Up,
     Deposit,
     Passthrough, // Just quickly jump out the back without moving sides
-    PassthroughDeposit // Drop without moving slides
+    PassthroughDeposit, // Drop without moving slides
+
+    LevelOneHang
 }
