@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 public class DepositStarterThenPark {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
-
         builder
                 .addPath(
                         // Line 1
@@ -33,8 +32,8 @@ public class DepositStarterThenPark {
                         // Line 3
                         new BezierCurve(
                                 new Point(16.837, 115.000, Point.CARTESIAN),
-                                new Point(16.837, 128.049, Point.CARTESIAN),
-                                new Point(14.622, 129.378, Point.CARTESIAN)
+                                new Point(18.831, 122.068, Point.CARTESIAN),
+                                new Point(17.502, 125.391, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
@@ -42,18 +41,18 @@ public class DepositStarterThenPark {
                 .addPath(
                         // Line 4
                         new BezierCurve(
-                                new Point(14.622, 129.378, Point.CARTESIAN),
-                                new Point(23.483, 120.517, Point.CARTESIAN),
-                                new Point(11.963, 100.357, Point.CARTESIAN),
-                                new Point(11.963, 82.412, Point.CARTESIAN)
+                                new Point(17.502, 125.391, Point.CARTESIAN),
+                                new Point(22.375, 116.308, Point.CARTESIAN),
+                                new Point(14.178, 100.357, Point.CARTESIAN),
+                                new Point(14.178, 80.418, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
                 .addPath(
                         // Line 5
                         new BezierLine(
-                                new Point(11.963, 82.412, Point.CARTESIAN),
-                                new Point(11.963, 10.000, Point.CARTESIAN)
+                                new Point(14.178, 80.418, Point.CARTESIAN),
+                                new Point(14.178, 12.628, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(90));

@@ -44,14 +44,13 @@ public class DepositStarterThenPark extends OpMode {
 
     @Override
     public void start() {
-        follower.setStartingPose(Poses.blueHumanPlayerAngledPoint);
-        follower.followPath(this.TestCurveBlueToRedHumanPlayer);
+        this.follower.update();
+        this.follower.followPath(org.firstinspires.ftc.teamcode.auto.paths.DepositStarterThenPark.path());
     }
 
     @Override
     public void loop() {
         this.follower.update();
-        if (!this.started) { this.follower.followPath(chain); }
         if (this.follower.atParametricEnd()) { terminateOpModeNow(); }
     }
 }
