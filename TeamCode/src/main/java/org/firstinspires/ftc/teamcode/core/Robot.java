@@ -91,6 +91,22 @@ public class Robot {
         }
     }
 
+    public boolean areSlidesReady() {
+        return state.outtake.outtakeState == OuttakeState.Up && drivetrain.motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 200.0;
+    }
+
+    public void dropSample() {
+        if (state.outtake.outtakeState == OuttakeState.Up) state.outtake.outtakeState = OuttakeState.Deposit;
+    }
+
+    public void lowerSlides() {
+        if (state.outtake.outtakeState == OuttakeState.Deposit) state.outtake.outtakeState = OuttakeState.Down;
+    }
+
+    public boolean areSlidesDown() {
+        return state.outtake.outtakeState == OuttakeState.Down && state.intake.intakeState == IntakeState.Retracted && drivetrain.motors.outtakePosition() < 100.0;
+    }
+
     @Config
     public static class PID_settings {
         public static double intakeSlide_p = 0.05;
