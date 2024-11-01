@@ -45,7 +45,7 @@ public class RobotParameters {
         }
     }
 
-    public static final class Odometry { // Last verified 13/6/24 8:21AM
+    public static final class Odometry {
         public static final class HardwareMapNames {
             public static final String left = RobotParameters.Motors.HardwareMapNames.rightBack;
             public static final String right = RobotParameters.Motors.HardwareMapNames.leftFront;
@@ -54,7 +54,7 @@ public class RobotParameters {
         public static final class Reversed {
             public static final boolean left = true;
             public static final boolean right = true;
-            public static final boolean sideways = false;
+            public static final boolean sideways = true;
         }
         public static final class CenterOffset_mm {
             // See diagram in LOCALIZATION.md
