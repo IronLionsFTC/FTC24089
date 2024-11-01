@@ -96,8 +96,9 @@ public class RobotParameters {
 
     public static final class ServoBounds {
         public static final double armDown = 0.0;
-        public static final double armUp = 0.6;
-        public static final double armTransfer = 0.16;
+        public static final double armUp = 0.57;
+        public static final double armWait = 0.37;
+        public static final double armTransfer = 0.13;
         public static final double bucketOpen = 0.07; // Parallel
         public static final double bucketTransfer = 0.08;
         public static final double bucketClosed = 0.2; // Gripping
@@ -108,7 +109,7 @@ public class RobotParameters {
     }
 
     public static final class SlideBounds {
-        public static final double outtakeDown = 0.0;
+        public static final double outtakeDown = 0.02;
         public static final double outtakeUp = 2950.0;
         public static final double intakeIn = 0.0;
         public static final double intakeClearance = 70.0; // Allow outtake to freely move without clipping
@@ -121,7 +122,7 @@ public class RobotParameters {
         public static final double intakeClearanceForOuttakeMovement = 60.0; // When to start moving outtake
         public static final double outtakeMinimumHeightToNotWorryAboutIntake = 800.0;
         public static final double outtakeHeightToRetractIntakeUpper = 900.0; // When outtake reaches this height, retract intake
-        public static final double outtakeHeightToRetractIntakeLower = 100.0; //  ^^^
+        public static final double outtakeHeightToRetractIntakeLower = 150.0; //  ^^^
         public static final double colourFilter = 1.0; // Higher the stricter
         public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
     }
