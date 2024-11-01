@@ -72,13 +72,18 @@ public class Servos {
         }
 
         if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Folded) {
-            if (motors.leftIntakeSlide.getCurrentPosition() < 20.0) {
+            if (motors.leftIntakeSlide.getCurrentPosition() < 20.0 && motors.leftOuttakeSlide.getCurrentPosition() < 100.0) {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchClosed);
             } else {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
             }
         } else {
             latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
+        }
+
+        if (outtakeState == OuttakeState.LevelOneHang) {
+            armServoA.setPosition(RobotParameters.ServoBounds.armDown - 0.05);
+            armServoB.setPosition(1.0 - (RobotParameters.ServoBounds.armDown - 0.05));
         }
     }
 
