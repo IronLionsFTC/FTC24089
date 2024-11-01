@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
+import org.firstinspires.ftc.teamcode.core.Robot;
+import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
@@ -18,9 +20,11 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 public class MainAuto extends OpMode {
     public int autostate = 1;
     public Follower follower;
+    public Robot robot;
 
     @Override
     public void init() {
+        this.robot = new Robot(hardwareMap, telemetry, Team.Blue);
         this.follower = new Follower(hardwareMap);
         this.follower.setStartingPose(new Pose(9.0, 41.0, Math.toRadians(-90)));
     }
@@ -32,6 +36,7 @@ public class MainAuto extends OpMode {
 
     @Override
     public void loop() {
+        this.robot.update_auto();
         this.follower.update();
         autoUpdate();
     }

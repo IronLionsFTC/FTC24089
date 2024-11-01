@@ -64,6 +64,10 @@ public class Robot {
                 RobotParameters.PIDConstants.yawD);
     }
 
+    public void update_auto() {
+        this.drivetrain.update_auto();
+    }
+
     public class Drivetrain {
         public Motors motors;
         public Servos servos;
@@ -335,11 +339,16 @@ public class Robot {
             return (controller.bPress > 0);
         }
 
-        public boolean drive(GamepadEx gamepad) {
-            // Calculate drive movement
-            if (calculateMovement(gamepad)) {
-                return true;
-            };
+        public void update_auto() {
+            moveOuttake();
+            moveIntake();
+
+            // Update servos / motors
+            servos.setPositions(state, motors);
+            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, false);
+        }
+
+        public void update_teleop(GamepadEx gamepad) {
             moveOuttake();
             moveIntake();
 
@@ -348,6 +357,14 @@ public class Robot {
             servos.setPositions(state, motors);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
             motors.setPowers();
+        }
+
+        public boolean drive(GamepadEx gamepad) {
+            // Calculate drive movement
+            if (calculateMovement(gamepad)) {
+                return true;
+            };
+            this.update_teleop(gamepad);
 
             return false;
         }
