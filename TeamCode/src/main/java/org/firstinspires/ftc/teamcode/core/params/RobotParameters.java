@@ -120,10 +120,10 @@ public class RobotParameters {
     public static final class Thresholds {
         public static final double intakeSamplePresent = 20.0; // mm where sample is present  (if less than)
         public static final double intakeClearanceForOuttakeMovement = 60.0; // When to start moving outtake
-        public static final double outtakeMinimumHeightToNotWorryAboutIntake = 800.0;
-        public static final double outtakeHeightToRetractIntakeUpper = 900.0; // When outtake reaches this height, retract intake
+        public static final double outtakeMinimumHeightToNotWorryAboutIntake = 500.0;
+        public static final double outtakeHeightToRetractIntakeUpper = 500.0; // When outtake reaches this height, retract intake
         public static final double outtakeHeightToRetractIntakeLower = 150.0; //  ^^^
-        public static final double colourFilter = 1.0; // Higher the stricter
+        public static final double colourFilter = 0.8; // Higher the stricter
         public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
     }
 
@@ -138,7 +138,7 @@ public class RobotParameters {
         public static final double intakeSlideF = 0.1;
 
         // Spinning Intake Speed
-        public static final double intakeSpeed = 0.3;
+        public static final double intakeSpeed = 0.2;
         public static final double reverseIntakeSpeed = 0.2;
 
         // Yaw Correction Settings

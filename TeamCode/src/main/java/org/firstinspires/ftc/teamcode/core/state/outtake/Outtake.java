@@ -15,6 +15,7 @@ public class Outtake {
         } else if (outtakeState == OuttakeState.Up) {
             outtakeState = OuttakeState.Deposit;
         } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
+            retract = false;
             outtakeState = OuttakeState.Down;
         } else if (outtakeState == OuttakeState.Passthrough) {
             outtakeState = OuttakeState.PassthroughDeposit;
