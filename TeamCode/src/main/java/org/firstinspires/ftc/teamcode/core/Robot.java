@@ -105,7 +105,7 @@ public class Robot {
 
     public void dropSample() {
         if (state.outtake.outtakeState == OuttakeState.Up) state.outtake.outtakeState = OuttakeState.Deposit;
-        moveMotorsBasedOnState();
+        update_auto();
     }
 
     public void lowerSlides() {
@@ -116,7 +116,7 @@ public class Robot {
         return state.outtake.outtakeState == OuttakeState.Down && state.intake.intakeState == IntakeState.Retracted && drivetrain.motors.outtakePosition() < 100.0;
     }
 
-    public void moveMotorsBasedOnState() {
+    public void update_auto() {
         drivetrain.moveIntake();
         drivetrain.moveOuttake();
         drivetrain.servos.setPositions(state, drivetrain.motors);
@@ -138,10 +138,6 @@ public class Robot {
                 RobotParameters.PIDConstants.yawP,
                 RobotParameters.PIDConstants.yawI,
                 RobotParameters.PIDConstants.yawD);
-    }
-
-    public void update_auto() {
-        this.drivetrain.update_auto();
     }
 
     public class Drivetrain {
@@ -422,15 +418,6 @@ public class Robot {
 
             // EMERGENCY STOP
             return (controller.bPress > 0);
-        }
-
-        public void update_auto() {
-            moveOuttake();
-            moveIntake();
-
-            // Update servos / motors
-            servos.setPositions(state, motors);
-            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, false);
         }
 
         public void update_teleop(GamepadEx gamepad) {
