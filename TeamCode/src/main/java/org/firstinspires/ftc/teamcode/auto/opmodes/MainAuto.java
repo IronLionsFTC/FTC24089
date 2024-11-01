@@ -61,15 +61,42 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.start_to_basket);
                 pause();
             case -1:
-                nextIfPathEnd();
+                setIfPathEnd(2000);
 
             // Deposit starting sample
-            case 2:
-                // Deposit starting sample here
+            case 2000:
+                robot.prepareTransferForPreloadedSample();
                 pause();
-            case -2:
-                // If done depositing - check state
-                next();
+            case -2000:
+                if (robot.tryTransfer()) {
+                    setAutoState(-2001);
+                }
+            case -2001:
+                if (robot.transferCompleted()) {
+                    setAutoState(2002);
+                }
+            case 2002:
+                robot.extendOuttakeToTop();
+                pause();
+            case -2002:
+                if (robot.areSlidesReady()) {
+                    setAutoState(2003);
+                }
+            case 2003:
+                // TODO: adjust robot position toward basket if needed
+                // Then move on to 2004
+            case 2004:
+                robot.dropSample();
+                // TODO: make sure it is clear here and has moved back to standard position
+                setAutoState(2005);
+            case 2005:
+                robot.lowerSlides();
+                pause();
+            case -2005:
+                if (robot.areSlidesDown()) {
+                    setAutoState(3);
+                }
+
 
             // Position to get bottom sample from yellow spike mark
             case 3:
@@ -80,12 +107,16 @@ public class MainAuto extends OpMode {
 
             // Start intake
             case 4:
-                // Start intake here
+                robot.extendIntakeFromFoldedPosition();
                 pause();
             case -4:
-                // MAY NOT BE NECESSARY
-                // Check if ready to intake the sample
-                next();
+                if (robot.isIntakeExtended()) {
+                    setAutoState(4001);
+                }
+            case 4001:
+                robot.foldDownIntakeAndStartCollecting();
+                setAutoState(5);
+
 
             // Move forward onto sample
             case 5:
@@ -101,15 +132,41 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.yellow_spike.BOTTOM_return);
                 pause();
             case -6:
-                nextIfPathEnd();
+                setIfPathEnd(7000);
 
             // Outtake the sample
-            case 7:
-                // Outtake the sample here
+            case 7000:
+                robot.prepareTransferForPreloadedSample();
                 pause();
-            case -7:
-                // Ensure that outtake is complete and robot is ready for the next cycle
-                next();
+            case -7000:
+                if (robot.tryTransfer()) {
+                    setAutoState(-7001);
+                }
+            case -7001:
+                if (robot.transferCompleted()) {
+                    setAutoState(7002);
+                }
+            case 7002:
+                robot.extendOuttakeToTop();
+                pause();
+            case -7002:
+                if (robot.areSlidesReady()) {
+                    setAutoState(7003);
+                }
+            case 7003:
+                // TODO: adjust robot position toward basket if needed
+                // Then move on to 2004
+            case 7004:
+                robot.dropSample();
+                // TODO: make sure it is clear here and has moved back to standard position
+                setAutoState(7005);
+            case 7005:
+                robot.lowerSlides();
+                pause();
+            case -7005:
+                if (robot.areSlidesDown()) {
+                    setAutoState(8);
+                }
 
             // Same deal but for the middle spike mark
 
@@ -122,12 +179,15 @@ public class MainAuto extends OpMode {
 
             // Start intake
             case 9:
-                // start intake here
+                robot.extendIntakeFromFoldedPosition();
                 pause();
             case -9:
-                // MAY NOT BE NECESSARY
-                // Check if ready to intake the sample
-                next();
+                if (robot.isIntakeExtended()) {
+                    setAutoState(9001);
+                }
+            case 9001:
+                robot.foldDownIntakeAndStartCollecting();
+                setAutoState(10);
 
             // Intake the sample
             case 10:
@@ -141,15 +201,41 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.yellow_spike.MIDDLE_return);
                 pause();
             case -11:
-                nextIfPathEnd();
+                setIfPathEnd(12000);
 
             // Outtake the sample
-            case 12:
-                // Outtake the sample here
+            case 12000:
+                robot.prepareTransferForPreloadedSample();
                 pause();
-            case -12:
-                // Ensure that the robot is ready to go
-                next();
+            case -12000:
+                if (robot.tryTransfer()) {
+                    setAutoState(-12001);
+                }
+            case -12001:
+                if (robot.transferCompleted()) {
+                    setAutoState(12002);
+                }
+            case 12002:
+                robot.extendOuttakeToTop();
+                pause();
+            case -12002:
+                if (robot.areSlidesReady()) {
+                    setAutoState(12003);
+                }
+            case 12003:
+                // TODO: adjust robot position toward basket if needed
+                // Then move on to 2004
+            case 12004:
+                robot.dropSample();
+                // TODO: make sure it is clear here and has moved back to standard position
+                setAutoState(12005);
+            case 12005:
+                robot.lowerSlides();
+                pause();
+            case -12005:
+                if (robot.areSlidesDown()) {
+                    setAutoState(13);
+                }
 
             // Go to park position, ready to intake in teleop
             case 13:
