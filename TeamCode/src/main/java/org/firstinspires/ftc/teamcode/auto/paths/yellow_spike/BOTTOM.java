@@ -5,6 +5,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
+import org.firstinspires.ftc.teamcode.auto.constants.Points;
+
 public class BOTTOM {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
@@ -13,7 +15,7 @@ public class BOTTOM {
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(18.150, 125.800, Point.CARTESIAN),
+                                Points.basketOuttake,
                                 new Point(11.000, 121.400, Point.CARTESIAN)
                         )
                 )

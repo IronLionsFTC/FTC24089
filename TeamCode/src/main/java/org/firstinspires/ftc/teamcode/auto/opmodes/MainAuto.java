@@ -54,7 +54,7 @@ public class MainAuto extends OpMode {
                 pause();
                 break;
             case -1:
-                setIfPathEnd(get_next());
+                nextIfPathEnd();
 
             // Deposit starting sample
             case 2:
@@ -66,7 +66,7 @@ public class MainAuto extends OpMode {
 
             // Position to get bottom sample from yellow spike mark
             case 3:
-                this.follower.followPath(Paths.get_spike_yellow_BOTTOM);
+                this.follower.followPath(Paths.yellow_spike.BOTTOM);
                 pause();
             case -3:
                 nextIfPathEnd();
@@ -80,8 +80,8 @@ public class MainAuto extends OpMode {
                 // Check if ready to intake the sample
                 next();
 
+            // Move forward onto sample
             case 5:
-
         }
     }
 }
