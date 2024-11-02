@@ -110,8 +110,8 @@ public class Servos {
     public void setPowers(IntakeState intakeState, double intakePower, Sensors sensors, boolean cancelIntake) {
         if (Math.abs(intakeOverridePower) < 0.1) {
             if (intakeState == IntakeState.Collecting) {
-                intakeServoA.set(intakePower);
-                intakeServoB.set(intakePower);
+                intakeServoA.set(RobotParameters.PIDConstants.intakeSpeed);
+                intakeServoB.set(RobotParameters.PIDConstants.intakeSpeed);
             } else if (intakeState == IntakeState.Dropping) {
                 intakeServoA.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
                 intakeServoB.set(-RobotParameters.SystemsTuning.reverseIntakeSpeed);
