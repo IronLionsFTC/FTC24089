@@ -6,16 +6,24 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.constants.Points;
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
+import org.firstinspires.ftc.teamcode.core.Robot;
+import org.firstinspires.ftc.teamcode.core.state.Team;
+import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
+import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 
 @Autonomous(name = "Park Only Auto", group = "_MAIN_")
 public class Park extends OpMode {
     public Follower follower;
+    public Robot robot;
 
     @Override
     public void init() {
         this.follower = new Follower(hardwareMap);
         this.follower.setStartingPose(Points.slantStartPose);
+        this.robot = new Robot(hardwareMap ,telemetry, Team.Blue);
+        this.robot.state.intake.intakeState = IntakeState.Retracted;
+        this.robot.state.outtake.outtakeState = OuttakeState.Down;
         telemetry = new MultipleTelemetry(telemetry);
     }
 
@@ -26,6 +34,7 @@ public class Park extends OpMode {
 
     @Override
     public void loop() {
+        robot.drivetrain.servos.setPositions(robot.state, robot.drivetrain.motors);
         follower.update();
     }
 }
