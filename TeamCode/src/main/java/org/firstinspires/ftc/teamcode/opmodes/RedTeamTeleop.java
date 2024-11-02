@@ -28,6 +28,8 @@ public class RedTeamTeleop extends LinearOpMode
         // Runs when the play button is pressed //
         //////////////////////////////////////////
 
+        robot.blockingRetractAndZeroBothSlides();
+
         // Main loop
         while (opModeIsActive()){
             if (robot.drivetrain.drive(gamepad)) {

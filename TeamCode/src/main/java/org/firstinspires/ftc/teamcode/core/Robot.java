@@ -49,6 +49,19 @@ public class Robot {
         team = colour;
     }
 
+    public void blockingRetractAndZeroBothSlides() {
+        Timer retractionTimer = new Timer();
+        drivetrain.motors.leftOuttakeSlide.set(-0.3);
+        drivetrain.motors.rightOuttakeSlide.set(-0.3);
+        drivetrain.motors.leftIntakeSlide.set(-0.3);
+        drivetrain.motors.rightIntakeSlide.set(-0.3);
+        while (retractionTimer.getElapsedTime() < 1000.0);
+        drivetrain.motors.rightIntakeSlide.resetEncoder();
+        drivetrain.motors.leftIntakeSlide.resetEncoder();
+        drivetrain.motors.rightOuttakeSlide.resetEncoder();
+        drivetrain.motors.leftOuttakeSlide.resetEncoder();
+    }
+
     public void prepareTransferForPreloadedSample() {
         state.intake.intakeState = IntakeState.Depositing;
     }
