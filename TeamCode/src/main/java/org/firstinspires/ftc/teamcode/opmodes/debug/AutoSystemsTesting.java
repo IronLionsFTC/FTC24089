@@ -42,10 +42,23 @@ public class AutoSystemsTesting extends LinearOpMode
         GamepadEx gp = new GamepadEx(gamepad1);
 
         while (opModeIsActive()) {
-            while (controller.xPress != 1) controller.updateKeyTracker(gp);
+            while (controller.xPress != 1) {
+                controller.updateKeyTracker(gp);
+            }
             robot.extendIntakeFromFoldedPosition();
-            while (!robot.isIntakeExtended());
+            while (!robot.isIntakeExtended()) {
+                robot.update_auto();
+            }
             robot.extendIntakeFromFoldedPosition();
+            while (!robot.tryToCollectSample()) {
+                robot.update_auto();
+            }
+            while (!robot.tryTransfer()) {
+                robot.update_auto();
+            }
+            while (!robot.transferCompleted()) {
+                robot.update_auto();
+            }
         }
     }
 }
