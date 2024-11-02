@@ -8,4 +8,6 @@ public final class Points {
     public static final Point basketOuttakeCloser = new Point(17.150, 126.800, Point.CARTESIAN);
     public static final Point slantStart = new Point(9.0, 45.0, Point.CARTESIAN);
     public static final Point humanAreaPark = new Point(10.0, 11.0, Point.CARTESIAN);
+
+    public static final Pose slantStartPose = new Pose(slantStart.getX(), slantStart.getY(), Math.PI/2);
 }

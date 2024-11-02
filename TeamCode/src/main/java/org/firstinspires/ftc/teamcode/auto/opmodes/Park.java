@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.auto.constants.Points;
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 
@@ -14,6 +15,7 @@ public class Park extends OpMode {
     @Override
     public void init() {
         this.follower = new Follower(hardwareMap);
+        this.follower.setStartingPose(Points.slantStartPose);
         telemetry = new MultipleTelemetry(telemetry);
     }
 

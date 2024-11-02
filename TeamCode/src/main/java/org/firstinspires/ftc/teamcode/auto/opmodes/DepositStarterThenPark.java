@@ -26,9 +26,7 @@ public class DepositStarterThenPark extends OpMode {
     @Override
     public void init() {
         this.follower = new Follower(hardwareMap);
-        this.follower.setStartingPose(new Pose(
-                9.0, 45.0, Math.PI/2
-        ));
+        this.follower.setStartingPose(Points.slantStartPose);
         this.chain = org.firstinspires.ftc.teamcode.auto.paths.DepositStarterThenPark.path();
     }
 
