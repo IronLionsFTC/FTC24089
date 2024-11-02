@@ -105,6 +105,7 @@ public class Robot {
 
     public void dropSample() {
         if (state.outtake.outtakeState == OuttakeState.Up) state.outtake.outtakeState = OuttakeState.Deposit;
+        state.outtake.armRaiseTimer.resetTimer();
         update_auto();
     }
 
