@@ -119,6 +119,7 @@ public class Robot {
     public void update_auto() {
         drivetrain.moveIntake();
         drivetrain.moveOuttake();
+        drivetrain.motors.setOtherPowers();
         drivetrain.servos.setPositions(state, drivetrain.motors);
         drivetrain.servos.setPowers(state.intake.intakeState, 0.0, sensors, false);
     }
@@ -199,7 +200,7 @@ public class Robot {
             }
 
             double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
-            double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.intakeSlideF;
+            double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.outtakeSlideF;
             double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
@@ -433,7 +434,8 @@ public class Robot {
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state, motors);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
-            motors.setPowers();
+            motors.setDrivePowers();
+            motors.setOtherPowers();
         }
 
         public boolean drive(GamepadEx gamepad) {

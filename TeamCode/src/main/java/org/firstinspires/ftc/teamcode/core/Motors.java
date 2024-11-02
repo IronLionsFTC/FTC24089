@@ -71,11 +71,13 @@ public class Motors {
         public double rightIntakeSlide = 0.0;
     }
 
-    public void setPowers() {
+    public void setDrivePowers() {
         leftFront.set(Math.abs(powers.leftFront) > 0.1 ? powers.leftFront : 0.0);
         rightFront.set(Math.abs(powers.rightFront) > 0.1 ? powers.rightFront : 0.0);
         leftBack.set(Math.abs(powers.leftBack) > 0.1 ? powers.leftBack : 0.0);
         rightBack.set(Math.abs(powers.rightBack) > 0.1 ? powers.rightBack : 0.0);
+    }
+    public void setOtherPowers() {
         leftOuttakeSlide.set(Math.abs(powers.leftOuttakeSlide) > 0.1 ? powers.leftOuttakeSlide : 0.0);
         rightOuttakeSlide.set(Math.abs(powers.rightOuttakeSlide) > 0.1 ? powers.rightOuttakeSlide : 0.0);
         leftIntakeSlide.set(Math.abs(powers.leftIntakeSlide) > 0.1 ? powers.leftIntakeSlide : 0.0);
@@ -87,7 +89,7 @@ public class Motors {
         powers.rightBack = 0.0;
         powers.leftFront = 0.0;
         powers.rightFront = 0.0;
-        setPowers();
+        setDrivePowers();
     }
 
     public double outtakePosition() {
