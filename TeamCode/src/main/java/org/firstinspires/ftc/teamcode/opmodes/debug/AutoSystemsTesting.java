@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.Sensors;
 import org.firstinspires.ftc.teamcode.core.Servos;
 import org.firstinspires.ftc.teamcode.core.state.Team;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 @TeleOp
 public class AutoSystemsTesting extends LinearOpMode
@@ -63,12 +64,21 @@ public class AutoSystemsTesting extends LinearOpMode
             while (!robot.areSlidesReady()) {
                 robot.update_auto();
             }
+            controller.xPress = 0;
+            while (controller.xPress == 0) {
+                robot.update_auto();
+                controller.updateKeyTracker(gp);
+            }
             robot.dropSample();
+            Timer timer = new Timer();
+            while (!(timer.getElapsedTime() < 200.0)) {
+                robot.update_auto();
+            }
             robot.lowerSlides();
             while (!robot.areSlidesDown()) {
                 robot.update_auto();
             }
-            while (!robot.intakeRetracted()) {
+            while (!robot.areSlidesRetracted()) {
                 robot.update_auto();
             }
             terminateOpModeNow();

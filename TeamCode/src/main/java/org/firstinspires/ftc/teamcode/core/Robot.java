@@ -119,8 +119,6 @@ public class Robot {
         if (ret) {
             state.intake.intakeState = IntakeState.Retracted;
         }
-        drivetrain.motors.leftOuttakeSlide.resetEncoder();
-        drivetrain.motors.rightOuttakeSlide.resetEncoder();
         return ret;
     }
 
