@@ -125,14 +125,14 @@ public class Robot {
 
     @Config
     public static class PID_settings {
-        public static double intakeSlide_p = 0.05;
-        public static double intakeSlide_i = 0.05;
-        public static double intakeSlide_d = 0.001;
+        public static double intakeSlide_p = 0.02;
+        public static double intakeSlide_i = 0.0;
+        public static double intakeSlide_d = 0.002;
 
         public PIDController outtakeSlideController = new PIDController(
-                RobotParameters.PIDConstants.intakeSlideP,
-                RobotParameters.PIDConstants.intakeSlideI,
-                RobotParameters.PIDConstants.intakeSlideD);
+                RobotParameters.PIDConstants.outtakeSlideP,
+                RobotParameters.PIDConstants.outtakeSlideI,
+                RobotParameters.PIDConstants.outtakeSlideD);
         public PIDController intakeSlideController = new PIDController(intakeSlide_d, intakeSlide_i, intakeSlide_d);
         public PIDController yawController = new PIDController(
                 RobotParameters.PIDConstants.yawP,

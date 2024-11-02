@@ -1,5 +1,5 @@
-/*
 // package org.firstinspires.ftc.teamcode.competition.autonomous;
+/*
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_AUTO_AVOID_POSITION;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_IN_POSITION;
 import static org.firstinspires.ftc.teamcode.util.RobotConstants.INTAKE_ARM_OUT_POSITION;
@@ -915,4 +915,5 @@ follower.poseUpdater.setYOffset(1.5 * MathFunctions.getSign(follower.poseUpdater
     public void stop() {
     }
 }
-*/
+
+ */

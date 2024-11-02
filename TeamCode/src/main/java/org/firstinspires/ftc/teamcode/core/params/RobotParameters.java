@@ -132,10 +132,10 @@ public class RobotParameters {
         public static final double ticksInDegree = 8.33;
 
         // Outtake Slide Settings
-        public static final double intakeSlideP = 0.002;
-        public static final double intakeSlideI = 0.003;
-        public static final double intakeSlideD = 0.0001;
-        public static final double intakeSlideF = 0.1;
+        public static final double outtakeSlideP = 0.002;
+        public static final double outtakeSlideI = 0.003;
+        public static final double outtakeSlideD = 0.0001;
+        public static final double outtakeSlideF = 0.1;
 
         // Spinning Intake Speed
         public static final double intakeSpeed = 0.2;
