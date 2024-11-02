@@ -10,4 +10,5 @@ public final class Points {
     public static final Point humanAreaPark = new Point(10.0, 11.0, Point.CARTESIAN);
 
     public static final Pose slantStartPose = new Pose(slantStart.getX(), slantStart.getY(), Math.PI/2);
+    public static final Pose basketTileFrontStartPose = new Pose(9.0, 87.0, Math.PI/2);
 }
