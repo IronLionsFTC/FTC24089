@@ -6,6 +6,7 @@ public class Paths {
     public static PathChain start_to_basket = org.firstinspires.ftc.teamcode.auto.paths.StartToBasket.path();
     public static PathChain outtake_to_park = org.firstinspires.ftc.teamcode.auto.paths.OuttakeToPark.path();
     public static PathChain start_to_park = org.firstinspires.ftc.teamcode.auto.paths.StartToPark.path();
+    public static PathChain push_then_park = org.firstinspires.ftc.teamcode.auto.paths.BasketStartPushToPark.path();
 
     public static PathChain outtakeClearanceIn = org.firstinspires.ftc.teamcode.auto.paths.outtakeClearanceIn.path();
     public static PathChain outtakeClearanceOut = org.firstinspires.ftc.teamcode.auto.paths.outtakeClearanceOut.path();
