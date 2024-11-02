@@ -41,16 +41,21 @@ public class MainAuto extends OpMode {
 
     @Override
     public void loop() {
-//        this.robot.update_auto();
+        this.robot.update_auto();
         this.follower.update();
         autoUpdate();
         this.follower.update();
+        telemetry.addData("Auto state:", autostate);
+        telemetry.update();
     }
 
 
     public void setAutoState(int n) { this.autostate = n; }
+    public boolean atEnd() { return !follower.isBusy(); }
     public void setIfPathEnd(int n) {
-        if (this.follower.isBusy()) { this.autostate = n; }
+        if (atEnd()) {
+            this.autostate = n;
+        }
     }
     public void pause() { this.autostate *= -1; }
     public int get_next() { return Math.abs(this.autostate) + 1; }
@@ -169,8 +174,6 @@ public class MainAuto extends OpMode {
             case -13:
                 setIfPathEnd(0); // End auto
         }
-        telemetry.addData("Auto state:", autostate);
-        telemetry.update();
     }
 
     public int outtakestate = 1;
@@ -205,7 +208,7 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.outtakeClearanceIn);
                 outtakestate = -3;
             case -3:
-                if (this.follower.isBusy()) {
+                if (atEnd()) {
                     outtakestate = 4;
                 }
             case 4:
@@ -213,7 +216,7 @@ public class MainAuto extends OpMode {
                 this.follower.followPath(Paths.outtakeClearanceOut);
                 outtakestate = -4;
             case -4:
-                if (this.follower.isBusy()) {
+                if (atEnd()) {
                     outtakestate = 5;
                 }
 
