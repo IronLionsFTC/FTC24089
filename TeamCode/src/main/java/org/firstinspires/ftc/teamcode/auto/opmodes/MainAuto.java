@@ -74,6 +74,7 @@ public class MainAuto extends OpMode {
                 break;
             case -1:
                 nextIfPathEnd();
+                break;
 
             // Deposit starting sample
             case 2:
@@ -85,6 +86,7 @@ public class MainAuto extends OpMode {
                 if (outtake()) {
                     next();
                 }
+                break;
 
 
             // Position to get bottom sample from yellow spike mark
@@ -94,6 +96,7 @@ public class MainAuto extends OpMode {
                 break;
             case -3:
                 nextIfPathEnd();
+                break;
 
             // Start intake
             case 4:
@@ -104,6 +107,7 @@ public class MainAuto extends OpMode {
                 if (intake()) {
                     next();
                 }
+                break;
 
             // Move forward onto sample
             case 5:
@@ -112,6 +116,7 @@ public class MainAuto extends OpMode {
                 break;
             case -5:
                 nextIfPathEnd();
+                break;
 
             // May need to do some checking of the intake here
 
@@ -122,6 +127,7 @@ public class MainAuto extends OpMode {
                 break;
             case -6:
                 nextIfPathEnd();
+                break;
 
             // Outtake the sample
             case 7:
@@ -132,6 +138,7 @@ public class MainAuto extends OpMode {
                 if (outtake()) {
                     next();
                 }
+                break;
 
             // Same deal but for the middle spike mark
 
@@ -142,6 +149,7 @@ public class MainAuto extends OpMode {
                 break;
             case -8:
                 nextIfPathEnd();
+                break;
 
             // Start intake
             case 9:
@@ -152,6 +160,7 @@ public class MainAuto extends OpMode {
                 if (intake()) {
                     next();
                 }
+                break;
 
             // Intake the sample
             case 10:
@@ -160,6 +169,7 @@ public class MainAuto extends OpMode {
                 break;
             case -10:
                 nextIfPathEnd();
+                break;
 
             // Return to baskets to outtake the sample
             case 11:
@@ -168,6 +178,7 @@ public class MainAuto extends OpMode {
                 break;
             case -11:
                 nextIfPathEnd();
+                break;
 
             // Outtake the sample
             case 12:
@@ -178,6 +189,7 @@ public class MainAuto extends OpMode {
                 if (outtake()) {
                     next();
                 }
+                break;
 
             // Go to park position, ready to intake in teleop
             case 13:
@@ -186,6 +198,7 @@ public class MainAuto extends OpMode {
                 break;
             case -13:
                 setIfPathEnd(0); // End auto
+                break;
         }
     }
 
