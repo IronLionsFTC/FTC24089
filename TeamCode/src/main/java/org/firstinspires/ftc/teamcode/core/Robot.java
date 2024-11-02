@@ -199,7 +199,7 @@ public class Robot {
             }
 
             double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
-            double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.intakeSlideF;
+            double outtakeSlideFeedForward = Math.cos(Math.toRadians(slideTarget / RobotParameters.PIDConstants.ticksInDegree)) * RobotParameters.PIDConstants.outtakeSlideF;
             double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
