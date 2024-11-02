@@ -119,6 +119,7 @@ public class Robot {
     public void update_auto() {
         drivetrain.moveIntake();
         drivetrain.moveOuttake();
+        drivetrain.motors.setOtherPowers();
         drivetrain.servos.setPositions(state, drivetrain.motors);
         drivetrain.servos.setPowers(state.intake.intakeState, 0.0, sensors, false);
     }
@@ -433,7 +434,8 @@ public class Robot {
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state, motors);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
-            motors.setPowers();
+            motors.setDrivePowers();
+            motors.setOtherPowers();
         }
 
         public boolean drive(GamepadEx gamepad) {
