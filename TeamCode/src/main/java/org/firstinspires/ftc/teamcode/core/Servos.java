@@ -101,6 +101,11 @@ public class Servos {
             latchServo.setPosition(RobotParameters.ServoBounds.latchOpened);
         }
 
+        if (state.outtake.outtakeState == OuttakeState.LevelOneHang) {
+            armPos = RobotParameters.ServoBounds.armUp;
+            bucketPos = RobotParameters.ServoBounds.bucketClosed;
+        }
+
         // Apply new positions to servos.
         armServoA.setPosition(armPos);
         armServoB.setPosition(1.0 - armPos);

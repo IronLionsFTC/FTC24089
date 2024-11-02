@@ -398,6 +398,11 @@ public class Robot {
                 state.outtake.outtakeState = OuttakeState.Passthrough;
             }
 
+            if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Extended)  {
+                state.outtake.outtakeState = OuttakeState.LevelOneHang;
+                state.intake.intakeState = IntakeState.Depositing;
+            }
+
             if (controller.yPress == 1 && state.outtake.outtakeState == OuttakeState.Passthrough) {
                 state.outtake.outtakeState = OuttakeState.PassthroughDeposit;
             }
