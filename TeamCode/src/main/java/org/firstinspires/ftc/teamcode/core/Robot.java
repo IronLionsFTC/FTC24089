@@ -416,6 +416,11 @@ public class Robot {
 
             telemetry.update();
 
+            if (state.outtake.outtakeState == OuttakeState.Down && motors.outtakePosition() < 50.0) {
+                motors.leftOuttakeSlide.resetEncoder();
+                motors.rightOuttakeSlide.resetEncoder();
+            }
+
             // EMERGENCY STOP
             return (controller.bPress > 0);
         }
