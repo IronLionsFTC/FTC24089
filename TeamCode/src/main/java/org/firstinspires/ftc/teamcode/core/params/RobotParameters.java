@@ -100,7 +100,7 @@ public class RobotParameters {
         public static final double armWait = 0.37;
         public static final double armTransfer = 0.13;
         public static final double bucketOpen = 0.07; // Parallel
-        public static final double bucketTransfer = 0.12;
+        public static final double bucketTransfer = 0.09;
         public static final double bucketClosed = 0.2; // Gripping
         public static final double intakeFolded = 0.88;
         public static final double intakeDown = 0.015; // Just above tiles

@@ -278,7 +278,7 @@ public class Robot {
                 // Transferring sample from intake -> outtake
                 intakeTarget = RobotParameters.SystemsTuning.intakeTransfer;
                 intakeLift = RobotParameters.ServoBounds.intakeFolded;
-                if (state.intake.intakeState == IntakeState.Depositing && state.intake.intakeLiftServoTimer.getElapsedTime() < 5000.0) {
+                if (state.intake.intakeState == IntakeState.Depositing && state.intake.intakeLiftServoTimer.getElapsedTime() < 1000.0) {
                     intakeTarget = RobotParameters.SlideBounds.intakeExtended;
                 }
             }
@@ -304,6 +304,8 @@ public class Robot {
                     state.intake.intakeState = IntakeState.Collecting;
                 }
             }
+
+            if (didCollect) state.intake.intakeLiftServoTimer.resetTimer();
             // Wait for driver to outtake before dropping sample
             // The outtake will wait for the sample to be dropped
             // and for the intake to be clear before moving
@@ -336,7 +338,11 @@ public class Robot {
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
 
+            telemetry.addData("timer", state.intake.intakeLiftServoTimer.getElapsedTime());
+            telemetry.update();
+
             return didCollect || state.intake.intakeState == IntakeState.Depositing;
+
         }
 
         public double yawCorrection() {
