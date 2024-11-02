@@ -422,6 +422,12 @@ public class Robot {
                 state.outtake.retract = true;
                 state.intake.intakeState = IntakeState.Retracted;
             }
+
+            if (controller.dPress > 0) {
+                state.intake.intakeState = IntakeState.Extended;
+                state.outtake.outtakeState = OuttakeState.Down;
+                state.outtake.retract = false;
+            }
             componentDrive(my, mx);
 
             telemetry.addData("IS POS", motors.intakePosition());
