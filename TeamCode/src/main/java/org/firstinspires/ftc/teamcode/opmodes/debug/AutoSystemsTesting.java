@@ -49,7 +49,7 @@ public class AutoSystemsTesting extends LinearOpMode
             while (!robot.isIntakeExtended()) {
                 robot.update_auto();
             }
-            robot.extendIntakeFromFoldedPosition();
+            robot.foldDownIntakeAndStartCollecting();
             while (!robot.tryToCollectSample()) {
                 robot.update_auto();
             }
@@ -59,6 +59,19 @@ public class AutoSystemsTesting extends LinearOpMode
             while (!robot.transferCompleted()) {
                 robot.update_auto();
             }
+            robot.extendOuttakeToTop();
+            while (!robot.areSlidesReady()) {
+                robot.update_auto();
+            }
+            robot.dropSample();
+            robot.lowerSlides();
+            while (!robot.areSlidesDown()) {
+                robot.update_auto();
+            }
+            while (!robot.intakeRetracted()) {
+                robot.update_auto();
+            }
+            terminateOpModeNow();
         }
     }
 }

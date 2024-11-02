@@ -110,10 +110,23 @@ public class Robot {
 
     public void lowerSlides() {
         if (state.outtake.outtakeState == OuttakeState.Deposit) state.outtake.outtakeState = OuttakeState.Down;
+        state.outtake.retract = false;
+        state.intake.intakeState = IntakeState.Extended;
     }
 
     public boolean areSlidesDown() {
-        return state.outtake.outtakeState == OuttakeState.Down && state.intake.intakeState == IntakeState.Retracted && drivetrain.motors.outtakePosition() < 100.0;
+        boolean ret = state.outtake.outtakeState == OuttakeState.Down && state.intake.intakeState == IntakeState.Extended && drivetrain.motors.outtakePosition() < 100.0;
+        if (ret) {
+            state.intake.intakeState = IntakeState.Retracted;
+        }
+        drivetrain.motors.leftOuttakeSlide.resetEncoder();
+        drivetrain.motors.rightOuttakeSlide.resetEncoder();
+        return ret;
+    }
+
+    public boolean areSlidesRetracted() {
+        state.intake.intakeState = IntakeState.Retracted;
+        return drivetrain.motors.intakePosition() < 5.0;
     }
 
     public void update_auto() {
