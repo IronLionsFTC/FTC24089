@@ -44,7 +44,6 @@ public class MainAuto extends OpMode {
         this.robot.update_auto();
         this.follower.update();
         autoUpdate();
-        this.follower.update();
         telemetry.addData("Auto state:", autostate);
         telemetry.update();
     }
