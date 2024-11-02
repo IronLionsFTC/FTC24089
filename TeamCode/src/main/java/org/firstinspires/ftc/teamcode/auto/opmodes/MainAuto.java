@@ -45,12 +45,13 @@ public class MainAuto extends OpMode {
         this.follower.update();
         autoUpdate();
         telemetry.addData("Auto state:", autostate);
+        telemetry.addData("PAUSED:", autostate < 0);
         telemetry.update();
     }
 
 
     public void setAutoState(int n) { this.autostate = n; }
-    public boolean atEnd() { return !follower.isBusy(); }
+    public boolean atEnd() { return !(follower.isBusy()); }
     public void setIfPathEnd(int n) {
         if (atEnd()) {
             this.autostate = n;
@@ -70,6 +71,7 @@ public class MainAuto extends OpMode {
             case 1:
                 this.follower.followPath(Paths.start_to_basket);
                 pause();
+                break;
             case -1:
                 nextIfPathEnd();
 
@@ -78,6 +80,7 @@ public class MainAuto extends OpMode {
                 robot.prepareTransferForPreloadedSample();
                 start_outtake();
                 pause();
+                break;
             case -2:
                 if (outtake()) {
                     next();
@@ -88,6 +91,7 @@ public class MainAuto extends OpMode {
             case 3:
                 this.follower.followPath(Paths.yellow_spike.BOTTOM);
                 pause();
+                break;
             case -3:
                 nextIfPathEnd();
 
@@ -95,6 +99,7 @@ public class MainAuto extends OpMode {
             case 4:
                 start_intake();
                 pause();
+                break;
             case -4:
                 if (intake()) {
                     next();
@@ -104,6 +109,7 @@ public class MainAuto extends OpMode {
             case 5:
                 this.follower.followPath(Paths.yellow_spike.BOTTOM_intake);
                 pause();
+                break;
             case -5:
                 nextIfPathEnd();
 
@@ -113,6 +119,7 @@ public class MainAuto extends OpMode {
             case 6:
                 this.follower.followPath(Paths.yellow_spike.BOTTOM_return);
                 pause();
+                break;
             case -6:
                 nextIfPathEnd();
 
@@ -120,6 +127,7 @@ public class MainAuto extends OpMode {
             case 7:
                 start_outtake();
                 pause();
+                break;
             case -7:
                 if (outtake()) {
                     next();
@@ -131,6 +139,7 @@ public class MainAuto extends OpMode {
             case 8:
                 this.follower.followPath(Paths.yellow_spike.MIDDLE);
                 pause();
+                break;
             case -8:
                 nextIfPathEnd();
 
@@ -138,6 +147,7 @@ public class MainAuto extends OpMode {
             case 9:
                 start_intake();
                 pause();
+                break;
             case -9:
                 if (intake()) {
                     next();
@@ -147,6 +157,7 @@ public class MainAuto extends OpMode {
             case 10:
                 this.follower.followPath(Paths.yellow_spike.MIDDLE_intake);
                 pause();
+                break;
             case -10:
                 nextIfPathEnd();
 
@@ -154,6 +165,7 @@ public class MainAuto extends OpMode {
             case 11:
                 this.follower.followPath(Paths.yellow_spike.MIDDLE_return);
                 pause();
+                break;
             case -11:
                 nextIfPathEnd();
 
@@ -161,6 +173,7 @@ public class MainAuto extends OpMode {
             case 12:
                 start_outtake();
                 pause();
+                break;
             case -12:
                 if (outtake()) {
                     next();
@@ -170,6 +183,7 @@ public class MainAuto extends OpMode {
             case 13:
                 this.follower.followPath(Paths.outtake_to_park);
                 pause();
+                break;
             case -13:
                 setIfPathEnd(0); // End auto
         }
