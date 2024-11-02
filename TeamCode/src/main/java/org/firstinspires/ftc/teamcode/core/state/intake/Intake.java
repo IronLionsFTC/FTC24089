@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.core.state.intake;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Intake {
     public IntakeState intakeState = IntakeState.Folded;
+    public Timer intakeLiftServoTimer = new Timer();
 
     public void toggle() {
         if (intakeState == IntakeState.Folded) {
@@ -14,6 +16,7 @@ public class Intake {
             intakeState = IntakeState.Evaluating;
         } else if (intakeState == IntakeState.Evaluating) {
             intakeState = IntakeState.Depositing;
+            intakeLiftServoTimer.resetTimer();
         } else if (intakeState == IntakeState.Depositing) {
             intakeState = IntakeState.Dropping;
         } else {

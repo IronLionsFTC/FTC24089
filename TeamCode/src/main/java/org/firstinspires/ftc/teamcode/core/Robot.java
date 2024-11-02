@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Robot {
     public Team team;
@@ -65,7 +66,9 @@ public class Robot {
     }
 
     public boolean tryToCollectSample() {
-        return drivetrain.moveIntake();
+        boolean collected = drivetrain.moveIntake();
+        if (collected) state.intake.intakeLiftServoTimer.resetTimer();
+        return collected;
     }
 
     public boolean tryTransfer() {
@@ -275,6 +278,9 @@ public class Robot {
                 // Transferring sample from intake -> outtake
                 intakeTarget = RobotParameters.SystemsTuning.intakeTransfer;
                 intakeLift = RobotParameters.ServoBounds.intakeFolded;
+                if (state.intake.intakeState == IntakeState.Depositing && state.intake.intakeLiftServoTimer.getElapsedTime() < 5000.0) {
+                    intakeTarget = RobotParameters.SlideBounds.intakeExtended;
+                }
             }
 
             if (state.outtake.retract && state.intake.intakeState == IntakeState.Retracted) {

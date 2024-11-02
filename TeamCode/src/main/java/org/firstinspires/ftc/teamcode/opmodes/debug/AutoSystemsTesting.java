@@ -53,11 +53,8 @@ public class AutoSystemsTesting extends LinearOpMode
             }
             robot.foldDownIntakeAndStartCollecting();
             while (!robot.tryToCollectSample()) {
-                robot.update_auto();
-            }
-            timer.resetTimer();
-            while (timer.getElapsedTime() < 400.0) {
-                robot.update_auto();
+                robot.drivetrain.servos.setPositions(robot.state, robot.drivetrain.motors);
+                robot.drivetrain.servos.setPowers(robot.state.intake.intakeState, 0.0, robot.sensors, false);
             }
             while (!robot.tryTransfer()) {
                 robot.update_auto();
