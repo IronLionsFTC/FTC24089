@@ -154,7 +154,7 @@ public class Robot {
 
     @Config
     public static class PID_settings {
-        public static double intakeSlide_p = 0.02;
+        public static double intakeSlide_p = 0.06;
         public static double intakeSlide_i = 0.0;
         public static double intakeSlide_d = 0.002;
 

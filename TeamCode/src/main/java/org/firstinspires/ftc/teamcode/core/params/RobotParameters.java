@@ -103,7 +103,7 @@ public class RobotParameters {
         public static final double bucketTransfer = 0.09;
         public static final double bucketClosed = 0.2; // Gripping
         public static final double intakeFolded = 0.88;
-        public static final double intakeDown = 0.015; // Just above tiles
+        public static final double intakeDown = 0.02; // Just above tiles
         public static final double latchClosed = 0.13;
         public static final double latchOpened = 0.0;
     }
