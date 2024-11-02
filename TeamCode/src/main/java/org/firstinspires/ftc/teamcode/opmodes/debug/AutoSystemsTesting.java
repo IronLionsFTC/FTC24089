@@ -41,6 +41,7 @@ public class AutoSystemsTesting extends LinearOpMode
         // Main loop
 
         GamepadEx gp = new GamepadEx(gamepad1);
+        Timer timer = new Timer();
 
         while (opModeIsActive()) {
             while (controller.xPress != 1) {
@@ -52,6 +53,10 @@ public class AutoSystemsTesting extends LinearOpMode
             }
             robot.foldDownIntakeAndStartCollecting();
             while (!robot.tryToCollectSample()) {
+                robot.update_auto();
+            }
+            timer.resetTimer();
+            while (timer.getElapsedTime() < 400.0) {
                 robot.update_auto();
             }
             while (!robot.tryTransfer()) {
@@ -70,8 +75,8 @@ public class AutoSystemsTesting extends LinearOpMode
                 controller.updateKeyTracker(gp);
             }
             robot.dropSample();
-            Timer timer = new Timer();
-            while (!(timer.getElapsedTime() < 200.0)) {
+            timer.resetTimer();
+            while (timer.getElapsedTime() < 400.0) {
                 robot.update_auto();
             }
             robot.lowerSlides();
