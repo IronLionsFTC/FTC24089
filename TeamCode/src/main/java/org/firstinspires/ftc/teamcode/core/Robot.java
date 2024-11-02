@@ -66,7 +66,7 @@ public class Robot {
     }
 
     public boolean tryToCollectSample() {
-        boolean collected = drivetrain.moveIntake();
+        boolean collected = drivetrain.moveIntake(0.2);
         if (collected) state.intake.intakeLiftServoTimer.resetTimer();
         return collected;
     }
@@ -132,7 +132,7 @@ public class Robot {
     }
 
     public void update_auto() {
-        drivetrain.moveIntake();
+        drivetrain.moveIntake(2.0);
         drivetrain.moveOuttake();
         drivetrain.motors.setOtherPowers();
         drivetrain.servos.setPositions(state, drivetrain.motors);
@@ -224,7 +224,7 @@ public class Robot {
             motors.powers.rightOuttakeSlide = outtakeSlidePower;
         }
 
-        public boolean moveIntake() {
+        public boolean moveIntake(double multiplier) {
             boolean didCollect = false;
             // Constantly check for inputs even if not in evaluation mode
             intakeColour.update(sensors);
@@ -329,7 +329,7 @@ public class Robot {
             // Calculate average slide position
             double intakeSlidePos = (motors.leftIntakeSlide.getCurrentPosition() + motors.rightIntakeSlide.getCurrentPosition()) * 0.5;
             double error = (intakeTarget - intakeSlidePos);
-            double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget);
+            double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget) * multiplier;
             // Cut power when slides are almost retracted so they don't pull against a hard stop
             // from encoder error (e.g. 1 off error)
             if (intakeTarget < 5 && intakeSlidePos <= 10) { intakeSlideResponse = 0.0; }
@@ -339,7 +339,6 @@ public class Robot {
             motors.powers.rightIntakeSlide = intakeSlideResponse;
 
             telemetry.addData("timer", state.intake.intakeLiftServoTimer.getElapsedTime());
-            telemetry.update();
 
             return didCollect || state.intake.intakeState == IntakeState.Depositing;
 
@@ -463,7 +462,7 @@ public class Robot {
 
         public void update_teleop(GamepadEx gamepad) {
             moveOuttake();
-            moveIntake();
+            moveIntake(1.0);
 
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);

@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
 import org.firstinspires.ftc.teamcode.core.Robot;
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Team;
+import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
+import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
@@ -42,7 +45,8 @@ public class MainAuto extends OpMode {
         this.follower.update();
         autoUpdate();
         telemetry.addData("Auto state:", autostate);
-        telemetry.addData("PAUSED:", autostate < 0);
+        telemetry.addData("Tried transfer:", this.triedTransferStart);
+        telemetry.addData("Transfer success:", this.transferComplete);
         telemetry.update();
     }
 
@@ -160,12 +164,21 @@ public class MainAuto extends OpMode {
     public void set_starting_outtake_state() {
         this.outtakestate = 1;
     }
+    public boolean triedTransferStart = false;
+    public boolean transferComplete = false;
     public boolean outtake() {
         switch (outtakestate) {
             case 1:
-                if (robot.tryTransfer()) outtakestate = 2;
+                triedTransferStart = true;
+                // if (robot.tryTransfer()) outtakestate = 2;
+                robot.state.intake.intakeState = IntakeState.Depositing;
+                if (robot.drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeTransfer - 5.0) {
+                    robot.state.intake.intakeState = IntakeState.Dropping;
+                    robot.state.outtake.outtakeState = OuttakeState.Waiting;
+                }
             case 2:
                 if (robot.transferCompleted()) outtakestate = 3;
+                transferComplete = true;
             case 3:
                 robot.extendOuttakeToTop();
                 outtakestate = -3;
