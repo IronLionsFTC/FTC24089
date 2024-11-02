@@ -391,13 +391,14 @@ public class Robot {
             }
 
             if (controller.rPress >= 1) {
-                mx = 0.5;
-                my = 0.0;
+                state.outtake.outtakeState = OuttakeState.Down;
+                motors.leftOuttakeSlide.resetEncoder();
+                motors.rightOuttakeSlide.resetEncoder();
             }
 
             if (controller.lPress >= 1) {
-                mx = -0.5;
-                my = 0.0;
+                state.outtake.outtakeState = OuttakeState.Up;
+                state.intake.intakeState = IntakeState.Extended;
             }
 
             if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
@@ -468,7 +469,7 @@ public class Robot {
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state, motors);
-            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1);
+            servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1 || state.outtake.outtakeState == OuttakeState.LevelOneHang);
             motors.setDrivePowers();
             motors.setOtherPowers();
         }
