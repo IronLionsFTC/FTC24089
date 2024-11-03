@@ -64,6 +64,10 @@ public class Servos {
             if ((intakePos > RobotParameters.SlideBounds.intakeClearance - 30.0 || state.outtake.retract) && state.outtake.outtakeState == OuttakeState.Waiting) {
                 armPos = RobotParameters.ServoBounds.armWait;
                 bucketPos = RobotParameters.ServoBounds.bucketClosed;
+                if (state.intake.timeUntilClamp.getElapsedTime() < 200.0) {
+                    armPos = RobotParameters.ServoBounds.armTransfer;
+                    bucketPos = RobotParameters.ServoBounds.bucketTransfer;
+                }
             } else {
                 armPos = RobotParameters.ServoBounds.armDown;
                 bucketPos = RobotParameters.ServoBounds.bucketTransfer;

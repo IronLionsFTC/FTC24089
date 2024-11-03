@@ -50,6 +50,7 @@ public class Robot {
     }
 
     public void blockingRetractAndZeroBothSlides() {
+        drivetrain.servos.latchServo.setPosition(0.0);
         Timer retractionTimer = new Timer();
         drivetrain.motors.leftOuttakeSlide.set(-0.3);
         drivetrain.motors.rightOuttakeSlide.set(-0.3);
@@ -154,7 +155,7 @@ public class Robot {
 
     @Config
     public static class PID_settings {
-        public static double intakeSlide_p = 0.06;
+        public static double intakeSlide_p = 0.02;
         public static double intakeSlide_i = 0.0;
         public static double intakeSlide_d = 0.002;
 
@@ -333,6 +334,7 @@ public class Robot {
             if (state.intake.intakeState == IntakeState.Dropping) {
                 if (sensors.d() > RobotParameters.Thresholds.intakeSamplePresent) {
                     state.intake.intakeState = IntakeState.Retracted;
+                    state.intake.timeUntilClamp.resetTimer();
                 }
             }
 

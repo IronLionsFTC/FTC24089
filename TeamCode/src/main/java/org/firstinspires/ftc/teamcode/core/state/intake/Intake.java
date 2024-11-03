@@ -2,8 +2,9 @@ package org.firstinspires.ftc.teamcode.core.state.intake;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Intake {
-    public IntakeState intakeState = IntakeState.Folded;
+    public IntakeState intakeState = IntakeState.Retracted;
     public Timer intakeLiftServoTimer = new Timer();
+    public Timer timeUntilClamp = new Timer();
 
     public void toggle() {
         if (intakeState == IntakeState.Folded) {
