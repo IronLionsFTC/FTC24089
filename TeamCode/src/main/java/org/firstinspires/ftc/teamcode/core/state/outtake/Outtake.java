@@ -13,20 +13,26 @@ public class Outtake {
         switch (outtakeState) {
             case Folded:
                 set(OuttakeState.Down);
+                break;
             case Down:
                 retract = false;
                 set(OuttakeState.Waiting);
+                break;
             case Waiting:
                 set(OuttakeState.Up);
+                break;
             case Up:
                 armRaiseTimer.resetTimer();
                 set(OuttakeState.Deposit);
+                break;
             case Deposit:
             case PassthroughDeposit:
                 retract = false;
                 set(OuttakeState.Down);
+                break;
             case Passthrough:
                 set(OuttakeState.PassthroughDeposit);
+                break;
         }
     }
 }

@@ -6,22 +6,33 @@ public class Intake {
     public Timer intakeLiftServoTimer = new Timer();
     public Timer timeUntilClamp = new Timer();
 
+    public void set(IntakeState state) {
+        intakeState = state;
+    }
     public void toggle() {
-        if (intakeState == IntakeState.Folded) {
-            intakeState = IntakeState.Retracted;
-        } else if (intakeState == IntakeState.Retracted) {
-            intakeState = IntakeState.Extended;
-        } else if (intakeState == IntakeState.Extended) {
-            intakeState = IntakeState.Collecting;
-        } else if (intakeState == IntakeState.Collecting) {
-            intakeState = IntakeState.Evaluating;
-        } else if (intakeState == IntakeState.Evaluating) {
-            intakeState = IntakeState.Depositing;
-            intakeLiftServoTimer.resetTimer();
-        } else if (intakeState == IntakeState.Depositing) {
-            intakeState = IntakeState.Dropping;
-        } else {
-            intakeState = IntakeState.Retracted;
+        switch (intakeState) {
+            case Folded:
+                set(IntakeState.Retracted);
+                break;
+            case Retracted:
+                set(IntakeState.Extended);
+                break;
+            case Extended:
+                set(IntakeState.Collecting);
+                break;
+            case Collecting:
+                set(IntakeState.Evaluating);
+                break;
+            case Evaluating:
+                intakeLiftServoTimer.resetTimer();
+                set(IntakeState.Depositing);
+                break;
+            case Depositing:
+                set(IntakeState.Dropping);
+                break;
+            default:
+                set(IntakeState.Retracted);
+                break;
         }
     }
 }
