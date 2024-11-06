@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.core.state;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.core.Sensors;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
