@@ -6,22 +6,27 @@ public class Outtake {
     public boolean retract = false;
     public Timer armRaiseTimer = new Timer();
 
+    public void set(OuttakeState state) {
+        outtakeState = state;
+    }
     public void toggle() {
-        if (outtakeState == OuttakeState.Folded) {
-            outtakeState = OuttakeState.Down;
-        } else if (outtakeState == OuttakeState.Down) {
-            retract = false;
-            outtakeState = OuttakeState.Waiting;
-        } else if (outtakeState == OuttakeState.Waiting) {
-            outtakeState = OuttakeState.Up;
-        } else if (outtakeState == OuttakeState.Up) {
-            armRaiseTimer.resetTimer();
-            outtakeState = OuttakeState.Deposit;
-        } else if (outtakeState == OuttakeState.Deposit || outtakeState == OuttakeState.PassthroughDeposit) {
-            retract = false;
-            outtakeState = OuttakeState.Down;
-        } else if (outtakeState == OuttakeState.Passthrough) {
-            outtakeState = OuttakeState.PassthroughDeposit;
+        switch (outtakeState) {
+            case Folded:
+                set(OuttakeState.Down);
+            case Down:
+                retract = false;
+                set(OuttakeState.Waiting);
+            case Waiting:
+                set(OuttakeState.Up);
+            case Up:
+                armRaiseTimer.resetTimer();
+                set(OuttakeState.Deposit);
+            case Deposit:
+            case PassthroughDeposit:
+                retract = false;
+                set(OuttakeState.Down);
+            case Passthrough:
+                set(OuttakeState.PassthroughDeposit);
         }
     }
 }

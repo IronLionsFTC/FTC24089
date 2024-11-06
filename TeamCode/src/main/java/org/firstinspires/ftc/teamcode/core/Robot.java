@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import org.firstinspires.ftc.teamcode.core.auxiliary.Blinkin;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Colour;
 import org.firstinspires.ftc.teamcode.core.state.ColourProfile;
@@ -25,11 +24,10 @@ public class Robot {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
     public Controller controller;
-    public static Blinkin blinkin;
     public Drivetrain drivetrain;
     public RobotIMU imu;
     public Sensors sensors;
-    public RobotState state = new RobotState();
+    public RobotState state;
     public PID_settings pidSettings = new PID_settings();
     public ColourProfile intakeColour;
 
@@ -39,7 +37,6 @@ public class Robot {
 
         state = new RobotState();
         controller = new Controller();
-        blinkin = new Blinkin(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap);
         imu = new RobotIMU(hardwareMap);
@@ -49,6 +46,11 @@ public class Robot {
         team = colour;
     }
 
+    public void sleep(int ms) {
+        try { Thread.sleep(ms); }
+        catch (InterruptedException ignored) {}
+    }
+
     public void blockingRetractAndZeroBothSlides() {
         drivetrain.servos.latchServo.setPosition(0.0);
         Timer retractionTimer = new Timer();
@@ -56,7 +58,7 @@ public class Robot {
         drivetrain.motors.rightOuttakeSlide.set(-0.3);
         drivetrain.motors.leftIntakeSlide.set(-0.3);
         drivetrain.motors.rightIntakeSlide.set(-0.3);
-        while (retractionTimer.getElapsedTime() < 1000.0);
+        sleep(500); // Forcibly retract slides
         drivetrain.motors.rightIntakeSlide.resetEncoder();
         drivetrain.motors.leftIntakeSlide.resetEncoder();
         drivetrain.motors.rightOuttakeSlide.resetEncoder();
@@ -251,10 +253,14 @@ public class Robot {
             pidSettings.intakeSlideController.setPID(pidSettings.intakeSlide_p, pidSettings.intakeSlide_i, pidSettings.intakeSlide_d);
             double intakeTarget = RobotParameters.SlideBounds.intakeIn;
             double intakeLift = RobotParameters.ServoBounds.intakeFolded;
-            if (state.intake.intakeState == IntakeState.Folded) {
-                intakeTarget = RobotParameters.SlideBounds.intakeIn;;
+
+            boolean folded = state.intake.intakeState == IntakeState.Folded;
+            boolean retracted = state.intake.intakeState == IntakeState.Retracted;
+
+            if (folded) {
+                intakeTarget = RobotParameters.SlideBounds.intakeIn;
                 intakeLift = RobotParameters.ServoBounds.intakeFolded;
-            } else if (state.intake.intakeState == IntakeState.Retracted || state.intake.intakeState == IntakeState.Folded) {
+            } else if (retracted) {
                 if (state.outtake.outtakeState != OuttakeState.Down) {
                     intakeTarget = RobotParameters.SlideBounds.intakeClearance;
                 } else {
@@ -490,11 +496,9 @@ public class Robot {
 
         public boolean drive(GamepadEx gamepad) {
             // Calculate drive movement
-            if (calculateMovement(gamepad)) {
-                return true;
-            };
-            this.update_teleop(gamepad);
+            if (calculateMovement(gamepad)) return true;
 
+            this.update_teleop(gamepad);
             return false;
         }
     }
