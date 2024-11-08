@@ -1,34 +1,28 @@
 package org.firstinspires.ftc.teamcode.core.state.intake;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
+
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 public class Intake {
     public IntakeState intakeState = IntakeState.Retracted;
-    public Timer intakeLiftServoTimer = new Timer();
-    public Timer timeUntilClamp = new Timer();
-
+    public double clawYaw = RobotParameters.ServoBounds.intakeYawZero;
     public void set(IntakeState state) {
         intakeState = state;
     }
     public void toggle() {
         switch (intakeState) {
-            case Folded:
-                set(IntakeState.Retracted);
-                break;
             case Retracted:
-                set(IntakeState.Extended);
+                set(IntakeState.ExtendedClawUp);
+                clawYaw = RobotParameters.ServoBounds.intakeYawZero;
                 break;
-            case Extended:
-                set(IntakeState.Collecting);
+            case ExtendedClawUp:
+                set(IntakeState.ExtendedClawDown);
+                clawYaw = RobotParameters.ServoBounds.intakeYawZero;
                 break;
-            case Collecting:
-                set(IntakeState.Evaluating);
+            case ExtendedClawDown:
+                set(IntakeState.Grabbing);
                 break;
-            case Evaluating:
-                intakeLiftServoTimer.resetTimer();
-                set(IntakeState.Depositing);
-                break;
-            case Depositing:
-                set(IntakeState.Dropping);
+            case Grabbing:
+                set(IntakeState.Transfer);
                 break;
             default:
                 set(IntakeState.Retracted);

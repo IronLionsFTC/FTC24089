@@ -43,6 +43,5 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
     @Override
     public void loop() {
         follower.update();
-        robot.update_auto();
     }
 }

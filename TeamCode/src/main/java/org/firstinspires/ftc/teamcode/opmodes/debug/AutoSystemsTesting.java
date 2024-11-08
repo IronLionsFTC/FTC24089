@@ -47,42 +47,6 @@ public class AutoSystemsTesting extends LinearOpMode
             while (controller.xPress != 1) {
                 controller.updateKeyTracker(gp);
             }
-            robot.extendIntakeFromFoldedPosition();
-            while (!robot.isIntakeExtended()) {
-                robot.update_auto();
-            }
-            robot.foldDownIntakeAndStartCollecting();
-            while (!robot.tryToCollectSample()) {
-                robot.drivetrain.servos.oldSetPositions(robot.state, robot.drivetrain.motors);
-                robot.drivetrain.servos.setPowers(robot.state.intake.intakeState, 0.0, robot.sensors, false);
-            }
-            while (!robot.tryTransfer()) {
-                robot.update_auto();
-            }
-            while (!robot.transferCompleted()) {
-                robot.update_auto();
-            }
-            robot.extendOuttakeToTop();
-            while (!robot.areSlidesReady()) {
-                robot.update_auto();
-            }
-            controller.xPress = 0;
-            while (controller.xPress == 0) {
-                robot.update_auto();
-                controller.updateKeyTracker(gp);
-            }
-            robot.dropSample();
-            timer.resetTimer();
-            while (timer.getElapsedTime() < 400.0) {
-                robot.update_auto();
-            }
-            robot.lowerSlides();
-            while (!robot.areSlidesDown()) {
-                robot.update_auto();
-            }
-            while (!robot.areSlidesRetracted()) {
-                robot.update_auto();
-            }
             terminateOpModeNow();
         }
     }
