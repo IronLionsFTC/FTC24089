@@ -36,8 +36,8 @@ public class Motors {
         leftBack.setInverted(RobotParameters.Motors.Reversed.leftBack);
         rightFront.setInverted(RobotParameters.Motors.Reversed.rightFront);
         rightBack.setInverted(RobotParameters.Motors.Reversed.rightBack);
-        leftOuttakeSlide.setInverted(true);
-        rightOuttakeSlide.setInverted(false);
+        //leftOuttakeSlide.setInverted(true);
+        //rightOuttakeSlide.setInverted(false);
         leftIntakeSlide.setInverted(true);
         rightIntakeSlide.setInverted(false);
 
@@ -47,12 +47,12 @@ public class Motors {
         rightFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         rightBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         leftIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        leftOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //leftOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         rightIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
-        rightOuttakeSlide.resetEncoder();
-        leftOuttakeSlide.resetEncoder();
+        //rightOuttakeSlide.resetEncoder();
+        //leftOuttakeSlide.resetEncoder();
         leftIntakeSlide.resetEncoder();
         rightIntakeSlide.resetEncoder();
 
@@ -78,8 +78,8 @@ public class Motors {
         rightBack.set(Math.abs(powers.rightBack) > 0.1 ? powers.rightBack : 0.0);
     }
     public void setOtherPowers() {
-        leftOuttakeSlide.set(Math.abs(powers.leftOuttakeSlide) > 0.1 ? powers.leftOuttakeSlide : 0.0);
-        rightOuttakeSlide.set(Math.abs(powers.rightOuttakeSlide) > 0.1 ? powers.rightOuttakeSlide : 0.0);
+        //leftOuttakeSlide.set(Math.abs(powers.leftOuttakeSlide) > 0.1 ? powers.leftOuttakeSlide : 0.0);
+        //rightOuttakeSlide.set(Math.abs(powers.rightOuttakeSlide) > 0.1 ? powers.rightOuttakeSlide : 0.0);
         leftIntakeSlide.set(Math.abs(powers.leftIntakeSlide) > 0.1 ? powers.leftIntakeSlide : 0.0);
         rightIntakeSlide.set(Math.abs(powers.rightIntakeSlide) > 0.1 ? powers.rightIntakeSlide : 0.0);
     }
@@ -93,7 +93,8 @@ public class Motors {
     }
 
     public double outtakePosition() {
-        return (rightOuttakeSlide.getCurrentPosition() + leftOuttakeSlide.getCurrentPosition()) * 0.5;
+        //return (rightOuttakeSlide.getCurrentPosition() + leftOuttakeSlide.getCurrentPosition()) * 0.5;
+        return 0.0;
     }
 
     public double intakePosition() {

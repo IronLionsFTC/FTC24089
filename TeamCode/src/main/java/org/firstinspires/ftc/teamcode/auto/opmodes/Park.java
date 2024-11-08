@@ -34,7 +34,7 @@ public class Park extends OpMode {
 
     @Override
     public void loop() {
-        robot.drivetrain.servos.setPositions(robot.state, robot.drivetrain.motors);
+        robot.drivetrain.servos.oldSetPositions(robot.state, robot.drivetrain.motors);
         follower.update();
     }
 }

@@ -25,15 +25,8 @@ public class RobotParameters {
             public static final String latchServo = "latchServo";
 
             // Servo Motors
-            public static final String bucketServo = "BucketServo";  // Port 1 ?
-            public static final String armServoA = "outtakeLiftB";        // Port 0 ?
-            public static final String armServoB = "outtakeLiftA";        // Port 0 ?
-            public static final String leftIntakeLiftServo = "leftIntakeLiftServo"; // Port e0
-            public static final String rightIntakeLiftServo = "rightIntakeLiftServo"; // Port e1
-
-            // CR Servo Motors
-            public static final String intakeServoA = "intakeServoA"; // Port 2
-            public static final String intakeServoB = "intakeServoB"; // Port 3
+            public static final String intakeLiftServo = "intakeLiftServo"; // Port c2
+            public static final String intakeYawServo = "intakeYawServo"; // Port c2
         }
         public static final class Reversed {
             public static final boolean leftFront = true;
@@ -102,8 +95,12 @@ public class RobotParameters {
         public static final double bucketOpen = 0.07; // Parallel
         public static final double bucketTransfer = 0.09;
         public static final double bucketClosed = 0.2; // Gripping
-        public static final double intakeFolded = 0.88;
-        public static final double intakeDown = 0.02; // Just above tiles
+
+        // NEW
+        public static final double intakeFolded = 0.67;
+        public static final double intakeDown = 0.3;
+        public static final double intakeYawZero = 0.63;
+
         public static final double latchClosed = 0.13;
         public static final double latchOpened = 0.0;
     }

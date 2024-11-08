@@ -50,7 +50,7 @@ public class Robot {
     }
 
     public void blockingRetractAndZeroBothSlides() {
-        drivetrain.servos.latchServo.setPosition(0.0);
+        // drivetrain.servos.latchServo.setPosition(0.0);
         Timer retractionTimer = new Timer();
         drivetrain.motors.leftOuttakeSlide.set(-0.3);
         drivetrain.motors.rightOuttakeSlide.set(-0.3);
@@ -149,7 +149,7 @@ public class Robot {
         drivetrain.moveIntake(2.0);
         drivetrain.moveOuttake();
         drivetrain.motors.setOtherPowers();
-        drivetrain.servos.setPositions(state, drivetrain.motors);
+        drivetrain.servos.oldSetPositions(state, drivetrain.motors);
         drivetrain.servos.setPowers(state.intake.intakeState, 0.0, sensors, false);
     }
 
@@ -303,8 +303,8 @@ public class Robot {
 
             // Lift the intake to the desired position
             // DO NOT CHANGE - THE 1.0 minus is essential
-            servos.leftIntakeLiftServo.setPosition(1.0 - intakeLift);
-            servos.rightIntakeLiftServo.setPosition(intakeLift);
+            // servos.leftIntakeLiftServo.setPosition(1.0 - intakeLift);
+            // servos.rightIntakeLiftServo.setPosition(intakeLift);
 
             if (state.intake.intakeState == IntakeState.Evaluating) {
                 Colour currentColour = intakeColour.classify();
@@ -482,7 +482,7 @@ public class Robot {
 
             // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
-            servos.setPositions(state, motors);
+            servos.oldSetPositions(state, motors);
             servos.setPowers(state.intake.intakeState, RobotParameters.PIDConstants.intakeSpeed, sensors, controller.uPress >= 1 || state.outtake.outtakeState == OuttakeState.LevelOneHang);
             motors.setDrivePowers();
             motors.setOtherPowers();
