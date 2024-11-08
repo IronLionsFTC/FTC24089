@@ -10,4 +10,4 @@ We are a small Australian team based out in the Sunshine Coast. \
 | Harrison | [@hchap1](https://github.com/hchap1) | TeleOp/CV/Hardware integration programmer<br>Intake/Outtake build lead |
 | Taha | [@paradoxiscoding](https://github.com/paradoxiscoding) | Team coordinator<br>Build team |
 | Rowan | [@SolemenF](https://github.com/solemenf) | Outreach, logistics, portfolio, documentation |
-| Jett | _ | CAD, 3D printing, assembly |
+| Jett |   | CAD, 3D printing, assembly |

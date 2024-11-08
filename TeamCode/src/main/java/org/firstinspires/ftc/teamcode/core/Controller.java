@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.core.params.Controls;
-import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 public class Controller {
     public int yPress = 0;

@@ -24,7 +24,6 @@ public class Servos {
         double armPos = 0.0;
         double outtakePos = motors.outtakePosition();
         double intakePos = motors.intakePosition();
-        double latchPosition = RobotParameters.ServoBounds.latchOpened;
 
         // Decide Arm Position
         // When should the arm be down?

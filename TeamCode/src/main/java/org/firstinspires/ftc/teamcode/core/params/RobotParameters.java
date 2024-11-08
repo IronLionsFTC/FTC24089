@@ -4,8 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
-
 public class RobotParameters {
     private RobotParameters(){} // Hide the constructor
     public static final double radius = 0.96;
