@@ -51,6 +51,7 @@ public class Motors {
         rightIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         //rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
+
         //rightOuttakeSlide.resetEncoder();
         //leftOuttakeSlide.resetEncoder();
         leftIntakeSlide.resetEncoder();

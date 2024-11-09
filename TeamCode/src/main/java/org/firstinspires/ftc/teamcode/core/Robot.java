@@ -233,6 +233,13 @@ public class Robot {
                 state.intake.intakeState = IntakeState.Retracted;
             }
 
+            // If grabbing, y releases claw in case of miss.
+            if (controller.yPress == 1) {
+                if (state.intake.intakeState == IntakeState.Grabbing) {
+                    state.intake.intakeState = IntakeState.ExtendedClawDown;
+                }
+            }
+
             // State reset in case
             if (controller.dPress > 0) {
                 state.intake.intakeState = IntakeState.ExtendedClawUp;
