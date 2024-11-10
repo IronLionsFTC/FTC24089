@@ -19,9 +19,10 @@ public class ComputerVision {
     public QuadrilateralTracker sample = new QuadrilateralTracker();
     List<Vec2> sampling = new ArrayList<>();
 
-    public ComputerVision(HardwareMap hardwareMap) {
+    public ComputerVision(HardwareMap hardwareMap, Team colour) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.pipelineSwitch(0); // Red and yellow
+        if (colour == Team.Red) limelight.pipelineSwitch(0); // Red and yellow
+        if (colour == Team.Blue) limelight.pipelineSwitch(1); // Blue and yellow
     }
 
     public void start() {

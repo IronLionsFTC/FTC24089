@@ -36,7 +36,7 @@ public class Robot {
     public Robot(HardwareMap h, Telemetry t, Team colour) {
         hardwareMap = h;
         telemetry = t;
-        computerVision = new ComputerVision(hardwareMap);
+        computerVision = new ComputerVision(hardwareMap, colour);
 
         state = new RobotState(computerVision);
         controller = new Controller();
@@ -237,6 +237,7 @@ public class Robot {
             if (controller.yPress == 1) {
                 if (state.intake.intakeState == IntakeState.Grabbing) {
                     computerVision.start();
+                    computerVision.sample.currentRotation = 0.0;
                     state.intake.intakeState = IntakeState.ExtendedClawUp;
                 }
             }

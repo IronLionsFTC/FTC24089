@@ -21,12 +21,14 @@ public class Intake {
                 break;
             case ExtendedClawUp:
                 cv.start();
+                cv.sample.currentRotation = 0.0;
                 set(IntakeState.ExtendedClawDown);
                 clawYaw = RobotParameters.ServoBounds.intakeYawZero;
                 break;
             case ExtendedClawDown:
                 cv.stop();
                 set(IntakeState.Grabbing);
+                cv.sample.currentRotation = 0.0;
                 break;
             case Grabbing:
                 set(IntakeState.Transfer);
