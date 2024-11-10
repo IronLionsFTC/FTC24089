@@ -96,8 +96,8 @@ public class RobotParameters {
         public static final double clawOpen = 0.4;
 
         // NEW
-        public static final double intakeFolded = 0.47;
-        public static final double intakeDown = 0.1;
+        public static final double intakeFolded = 0.43;
+        public static final double intakeDown = 0.06;
         public static final double intakeYawZero = 0.63;
 
         public static final double latchClosed = 0.13;
@@ -120,6 +120,8 @@ public class RobotParameters {
         public static final double outtakeHeightToRetractIntakeLower = 150.0; //  ^^^
         public static final double colourFilter = 0.8; // Higher the stricter
         public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
+
+        public static final int CVSmoothing = 5; // Num frames to smooth values over to reduce jitter.
     }
 
     public static final class PIDConstants {

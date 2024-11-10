@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.core;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
@@ -38,6 +39,7 @@ public class Servos {
                 claw = RobotParameters.ServoBounds.clawClosed;
                 break;
         }
+
         intakeLiftServo.setPosition(lift);
         intakeClawServo.setPosition(claw);
         intakeYawServo.setPosition(yaw);

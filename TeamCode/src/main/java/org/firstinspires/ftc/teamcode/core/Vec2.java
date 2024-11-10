@@ -34,7 +34,7 @@ public class Vec2 {
         return 0;
     }
 
-    void fromComponent(double new_x, double new_y) {
+    public void fromComponent(double new_x, double new_y) {
         x = new_x; y = new_y;
         magnitude = Math.sqrt(x*x + y*y);
         direction = compassAtan(x, y);
@@ -46,10 +46,9 @@ public class Vec2 {
         y = Math.cos(Math.toRadians(new_degrees)) * new_magnitude;
     }
 
-    Vec2 add(Vec2 vector) {
-        Vec2 newVector = new Vec2();
-        newVector.fromComponent(x + vector.x, y + vector.y);
-        return newVector;
+    public void add(Vec2 vector) {
+        this.x += vector.x;
+        this.y += vector.y;
     }
 
     Vec2 subtract(Vec2 vector) {
@@ -62,5 +61,11 @@ public class Vec2 {
         Vec2 newVector = new Vec2();
         newVector.fromComponent(x / magnitude, y / magnitude);
         return newVector;
+    }
+
+    public void divide(double denominator) {
+        Vec2 newVector = new Vec2();
+        this.x /= denominator;
+        this.y /= denominator;
     }
 }

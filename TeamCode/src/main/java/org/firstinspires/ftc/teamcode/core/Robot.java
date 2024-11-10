@@ -13,11 +13,13 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Colour;
 import org.firstinspires.ftc.teamcode.core.state.ColourProfile;
+import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
+import org.opencv.core.Mat;
 
 public class Robot {
     public Team team;
@@ -28,13 +30,14 @@ public class Robot {
     public RobotIMU imu;
     public RobotState state;
     public PID_settings pidSettings = new PID_settings();
-    public ColourProfile intakeColour;
+    public ComputerVision computerVision;
 
     public Robot(HardwareMap h, Telemetry t, Team colour) {
         hardwareMap = h;
         telemetry = t;
+        computerVision = new ComputerVision(hardwareMap);
 
-        state = new RobotState();
+        state = new RobotState(computerVision);
         controller = new Controller();
 
         drivetrain = new Drivetrain(hardwareMap);
@@ -99,7 +102,13 @@ public class Robot {
         }
 
 
-        public void componentDrive(double forwardPower, double rightPower) {
+        public void componentDrive(double forwardPower, double rightPower, Vec2 samplePosition, boolean useCV) {
+            if (samplePosition != null && useCV) {
+                double normalisedSampleX = samplePosition.x / 30.0;
+                double normalisedSampleY = samplePosition.y / 25.0 + 0.1;
+                forwardPower -= normalisedSampleY * 1.5;
+                rightPower += normalisedSampleX * 1.5;
+            }
             double r = yawCorrection();
             double movementMultiplier = 1.0;
             if (state.intake.intakeState == IntakeState.ExtendedClawDown) movementMultiplier = 0.2;
@@ -107,16 +116,6 @@ public class Robot {
             motors.powers.rightFront = ((-rightPower - forwardPower) * movementMultiplier - r);
             motors.powers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
-        }
-
-        private void driveInDirection(double direction, double power, boolean fieldCentric) {
-            double degrees = direction - 90;
-            if (fieldCentric) { degrees -= imu.getYawDegrees(); }
-            if (degrees > 180.0) { degrees -= 360.0; }
-            if (degrees <-180.0) { degrees += 360.0; }
-            Vec2 driveVector = new Vec2();
-            driveVector.fromPolar(power, degrees);
-            componentDrive(driveVector.y, driveVector.x);
         }
 
         public void moveOuttake() {
@@ -166,7 +165,7 @@ public class Robot {
 			} else { return response; }
         }
 
-        public boolean calculateMovement(GamepadEx gamepad) {
+        public boolean calculateMovement(GamepadEx gamepad, Vec2 samplePosition) {
             // true -> STOP false -> CONTINUE
 
             // Track number of frames each control has been pressed, made for toggles.
@@ -236,7 +235,8 @@ public class Robot {
             // If grabbing, y releases claw in case of miss.
             if (controller.yPress == 1) {
                 if (state.intake.intakeState == IntakeState.Grabbing) {
-                    state.intake.intakeState = IntakeState.ExtendedClawDown;
+                    computerVision.start();
+                    state.intake.intakeState = IntakeState.ExtendedClawUp;
                 }
             }
 
@@ -246,15 +246,9 @@ public class Robot {
                 state.outtake.outtakeState = OuttakeState.Down;
                 state.outtake.retract = false;
             }
-            componentDrive(my, mx);
-
-            telemetry.addData("IS POS", motors.intakePosition());
-            telemetry.addData("OS POS", motors.outtakePosition());
-            telemetry.addData("X", mx);
-            telemetry.addData("Y", my);
+            componentDrive(my, mx, samplePosition, controller.yPress > 0);
 
             state.intake.clawYaw -= (controller.right_trigger(gamepad) - controller.left_trigger(gamepad)) * 0.03;
-            telemetry.update();
 
             if (state.outtake.outtakeState == OuttakeState.Down && motors.outtakePosition() < 50.0) {
                 motors.leftOuttakeSlide.resetEncoder();
@@ -269,7 +263,6 @@ public class Robot {
             moveOuttake();
             moveIntake(1.0);
 
-            // Update servos / motors
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw);
             motors.setDrivePowers();
@@ -277,9 +270,22 @@ public class Robot {
         }
 
         public boolean drive(GamepadEx gamepad) {
-            // Calculate drive movement
-            if (calculateMovement(gamepad)) return true;
+            Vec2 samplePosition = null;
 
+            if (state.intake.intakeState == IntakeState.ExtendedClawDown) {
+                samplePosition = computerVision.getSamplePosition();
+                if (samplePosition == null) {
+                    telemetry.addData("isNull", true);
+                } else {
+                    telemetry.addData("isNull", false);
+                    telemetry.addData("XPOS", samplePosition.x);
+                    telemetry.addData("YPOS", samplePosition.y);
+                }
+            }
+            telemetry.update();
+
+            // Calculate drive movement
+            if (calculateMovement(gamepad, samplePosition)) return true;
             this.update_teleop(gamepad);
             return false;
         }
