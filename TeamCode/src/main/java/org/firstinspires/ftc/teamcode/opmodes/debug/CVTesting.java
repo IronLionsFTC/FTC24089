@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import java.util.List;
 import org.firstinspires.ftc.teamcode.core.Motors;
 import org.firstinspires.ftc.teamcode.core.Sensors;
 import org.firstinspires.ftc.teamcode.core.Servos;
@@ -42,14 +42,16 @@ public class CVTesting extends LinearOpMode
         // Main loop
         while (opModeIsActive()) {
             Vec2 position = cvTest.getSamplePosition();
-            if (position == null) {
+            String rawCorners = cvTest.getRawCorners();
+            int numResults = cvTest.getNumResults();
+            if (position == null || rawCorners == null) {
                 continue;
             }
 
-            telemetry.addData("ax", position.x);
-            telemetry.addData("ay", position.y);
-            telemetry.addData("x", cvTest.analyse().getTx());
-            telemetry.addData("y", cvTest.analyse().getTy());
+            telemetry.addData("x", position.x);
+            telemetry.addData("y", position.y);
+            telemetry.addData("num", numResults);
+            telemetry.addData("raw", rawCorners);
             telemetry.update();
         }
     }

@@ -57,4 +57,51 @@ public class ComputerVision {
         }
         return null;
     }
+
+    // Failure - always returns 0.0
+    public Double sampleYaw() {
+        LLResult analysis = analyse();
+        if (analysis == null) return null;
+        List<LLResultTypes.ColorResult> crs = analysis.getColorResults();
+        for (LLResultTypes.ColorResult cr : crs) {
+            Pose3D samplePos = cr.getTargetPoseCameraSpace();
+            return samplePos.getOrientation().getYaw(AngleUnit.DEGREES);
+        }
+        return null;
+    }
+
+    public List<Vec2> getSampleCornerPositions() {
+        List<Vec2> corners = new ArrayList<>();
+        LLResult analysis = analyse();
+        if (analysis == null) return null;
+        List<LLResultTypes.ColorResult> crs = analysis.getColorResults();
+        if (crs.isEmpty()) return null;
+        for (List<Double> positions: crs.get(0).getTargetCorners()) {
+            Vec2 corner = new Vec2();
+            corner.fromComponent(positions.get(0), positions.get(1));
+        }
+        return corners;
+    }
+
+    public String getRawOrientation() {
+        LLResult analysis = analyse();
+        if (analysis == null) return null;
+        List<LLResultTypes.ColorResult> crs = analysis.getColorResults();
+        if (crs.isEmpty()) return null;
+        return crs.get(0).getTargetPoseCameraSpace().getPosition().toString();
+    }
+
+    public String getRawCorners() {
+        LLResult analysis = analyse();
+        if (analysis == null) return null;
+        List<LLResultTypes.ColorResult> crs = analysis.getColorResults();
+        if (crs.isEmpty()) return null;
+        return crs.get(0).getTargetCorners().toString();
+    }
+
+    public int getNumResults() {
+        LLResult analysis = analyse();
+        if (analysis == null) return -1;
+        return analysis.getColorResults().size();
+    }
 }
