@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.core;
 import com.acmerobotics.dashboard.FtcDashboard; import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -94,7 +95,7 @@ public class Robot {
         }
 
         public class PositionTracker {
-            public Vec2 position = new Vec2();
+            public Vec2 position = new Vec2(0.0,0.0);
             public double fr = 0.0;
             public double fl = 0.0;
             public double br = 0.0;
@@ -259,34 +260,38 @@ public class Robot {
             return (controller.bPress > 0);
         }
 
-        public void update_teleop(GamepadEx gamepad) {
+        public void update_teleop(GamepadEx gamepad, double sampleOffset) {
             moveOuttake();
             moveIntake(1.0);
 
             servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw);
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset);
             motors.setDrivePowers();
             motors.setOtherPowers();
         }
 
         public boolean drive(GamepadEx gamepad) {
             Vec2 samplePosition = null;
+            double rotation = 0.0;
 
             if (state.intake.intakeState == IntakeState.ExtendedClawDown) {
-                samplePosition = computerVision.getSamplePosition();
-                if (samplePosition == null) {
-                    telemetry.addData("isNull", true);
-                } else {
-                    telemetry.addData("isNull", false);
-                    telemetry.addData("XPOS", samplePosition.x);
-                    telemetry.addData("YPOS", samplePosition.y);
+                samplePosition = computerVision.getSamplePosition(computerVision.analyse());
+                rotation = computerVision.sample.currentRotation;
+                if (samplePosition != null) {
+                    if (controller.yPress > 1) {
+                        LLResult analysis = computerVision.analyse();
+                        if (analysis != null) {
+                            computerVision.sample.update(computerVision.getSampleCornerPositions(analysis));
+                            computerVision.sample.getDirection();
+                        }
+                    }
                 }
             }
             telemetry.update();
 
             // Calculate drive movement
             if (calculateMovement(gamepad, samplePosition)) return true;
-            this.update_teleop(gamepad);
+            this.update_teleop(gamepad, rotation);
             return false;
         }
     }

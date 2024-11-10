@@ -6,6 +6,14 @@ public class Vec2 {
     public double direction;
     public double magnitude;
 
+    public Vec2(double a, double b) {
+        // Assume component
+        x = a;
+        y = b;
+        magnitude = Math.sqrt(x*x + y*y);
+        direction = compassAtan(x, y);
+    }
+
     double clamp(double value, double min, double max) {
         if (value < min) return min;
         return Math.min(value, max);
@@ -46,26 +54,25 @@ public class Vec2 {
         y = Math.cos(Math.toRadians(new_degrees)) * new_magnitude;
     }
 
-    public void add(Vec2 vector) {
+    public Vec2 add(Vec2 vector) {
         this.x += vector.x;
         this.y += vector.y;
+        return this;
     }
 
-    Vec2 subtract(Vec2 vector) {
-        Vec2 newVector = new Vec2();
-        newVector.fromComponent(x - vector.x, y - vector.y);
-        return newVector;
+    public Vec2 sub(Vec2 vector) {
+        this.x -= vector.x;
+        this.y -= vector.y;
+        return this;
     }
 
     Vec2 normalize() {
-        Vec2 newVector = new Vec2();
-        newVector.fromComponent(x / magnitude, y / magnitude);
-        return newVector;
+        return new Vec2(x / magnitude, y / magnitude);
     }
 
-    public void divide(double denominator) {
-        Vec2 newVector = new Vec2();
+    public Vec2 divide(double denominator) {
         this.x /= denominator;
         this.y /= denominator;
+        return this;
     }
 }

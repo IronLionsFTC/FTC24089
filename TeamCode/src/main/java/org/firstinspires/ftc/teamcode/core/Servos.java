@@ -20,7 +20,7 @@ public class Servos {
         intakeClawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeClawServo);
     }
 
-    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw) {
+    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset) {
         double lift = RobotParameters.ServoBounds.intakeFolded;
         double claw = RobotParameters.ServoBounds.clawOpen;
         double yaw = RobotParameters.ServoBounds.intakeYawZero;
@@ -28,7 +28,7 @@ public class Servos {
         switch (intakeState) {
             case ExtendedClawDown:
                 lift = RobotParameters.ServoBounds.intakeDown;
-                yaw = intakeYaw;
+                yaw = intakeYaw + sampleOffset;
                 break;
             case Grabbing:
                 lift = RobotParameters.ServoBounds.intakeDown;

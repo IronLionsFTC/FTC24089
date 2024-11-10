@@ -121,7 +121,7 @@ public class RobotParameters {
         public static final double colourFilter = 0.8; // Higher the stricter
         public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
 
-        public static final int CVSmoothing = 5; // Num frames to smooth values over to reduce jitter.
+        public static final int CVSmoothing = 1; // Num frames to smooth values over to reduce jitter.
     }
 
     public static final class PIDConstants {

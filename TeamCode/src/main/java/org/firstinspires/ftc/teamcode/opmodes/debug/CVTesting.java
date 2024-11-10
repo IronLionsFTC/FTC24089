@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.core.Motors;
+import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.Sensors;
 import org.firstinspires.ftc.teamcode.core.Servos;
 import org.firstinspires.ftc.teamcode.core.Vec2;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
+import org.firstinspires.ftc.teamcode.core.state.QuadrilateralTracker;
 
 @TeleOp
 public class CVTesting extends LinearOpMode
@@ -20,7 +22,6 @@ public class CVTesting extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-
         ComputerVision cvTest = new ComputerVision(hardwareMap);
         Servos servos = new Servos(hardwareMap);
 
@@ -38,20 +39,13 @@ public class CVTesting extends LinearOpMode
         //////////////////////////////////////////
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        java.util.List<Double> average = new java.util.ArrayList<Double>();
         // Main loop
         while (opModeIsActive()) {
-            Vec2 position = cvTest.getSamplePosition();
-            String rawCorners = cvTest.getRawCorners();
-            int numResults = cvTest.getNumResults();
-            if (position == null || rawCorners == null) {
-                continue;
-            }
-
-            telemetry.addData("x", position.x);
-            telemetry.addData("y", position.y);
-            telemetry.addData("num", numResults);
-            telemetry.addData("raw", rawCorners);
+            LLResult result = cvTest.analyse();
+            if (result != null) cvTest.sample.update(cvTest.getSampleCornerPositions(result));
+            double rotation = cvTest.sample.getDirection();
+            telemetry.addData("rot", rotation);
+            servos.intakeYawServo.setPosition(RobotParameters.ServoBounds.intakeYawZero + rotation);
             telemetry.update();
         }
     }

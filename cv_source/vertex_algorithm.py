@@ -5,7 +5,7 @@ pygame.init()
 screen = pygame.display.set_mode((640,480))
 
 # COPY PASTE ---------------------------------------------------------
-corners = [[115.0, 0.0], [104.0, 31.0], [234.0, 150.0], [280.0, 112.0], [180.0, 0.0]]
+corners = [[10,50],[10,100],[200,0],[200,60]]
 # --------------------------------------------------------------------
 
 # Normalise
@@ -79,7 +79,19 @@ else:
 dx = (tl[0] - bl[0] + tr[0] - br[0]) * 0.5
 dy = (tl[1] - bl[1] + tr[1] - br[1]) * 0.5
 
-angle = degrees(atan2(dx, dy))
+dx2 = (tl[0] - tr[0] + bl[0] - br[0]) * 0.5
+dy2 = (tl[1] - tr[1] + bl[1] - br[1]) * 0.5
+
+mag1 = dx**2 + dy**2
+mag2 = dx2**2 + dy2**2
+
+if mag1 > mag2:
+    print("properly aligned")
+    angle = degrees(atan2(dx, dy))
+else:
+    print("sideways")
+    angle = degrees(atan2(dx2, dy2))
+
 print(angle)
 
 while running:

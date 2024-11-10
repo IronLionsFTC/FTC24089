@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 public class ComputerVision {
     public Limelight3A limelight;
+    public QuadrilateralTracker sample = new QuadrilateralTracker();
     List<Vec2> sampling = new ArrayList<>();
 
     public ComputerVision(HardwareMap hardwareMap) {
@@ -32,20 +33,25 @@ public class ComputerVision {
     }
 
     public LLResult analyse() {
-        return limelight.getLatestResult();
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
+            List<Vec2> corners = getSampleCornerPositions(result);
+            if (corners != null) {
+                sample.update(corners);
+            }
+        }
+        return result;
     }
 
-    public Vec2 getSamplePosition() {
+    public Vec2 getSamplePosition(LLResult analysis) {
         // Averages the position over several frames to reduce jitter
-        LLResult analysis = analyse();
         if (analysis != null) {
-            Vec2 position = new Vec2();
-            position.fromComponent(analysis.getTx(), analysis.getTy());
+            Vec2 position = new Vec2(analysis.getTx(), analysis.getTy());
             sampling.add(position);
             if (sampling.size() > RobotParameters.Thresholds.CVSmoothing) {
                 sampling.remove(0);
             }
-            Vec2 average = new Vec2();
+            Vec2 average = new Vec2(0.0, 0.0);
             for (Vec2 sample : sampling) {
                 average.add(sample);
             }
@@ -70,15 +76,13 @@ public class ComputerVision {
         return null;
     }
 
-    public List<Vec2> getSampleCornerPositions() {
+    public List<Vec2> getSampleCornerPositions(LLResult analysis) {
         List<Vec2> corners = new ArrayList<>();
-        LLResult analysis = analyse();
         if (analysis == null) return null;
         List<LLResultTypes.ColorResult> crs = analysis.getColorResults();
         if (crs.isEmpty()) return null;
         for (List<Double> positions: crs.get(0).getTargetCorners()) {
-            Vec2 corner = new Vec2();
-            corner.fromComponent(positions.get(0), positions.get(1));
+            corners.add(new Vec2(positions.get(0), positions.get(1)));
         }
         return corners;
     }
