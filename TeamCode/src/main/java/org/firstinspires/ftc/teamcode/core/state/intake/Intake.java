@@ -1,34 +1,37 @@
 package org.firstinspires.ftc.teamcode.core.state.intake;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
+
+import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 
 public class Intake {
     public IntakeState intakeState = IntakeState.Retracted;
-    public Timer intakeLiftServoTimer = new Timer();
-    public Timer timeUntilClamp = new Timer();
-
+    public ComputerVision cv;
+    public double clawYaw = RobotParameters.ServoBounds.intakeYawZero;
     public void set(IntakeState state) {
         intakeState = state;
     }
+    public Intake(ComputerVision computerVision) {
+        cv = computerVision;
+    }
     public void toggle() {
         switch (intakeState) {
-            case Folded:
-                set(IntakeState.Retracted);
-                break;
             case Retracted:
-                set(IntakeState.Extended);
+                set(IntakeState.ExtendedClawUp);
+                clawYaw = RobotParameters.ServoBounds.intakeYawZero;
                 break;
-            case Extended:
-                set(IntakeState.Collecting);
+            case ExtendedClawUp:
+                cv.start();
+                cv.sample.currentRotation = 0.0;
+                set(IntakeState.ExtendedClawDown);
+                clawYaw = RobotParameters.ServoBounds.intakeYawZero;
                 break;
-            case Collecting:
-                set(IntakeState.Evaluating);
+            case ExtendedClawDown:
+                cv.stop();
+                set(IntakeState.Grabbing);
+                cv.sample.currentRotation = 0.0;
                 break;
-            case Evaluating:
-                intakeLiftServoTimer.resetTimer();
-                set(IntakeState.Depositing);
-                break;
-            case Depositing:
-                set(IntakeState.Dropping);
+            case Grabbing:
+                set(IntakeState.Transfer);
                 break;
             default:
                 set(IntakeState.Retracted);

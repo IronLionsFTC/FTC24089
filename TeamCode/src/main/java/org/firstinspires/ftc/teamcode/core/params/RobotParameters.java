@@ -23,15 +23,9 @@ public class RobotParameters {
             public static final String latchServo = "latchServo";
 
             // Servo Motors
-            public static final String bucketServo = "BucketServo";  // Port 1 ?
-            public static final String armServoA = "outtakeLiftB";        // Port 0 ?
-            public static final String armServoB = "outtakeLiftA";        // Port 0 ?
-            public static final String leftIntakeLiftServo = "leftIntakeLiftServo"; // Port e0
-            public static final String rightIntakeLiftServo = "rightIntakeLiftServo"; // Port e1
-
-            // CR Servo Motors
-            public static final String intakeServoA = "intakeServoA"; // Port 2
-            public static final String intakeServoB = "intakeServoB"; // Port 3
+            public static final String intakeLiftServo = "intakeLiftServo"; // Port c0
+            public static final String intakeYawServo = "intakeYawServo"; // Port c1
+            public static final String intakeClawServo = "intakeClawServo"; // Port c2
         }
         public static final class Reversed {
             public static final boolean leftFront = true;
@@ -82,8 +76,8 @@ public class RobotParameters {
 
     public static final class IMU {
         public static final RevHubOrientationOnRobot hubOrientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
         );
 
         public static final String hardwareMapName = "imu";
@@ -97,11 +91,15 @@ public class RobotParameters {
         public static final double armUp = 0.57;
         public static final double armWait = 0.37;
         public static final double armTransfer = 0.13;
-        public static final double bucketOpen = 0.07; // Parallel
-        public static final double bucketTransfer = 0.09;
-        public static final double bucketClosed = 0.2; // Gripping
-        public static final double intakeFolded = 0.88;
-        public static final double intakeDown = 0.02; // Just above tiles
+
+        public static final double clawClosed = 0.0;
+        public static final double clawOpen = 0.4;
+
+        // NEW
+        public static final double intakeFolded = 0.43;
+        public static final double intakeDown = 0.06;
+        public static final double intakeYawZero = 0.63;
+
         public static final double latchClosed = 0.13;
         public static final double latchOpened = 0.0;
     }
@@ -111,8 +109,7 @@ public class RobotParameters {
         public static final double outtakeUp = 2950.0;
         public static final double intakeIn = 0.0;
         public static final double intakeClearance = 70.0; // Allow outtake to freely move without clipping
-        public static final double intakeExtended = 100.0;
-        public static final double intakeTransfer = 45.0;  // Position where transfer is most consistent
+        public static final double intakeExtended = 90.0;
     }
 
     public static final class Thresholds {
@@ -123,6 +120,8 @@ public class RobotParameters {
         public static final double outtakeHeightToRetractIntakeLower = 150.0; //  ^^^
         public static final double colourFilter = 0.8; // Higher the stricter
         public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
+
+        public static final int CVSmoothing = 1; // Num frames to smooth values over to reduce jitter.
     }
 
     public static final class PIDConstants {
@@ -143,12 +142,5 @@ public class RobotParameters {
         public static final double yawP = 0.015;
         public static final double yawI = 0.05;
         public static final double yawD = 0.001;
-    }
-
-    @Config
-    public static class SystemsTuning {
-        public static double armTransfer = ServoBounds.armTransfer;
-        public static double intakeTransfer = SlideBounds.intakeTransfer;
-        public static double reverseIntakeSpeed = PIDConstants.reverseIntakeSpeed;
     }
 }

@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.auto.opmodes;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -238,3 +239,5 @@ public class MainAuto extends OpMode {
 
 
 
+
+*/

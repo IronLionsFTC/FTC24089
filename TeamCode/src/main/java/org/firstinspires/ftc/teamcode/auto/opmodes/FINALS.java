@@ -43,6 +43,5 @@ public class FINALS extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        robot.update_auto();
     }
 }
