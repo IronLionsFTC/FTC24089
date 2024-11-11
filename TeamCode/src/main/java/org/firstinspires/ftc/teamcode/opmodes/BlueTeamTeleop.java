@@ -14,8 +14,8 @@ public class BlueTeamTeleop extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot = new Robot(hardwareMap, telemetry, Team.Blue);
         gamepad = new GamepadEx(gamepad1);
+        robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Blue);
 
         //////////////////////////////////////////
         // Runs when the init button is pressed //

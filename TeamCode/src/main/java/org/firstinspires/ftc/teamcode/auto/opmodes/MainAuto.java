@@ -25,7 +25,7 @@ public class MainAuto extends OpMode {
 
     @Override
     public void init() {
-        this.robot = new Robot(hardwareMap, telemetry, Team.Blue);
+        this.robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Blue);
         this.follower = new Follower(hardwareMap);
         this.follower.setStartingPose(new Pose(9.0, 41.0, Math.toRadians(-90)));
         this.timer = new Timer();

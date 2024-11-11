@@ -14,7 +14,7 @@ public class RedTeamTeleop extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot = new Robot(hardwareMap, telemetry, Team.Red);
+        robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Red);
         gamepad = new GamepadEx(gamepad1);
 
         //////////////////////////////////////////
