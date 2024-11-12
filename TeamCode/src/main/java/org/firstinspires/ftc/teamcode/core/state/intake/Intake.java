@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.core.state.intake;
 
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Intake {
     public IntakeState intakeState = IntakeState.Retracted;
+    public Timer foldIntakeBeforeRetraction = new Timer();
     public ComputerVision cv;
     public double clawYaw = RobotParameters.ServoBounds.intakeYawZero;
     public void set(IntakeState state) {
@@ -32,6 +34,7 @@ public class Intake {
                 break;
             case Grabbing:
                 set(IntakeState.Transfer);
+                foldIntakeBeforeRetraction.resetTimer();
                 break;
             default:
                 set(IntakeState.Retracted);

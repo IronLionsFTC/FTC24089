@@ -36,7 +36,7 @@ public class Motors {
         leftBack.setInverted(RobotParameters.Motors.Reversed.leftBack);
         rightFront.setInverted(RobotParameters.Motors.Reversed.rightFront);
         rightBack.setInverted(RobotParameters.Motors.Reversed.rightBack);
-        //leftOuttakeSlide.setInverted(true);
+        leftOuttakeSlide.setInverted(true);
         //rightOuttakeSlide.setInverted(false);
         leftIntakeSlide.setInverted(true);
         rightIntakeSlide.setInverted(false);
@@ -47,13 +47,13 @@ public class Motors {
         rightFront.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         rightBack.setZeroPowerBehavior(RobotParameters.Motors.zeroPowerBehaviour);
         leftIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        //leftOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        leftOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         rightIntakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        //rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        rightOuttakeSlide.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
 
         //rightOuttakeSlide.resetEncoder();
-        //leftOuttakeSlide.resetEncoder();
+        leftOuttakeSlide.resetEncoder();
         leftIntakeSlide.resetEncoder();
         rightIntakeSlide.resetEncoder();
 
@@ -94,8 +94,7 @@ public class Motors {
     }
 
     public double outtakePosition() {
-        //return (rightOuttakeSlide.getCurrentPosition() + leftOuttakeSlide.getCurrentPosition()) * 0.5;
-        return 0.0;
+        return leftOuttakeSlide.getCurrentPosition(); //rightOuttakeSlide.getCurrentPosition() + leftOuttakeSlide.getCurrentPosition()) * 0.5;
     }
 
     public double intakePosition() {

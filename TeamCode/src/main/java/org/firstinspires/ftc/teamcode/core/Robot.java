@@ -145,6 +145,9 @@ public class Robot {
                 case ExtendedClawUp: case ExtendedClawDown: case Grabbing:
                     intakeTarget = RobotParameters.SlideBounds.intakeExtended;
             }
+            if (state.intake.intakeState == IntakeState.Transfer && state.intake.foldIntakeBeforeRetraction.getElapsedTime() < 500) {
+                intakeTarget = RobotParameters.SlideBounds.intakeExtended;
+            }
             double intakeSlidePos = motors.intakePosition();
             double error = (intakeTarget - intakeSlidePos);
             double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget) * multiplier;

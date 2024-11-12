@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.core.Vec2;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 import org.firstinspires.ftc.teamcode.core.state.QuadrilateralTracker;
+import org.firstinspires.ftc.teamcode.core.state.Team;
 
 @TeleOp
 public class CVTesting extends LinearOpMode
@@ -22,7 +23,7 @@ public class CVTesting extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        ComputerVision cvTest = new ComputerVision(hardwareMap);
+        ComputerVision cvTest = new ComputerVision(hardwareMap, Team.Red);
         Servos servos = new Servos(hardwareMap);
 
         //////////////////////////////////////////

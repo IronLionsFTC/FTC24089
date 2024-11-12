@@ -23,15 +23,29 @@ public class ServoTuning extends LinearOpMode
         public static double aP = 0.0;
         public static double bI = 0.0;
         public static double cD = 0.0;
-        public static double dTarget = 0.0;
+
+        public static double oP = 0.0;
+        public static double pI = 0.0;
+        public static double qD = 0.0;
+
+        public static double oF = 0.0;
+
+        public static double idTarget = 0.0;
+        public static double odTarget = 0.0;
     }
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-        PIDController controller = new PIDController(Tune.aP, Tune.bI, Tune.cD);
+        PIDController intakeController = new PIDController(Tune.aP, Tune.bI, Tune.cD);
+        PIDController outtakeController = new PIDController(Tune.aP, Tune.bI, Tune.cD);
         Servos servos = new Servos(hardwareMap);
         Motors motors = new Motors(hardwareMap);
+
+        // 0.02
+        // 0.0
+        // 0.0
+        // 0.1 ff
 
         //////////////////////////////////////////
         // Runs when the init button is pressed //
@@ -46,18 +60,26 @@ public class ServoTuning extends LinearOpMode
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         // Main loop
         while (opModeIsActive()) {
-            controller.setPID(Tune.aP, Tune.bI, Tune.cD);
-            double intakeResponse = controller.calculate(motors.intakePosition(), Tune.dTarget);
+            intakeController.setPID(Tune.aP, Tune.bI, Tune.cD);
+            outtakeController.setPID(Tune.oP, Tune.pI, Tune.qD);
+            double intakeResponse = intakeController.calculate(motors.intakePosition(), Tune.idTarget);
+            double outtakeResponse = outtakeController.calculate(motors.outtakePosition(), Tune.odTarget);
+
+            if (Tune.odTarget > 10.0) {
+                outtakeResponse += Tune.oF;
+            }
 
             motors.leftIntakeSlide.set(intakeResponse);
             motors.rightIntakeSlide.set(intakeResponse);
+
+            motors.leftOuttakeSlide.set(outtakeResponse);
 
             servos.intakeLiftServo.setPosition(Tune.intakeLiftPosition);
             servos.intakeYawServo.setPosition(Tune.intakeYawPosition);
             servos.intakeClawServo.setPosition(Tune.intakeClawPosition);
 
-            telemetry.addData("pos", motors.intakePosition());
-            telemetry.addData("tar", Tune.dTarget);
+            telemetry.addData("pos", motors.outtakePosition());
+            telemetry.addData("tar", Tune.odTarget);
             telemetry.update();
         }
     }
