@@ -6,10 +6,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.core.Controller;
+import org.firstinspires.ftc.teamcode.core.control.Controller;
 import org.firstinspires.ftc.teamcode.core.Robot;
-import org.firstinspires.ftc.teamcode.core.Sensors;
-import org.firstinspires.ftc.teamcode.core.Servos;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
@@ -24,8 +22,8 @@ public class AutoSystemsTesting extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        Robot robot = new Robot(hardwareMap, telemetry, Team.Blue);
-        Controller controller = new Controller();
+        Controller controller = new Controller(gamepad1);
+        Robot robot = new Robot(hardwareMap, telemetry, gamepad1, Team.Blue);
 
         //////////////////////////////////////////
         // Runs when the init button is pressed //
@@ -45,7 +43,7 @@ public class AutoSystemsTesting extends LinearOpMode
 
         while (opModeIsActive()) {
             while (controller.xPress != 1) {
-                controller.updateKeyTracker(gp);
+                controller.update();
             }
             terminateOpModeNow();
         }

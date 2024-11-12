@@ -31,7 +31,7 @@ public class FINALS extends OpMode {
     public void init() {
         this.follower = new Follower(hardwareMap);
         this.follower.setStartingPose(Points.basketTileFrontStartPose);
-        this.robot = new Robot(hardwareMap, telemetry, Team.Blue);
+        this.robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Blue);
         telemetry = new MultipleTelemetry(telemetry);
     }
 

@@ -3,6 +3,7 @@ import com.acmerobotics.dashboard.FtcDashboard; import com.acmerobotics.dashboar
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -11,35 +12,34 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+
+import org.firstinspires.ftc.teamcode.core.control.Controls;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
-import org.firstinspires.ftc.teamcode.core.state.Colour;
-import org.firstinspires.ftc.teamcode.core.state.ColourProfile;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
-import org.opencv.core.Mat;
 
 public class Robot {
     public Team team;
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
-    public Controller controller;
+    public Controls controls;
     public Drivetrain drivetrain;
     public RobotIMU imu;
     public RobotState state;
     public PID_settings pidSettings = new PID_settings();
     public ComputerVision computerVision;
 
-    public Robot(HardwareMap h, Telemetry t, Team colour) {
+    public Robot(HardwareMap h, Telemetry t, Gamepad g1, Gamepad g2, Team colour) {
         hardwareMap = h;
         telemetry = t;
         computerVision = new ComputerVision(hardwareMap, colour);
 
         state = new RobotState(computerVision);
-        controller = new Controller();
+        controls = new Controls(g1, g2);
 
         drivetrain = new Drivetrain(hardwareMap);
         imu = new RobotIMU(hardwareMap);
@@ -87,6 +87,9 @@ public class Robot {
         public Motors motors;
         public Servos servos;
         public PositionTracker PositionTracker;
+        // Basically, override yaw correction to stop from over rotating when a joystick rotation is made,
+        // do not cut off the yaw correction if the last input was NOT a joystick rotation
+        public boolean lastYawWasAnalog = true;
 
         public Drivetrain(HardwareMap hardwareMap) {
             motors = new Motors(hardwareMap);
@@ -173,72 +176,76 @@ public class Robot {
             // true -> STOP false -> CONTINUE
 
             // Track number of frames each control has been pressed, made for toggles.
-            controller.updateKeyTracker(gamepad);
-            double mx = controller.movement_x(gamepad);
-            double my = controller.movement_y(gamepad);
-            double controllerR = controller.yawRotation(gamepad);
-            double controllerR2 = controller.pitchRotation(gamepad);
+            controls.update();
 
-            imu.targetYaw -= controllerR2 * 6.0;
+            double mx = controls.movement.X();
+            double my = controls.movement.Y();
+            double mx_s = controls.movement.precise.X();
+            double my_s = controls.movement.precise.Y();
+            // Slowed movement
+            mx = mx_s != 0 ? mx_s : mx;
+            my = my_s != 0 ? my_s : my;
 
-            if (Math.abs(controllerR2) < 0.01) {
-                if (controller.lastYawWasAnalog) {
+            double yaw = controls.movement.yaw();
+            double pitch = controls.movement.pitch();
+
+            imu.targetYaw -= yaw * 6.0;
+
+            if (Math.abs(yaw) < 0.01) {
+                if (lastYawWasAnalog) {
                     imu.targetYaw = imu.getYawDegrees();
-                    controller.lastYawWasAnalog = false;
+                    lastYawWasAnalog = false;
                 }
             } else {
-                controller.lastYawWasAnalog = true;
+                lastYawWasAnalog = true;
             }
 
             // Toggle the intake state
-            if (controller.xPress == 1.0) {
+            if (controls.intake.toggle_state()) {
                 state.intake.toggle();
             }
 
-            if (controller.uPress >= 1) {
-                mx = 0.0;
-                my = -0.4;
-            }
-
-            if (controller.rPress >= 1) {
+            if (controls.outtake.reset()) {
                 state.outtake.outtakeState = OuttakeState.Down;
                 motors.leftOuttakeSlide.resetEncoder();
                 motors.rightOuttakeSlide.resetEncoder();
             }
 
-            if (controller.yPress == 1 && state.intake.intakeState == IntakeState.Retracted) {
-                imu.targetYaw = 0.0;
-                controller.lastYawWasAnalog = false;
+            if (controls.util_button_press()) {
+                if (state.intake.intakeState == IntakeState.Retracted) {
+                    imu.targetYaw = 0.0;
+                    lastYawWasAnalog = false;
+                }
+
+                if (state.outtake.outtakeState == OuttakeState.Passthrough) {
+                    state.outtake.outtakeState = OuttakeState.PassthroughDeposit;
+                }
             }
 
-            if (controller.yPress == 1 && state.outtake.outtakeState == OuttakeState.Passthrough) {
-                state.outtake.outtakeState = OuttakeState.PassthroughDeposit;
-            }
-
-            if (controller.lbPress == 1) {
+            if (controls.movement.CCW45()) {
                 imu.targetYaw -= 45.0;
-                controller.lastYawWasAnalog = false;
+                lastYawWasAnalog = false;
             }
 
-            if (controller.rbPress == 1) {
+            if (controls.movement.CW45()) {
                 imu.targetYaw += 45.0;
-                controller.lastYawWasAnalog = false;
+                lastYawWasAnalog = false;
             }
 
             // Wrap target rotation
-            if (imu.targetYaw < -180) { imu.targetYaw += 360; }
-            if (imu.targetYaw > 180) { imu.targetYaw -= 360; }
+            while (imu.targetYaw < -180) { imu.targetYaw += 360; }
+            while (imu.targetYaw > 180) { imu.targetYaw -= 360; }
 
             // Toggle OUTTAKE state.
-            if (controller.aPress == 1.0) { state.outtake.toggle(); }
-            if (controller.xPress == 1.0 && state.outtake.outtakeState == OuttakeState.Waiting) {
+            if (controls.outtake.toggle_state()) { state.outtake.toggle(); }
+            if (controls.outtake.retract() && state.outtake.outtakeState == OuttakeState.Waiting) {
                 state.outtake.retract = true;
                 state.intake.intakeState = IntakeState.Retracted;
             }
 
             // If grabbing, y releases claw in case of miss.
-            if (controller.yPress == 1) {
-                if (state.intake.intakeState == IntakeState.Grabbing) {
+            if (controls.util_button_press()) {
+                if (controls.use_cv() && state.intake.intakeState == IntakeState.Grabbing) {
                     computerVision.start();
                     computerVision.sample.currentRotation = 0.0;
                     state.intake.intakeState = IntakeState.ExtendedClawUp;
@@ -246,14 +253,14 @@ public class Robot {
             }
 
             // State reset in case
-            if (controller.dPress > 0) {
+            if (controls.RESET()) {
                 state.intake.intakeState = IntakeState.ExtendedClawUp;
                 state.outtake.outtakeState = OuttakeState.Down;
                 state.outtake.retract = false;
             }
-            componentDrive(my, mx, samplePosition, controller.yPress > 0);
+            componentDrive(my, mx, samplePosition, controls.use_cv());
 
-            state.intake.clawYaw -= (controller.right_trigger(gamepad) - controller.left_trigger(gamepad)) * 0.03;
+            state.intake.clawYaw -= (controls.intake.claw.CW_rotation() - controls.intake.claw.CCW_rotation()) * 0.03;
 
             if (state.outtake.outtakeState == OuttakeState.Down && motors.outtakePosition() < 50.0) {
                 motors.leftOuttakeSlide.resetEncoder();
@@ -261,14 +268,16 @@ public class Robot {
             }
 
             // EMERGENCY STOP
-            return (controller.bPress > 0);
+            return controls.EMERGENCY_STOP();
         }
 
         public void update_teleop(GamepadEx gamepad, double sampleOffset) {
             moveOuttake();
             moveIntake(1.0);
 
-            servos.intakeOverridePower = controller.right_trigger(gamepad) - controller.left_trigger(gamepad);
+            // DEPRECATED | will be removed soon
+            // servos.intakeOverridePower = controller.RT() - controller.LT();
+
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset);
             motors.setDrivePowers();
             motors.setOtherPowers();
@@ -282,7 +291,7 @@ public class Robot {
                 samplePosition = computerVision.getSamplePosition(computerVision.analyse());
                 rotation = computerVision.sample.currentRotation;
                 if (samplePosition != null) {
-                    if (controller.yPress > 1) {
+                    if (controls.use_cv()) {
                         LLResult analysis = computerVision.analyse();
                         if (analysis != null) {
                             computerVision.sample.update(computerVision.getSampleCornerPositions(analysis));

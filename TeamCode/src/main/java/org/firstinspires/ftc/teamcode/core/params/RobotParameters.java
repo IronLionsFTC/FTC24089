@@ -72,6 +72,7 @@ public class RobotParameters {
     public static final class Movement {
         public static final double strafeCorrection = 1.1;
         public static final double speed = 1.0;
+        public static final double preciseMovementSpeed = 0.4;
     }
 
     public static final class IMU {

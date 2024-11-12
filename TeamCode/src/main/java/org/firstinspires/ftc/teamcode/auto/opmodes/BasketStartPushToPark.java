@@ -20,7 +20,7 @@ public class BasketStartPushToPark extends OpMode {
     public void init() {
         this.follower = new Follower(hardwareMap);
         this.follower.setStartingPose(new Pose( 9.0, 90.0, Math.toRadians(90) ));
-        this.robot = new Robot(hardwareMap, telemetry, Team.Blue);
+        this.robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Blue);
         telemetry = new MultipleTelemetry(telemetry);
     }
 
