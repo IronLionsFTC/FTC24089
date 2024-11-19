@@ -21,7 +21,7 @@ public class EncoderDirectionDebug extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot = new Robot(hardwareMap, telemetry, gamepad1, Team.Red);
+        robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Red);
         gamepad = new GamepadEx(gamepad1);
 
         MotorEx encoderLeft = new MotorEx(hardwareMap, RobotParameters.Odometry.HardwareMapNames.left);

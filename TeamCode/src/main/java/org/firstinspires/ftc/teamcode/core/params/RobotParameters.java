@@ -26,6 +26,10 @@ public class RobotParameters {
             public static final String intakeLiftServo = "intakeLiftServo"; // Port c0
             public static final String intakeYawServo = "intakeYawServo"; // Port c1
             public static final String intakeClawServo = "intakeClawServo"; // Port c2
+
+            public static final String outtakeClawServo = "outtakeClawServo";
+            public static final String leftArmServo = "leftArmServo";
+            public static final String rightArmServo = "rightArmServo";
         }
         public static final class Reversed {
             public static final boolean leftFront = true;
@@ -88,18 +92,16 @@ public class RobotParameters {
     }
 
     public static final class ServoBounds {
-        public static final double armDown = 0.03;
-        public static final double armUp = 0.57;
-        public static final double armWait = 0.37;
-        public static final double armTransfer = 0.13;
+        public static final double armDown = 0.0;
+        public static final double armUp = 0.7;
 
         public static final double clawClosed = 0.0;
         public static final double clawOpen = 0.4;
 
         // NEW
-        public static final double intakeFolded = 0.0;
-        public static final double intakeDown = 1.0;
-        public static final double intakeYawZero = 0.63;
+        public static final double intakeFolded = 1.0;
+        public static final double intakeDown = 0.0;
+        public static final double intakeYawZero = 0.64;
 
         public static final double latchClosed = 0.13;
         public static final double latchOpened = 0.0;
@@ -107,18 +109,13 @@ public class RobotParameters {
 
     public static final class SlideBounds {
         public static final double outtakeDown = 0.02;
-        public static final double outtakeUp = 2950.0;
+        public static final double outtakeUp = 1000.0;
         public static final double intakeIn = 0.0;
-        public static final double intakeClearance = 70.0; // Allow outtake to freely move without clipping
-        public static final double intakeExtended = 90.0;
+        public static final double intakeExtended = 120;
     }
 
     public static final class Thresholds {
         public static final double intakeSamplePresent = 20.0; // mm where sample is present  (if less than)
-        public static final double intakeClearanceForOuttakeMovement = 60.0; // When to start moving outtake
-        public static final double outtakeMinimumHeightToNotWorryAboutIntake = 500.0;
-        public static final double outtakeHeightToRetractIntakeUpper = 500.0; // When outtake reaches this height, retract intake
-        public static final double outtakeHeightToRetractIntakeLower = 150.0; //  ^^^
         public static final double colourFilter = 0.8; // Higher the stricter
         public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
 

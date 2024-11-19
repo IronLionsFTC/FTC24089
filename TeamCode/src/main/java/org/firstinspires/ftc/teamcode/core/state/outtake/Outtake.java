@@ -2,36 +2,29 @@ package org.firstinspires.ftc.teamcode.core.state.outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Outtake {
-    public OuttakeState outtakeState = OuttakeState.Down;
-    public boolean retract = false;
-    public Timer armRaiseTimer = new Timer();
+    public OuttakeState outtakeState = OuttakeState.DownClawShut;
 
     public void set(OuttakeState state) {
         outtakeState = state;
     }
     public void toggle() {
         switch (outtakeState) {
-            case Folded:
-                set(OuttakeState.Down);
+            case DownClawOpen:
+                set(OuttakeState.DownClawShut);
                 break;
-            case Down:
-                retract = false;
-                set(OuttakeState.Waiting);
+            case DownClawShut:
+                set(OuttakeState.UpWaitingToFlip);
                 break;
-            case Waiting:
-                set(OuttakeState.Up);
+            case UpWaitingToFlip:
+                set(OuttakeState.UpFlipped);
                 break;
-            case Up:
-                armRaiseTimer.resetTimer();
-                set(OuttakeState.Deposit);
+            case UpClawOpen:
+                set(OuttakeState.UpWaitingToGoDown);
                 break;
-            case Deposit:
-            case PassthroughDeposit:
-                retract = false;
-                set(OuttakeState.Down);
+            case UpWaitingToGoDown:
+                set(OuttakeState.DownClawOpen);
                 break;
-            case Passthrough:
-                set(OuttakeState.PassthroughDeposit);
+            default:
                 break;
         }
     }

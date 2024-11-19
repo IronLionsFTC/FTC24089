@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.teamcode.core.control.Controller;
 import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.state.Team;
@@ -23,7 +22,7 @@ public class AutoSystemsTesting extends LinearOpMode
     public void runOpMode() throws InterruptedException
     {
         Controller controller = new Controller(gamepad1);
-        Robot robot = new Robot(hardwareMap, telemetry, gamepad1, Team.Blue);
+        Robot robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Blue);
 
         //////////////////////////////////////////
         // Runs when the init button is pressed //
@@ -42,7 +41,7 @@ public class AutoSystemsTesting extends LinearOpMode
         Timer timer = new Timer();
 
         while (opModeIsActive()) {
-            while (controller.xPress != 1) {
+            while (controller.X.framesPressed() < 1) {
                 controller.update();
             }
             terminateOpModeNow();

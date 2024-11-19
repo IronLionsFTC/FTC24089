@@ -23,7 +23,7 @@ public class Park extends OpMode {
         this.follower.setStartingPose(Points.slantStartPose);
         this.robot = new Robot(hardwareMap ,telemetry, gamepad1, gamepad2, Team.Blue);
         this.robot.state.intake.intakeState = IntakeState.Retracted;
-        this.robot.state.outtake.outtakeState = OuttakeState.Down;
+        this.robot.state.outtake.outtakeState = OuttakeState.DownClawOpen;
         telemetry = new MultipleTelemetry(telemetry);
     }
 

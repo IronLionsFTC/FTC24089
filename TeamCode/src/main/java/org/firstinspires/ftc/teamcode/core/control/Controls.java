@@ -35,16 +35,14 @@ public final class Controls {
         // Precise movement
         public class Precise {
             double speed = RobotParameters.Movement.preciseMovementSpeed;
-            Controller g = g1;
-
             public double X() {
-                if (g.DL.isPressed()) { return -speed; }
-                else if (g.DR.isPressed()) { return speed; }
+                if (g1.DL.isPressed()) { return -speed; }
+                else if (g1.DR.isPressed()) { return speed; }
                 else { return 0; }
             }
             public double Y() {
-                if (g.DD.isPressed()) { return -speed; }
-                else if (g.DU.isPressed()) { return speed; }
+                if (g1.DD.isPressed()) { return -speed; }
+                else if (g1.DU.isPressed()) { return speed; }
                 else { return 0; }
             }
         } public Precise precise = new Precise();

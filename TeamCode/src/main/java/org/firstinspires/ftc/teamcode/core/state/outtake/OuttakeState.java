@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.core.state.outtake;
 
 public enum OuttakeState {
-    Folded,
-    Down,
-    Waiting,
-    Up,
-    Deposit,
-    Passthrough, // Just quickly jump out the back without moving sides
-    PassthroughDeposit, // Drop without moving slides
-
-    LevelOneHang
+    DownClawOpen,
+    DownClawShut,
+    UpWaitingToFlip,
+    UpFlipped,
+    UpClawOpen,
+    UpWaitingToGoDown,
 }

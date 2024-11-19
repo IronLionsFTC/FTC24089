@@ -11,6 +11,9 @@ public class Servos {
     public Servo intakeLiftServo;
     public Servo intakeYawServo;
     public Servo intakeClawServo;
+    public Servo outtakeClawServo;
+    public Servo leftArmServo;
+    public Servo rightArmServo;
     public double intakeOverridePower = 0.0;
 
 	// Initialize the motors with hardwaremap
@@ -18,6 +21,9 @@ public class Servos {
         intakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
         intakeYawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeYawServo);
         intakeClawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeClawServo);
+        outtakeClawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.outtakeClawServo);
+        leftArmServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftArmServo);
+        rightArmServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightArmServo);
     }
 
     public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset) {
