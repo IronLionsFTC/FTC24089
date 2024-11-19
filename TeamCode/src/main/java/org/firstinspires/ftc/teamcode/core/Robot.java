@@ -243,7 +243,7 @@ public class Robot {
 
             componentDrive(my, mx, samplePosition, controls.use_cv());
 
-            state.intake.clawYaw -= (controls.intake.claw.CW_rotation() - controls.intake.claw.CCW_rotation()) * 0.03;
+            state.intake.clawYaw -= (controls.intake.claw.CW_rotation() - controls.intake.claw.CCW_rotation()) * 0.02;
 
             // EMERGENCY STOP
             return controls.EMERGENCY_STOP();

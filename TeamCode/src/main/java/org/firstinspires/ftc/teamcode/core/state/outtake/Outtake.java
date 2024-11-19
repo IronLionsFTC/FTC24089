@@ -18,6 +18,9 @@ public class Outtake {
             case UpWaitingToFlip:
                 set(OuttakeState.UpFlipped);
                 break;
+            case UpFlipped:
+                set(OuttakeState.UpClawOpen);
+                break;
             case UpClawOpen:
                 set(OuttakeState.UpWaitingToGoDown);
                 break;
