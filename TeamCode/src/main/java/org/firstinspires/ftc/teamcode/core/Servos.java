@@ -27,27 +27,46 @@ public class Servos {
     }
 
     public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset) {
-        double lift = RobotParameters.ServoBounds.intakeFolded;
-        double claw = RobotParameters.ServoBounds.clawOpen;
+        double intakeLift = RobotParameters.ServoBounds.intakeFolded;
+        double intakeClaw = RobotParameters.ServoBounds.clawOpen;
+        double outtakeLift = RobotParameters.ServoBounds.armDown;
+        double outtakeClaw = RobotParameters.ServoBounds.clawOpen;
         double yaw = RobotParameters.ServoBounds.intakeYawZero;
 
         switch (intakeState) {
             case ExtendedClawDown:
-                lift = RobotParameters.ServoBounds.intakeDown;
+                intakeLift = RobotParameters.ServoBounds.intakeDown;
                 yaw = intakeYaw + sampleOffset;
                 break;
             case Grabbing:
-                lift = RobotParameters.ServoBounds.intakeDown;
-                claw = RobotParameters.ServoBounds.clawClosed;
+                intakeLift = RobotParameters.ServoBounds.intakeDown;
+                intakeClaw = RobotParameters.ServoBounds.clawClosed;
                 yaw = intakeYaw;
                 break;
             case Transfer:
-                claw = RobotParameters.ServoBounds.clawClosed;
+                intakeClaw = RobotParameters.ServoBounds.clawClosed;
                 break;
         }
 
-        intakeLiftServo.setPosition(lift);
-        intakeClawServo.setPosition(claw);
+        switch (outtakeState) {
+            case DownClawShut: case UpWaitingToFlip:
+                outtakeClaw = RobotParameters.ServoBounds.clawClosed;
+                break;
+            case UpFlipped:
+                outtakeClaw = RobotParameters.ServoBounds.clawClosed;
+                outtakeLift = RobotParameters.ServoBounds.armUp;
+                break;
+            case UpClawOpen:
+                outtakeLift = RobotParameters.ServoBounds.armUp;
+                break;
+        }
+
+        if (outtakeState != OuttakeState.DownClawOpen && outtakeState != OuttakeState.DownClawShut) {
+            intakeClaw = RobotParameters.ServoBounds.clawOpen;
+        }
+
+        intakeLiftServo.setPosition(intakeLift);
+        intakeClawServo.setPosition(intakeClaw);
         intakeYawServo.setPosition(yaw);
     }
 }

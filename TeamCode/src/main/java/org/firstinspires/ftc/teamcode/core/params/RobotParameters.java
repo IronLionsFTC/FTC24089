@@ -96,15 +96,11 @@ public class RobotParameters {
         public static final double armUp = 0.7;
 
         public static final double clawClosed = 0.0;
-        public static final double clawOpen = 0.4;
+        public static final double clawOpen = 0.3;
 
-        // NEW
         public static final double intakeFolded = 1.0;
         public static final double intakeDown = 0.0;
         public static final double intakeYawZero = 0.64;
-
-        public static final double latchClosed = 0.13;
-        public static final double latchOpened = 0.0;
     }
 
     public static final class SlideBounds {
@@ -115,10 +111,6 @@ public class RobotParameters {
     }
 
     public static final class Thresholds {
-        public static final double intakeSamplePresent = 20.0; // mm where sample is present  (if less than)
-        public static final double colourFilter = 0.8; // Higher the stricter
-        public static final double frameThresh = 4.0; // Num loop cycles to be confident that a sample is there
-
         public static final int CVSmoothing = 1; // Num frames to smooth values over to reduce jitter.
     }
 
@@ -127,18 +119,14 @@ public class RobotParameters {
         public static final double ticksInDegree = 8.33;
 
         // Outtake Slide Settings
-        public static final double outtakeSlideP = 0.002;
-        public static final double outtakeSlideI = 0.003;
-        public static final double outtakeSlideD = 0.0001;
-        public static final double outtakeSlideF = 0.1;
-
-        // Spinning Intake Speed
-        public static final double intakeSpeed = 0.2;
-        public static final double reverseIntakeSpeed = 0.2;
+        public static final double outtakeSlideP = 0.02;
+        public static final double outtakeSlideI = 0.0;
+        public static final double outtakeSlideD = 0.0;
+        public static final double outtakeSlideF = 0.15;
 
         // Yaw Correction Settings
-        public static final double yawP = 0.015;
-        public static final double yawI = 0.05;
-        public static final double yawD = 0.001;
+        public static final double yawP = 0.02;
+        public static final double yawI = 0.0;
+        public static final double yawD = 0.0;
     }
 }

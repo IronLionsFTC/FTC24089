@@ -53,12 +53,10 @@ public class Robot {
     }
 
     public void blockingRetractAndZeroBothSlides() {
-        // drivetrain.servos.latchServo.setPosition(0.0);
-        Timer retractionTimer = new Timer();
-        // drivetrain.motors.leftOuttakeSlide.set(-0.3);
-        // drivetrain.motors.rightOuttakeSlide.set(-0.3);
-        drivetrain.motors.intakeSlide.set(-0.3);
-        sleep(500); // Forcibly retract slides
+        drivetrain.motors.leftOuttakeSlide.set(-0.2);
+        drivetrain.motors.rightOuttakeSlide.set(-0.2);
+        drivetrain.motors.intakeSlide.set(-0.5);
+        sleep(500);
         drivetrain.motors.intakeSlide.resetEncoder();
         drivetrain.motors.rightOuttakeSlide.resetEncoder();
         drivetrain.motors.leftOuttakeSlide.resetEncoder();
@@ -66,7 +64,7 @@ public class Robot {
 
     @Config
     public static class PID_settings {
-        public static double intakeSlide_p = 0.01;
+        public static double intakeSlide_p = 0.02;
         public static double intakeSlide_i = 0.0;
         public static double intakeSlide_d = 0.0;
 
