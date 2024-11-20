@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.core.control.Controller;
 import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.state.Team;
@@ -21,29 +23,27 @@ public class AutoSystemsTesting extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        Controller controller = new Controller(gamepad1);
-        Robot robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, Team.Blue);
-
-        //////////////////////////////////////////
-        // Runs when the init button is pressed //
-        //////////////////////////////////////////
-
+        AutonomousRobot robot = new AutonomousRobot(telemetry, hardwareMap);
         if (isStopRequested()) return;
         waitForStart();
 
-        //////////////////////////////////////////
-        // Runs when the play button is pressed //
-        //////////////////////////////////////////
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        // Main loop
-
-        GamepadEx gp = new GamepadEx(gamepad1);
-        Timer timer = new Timer();
 
         while (opModeIsActive()) {
-            while (controller.X.framesPressed() < 1) {
-                controller.update();
-            }
+            robot.extendIntake();
+            while (!robot.isIntakeExtended()) { robot.update(); }
+            robot.closeIntakeClaw();
+            while (!robot.isGrabbingDone()) { robot.update(); }
+            robot.retractIntake();
+            while (!robot.isTransferReady()) { robot.update(); }
+            while (!robot.waitForTransfer()) { robot.update(); }
+            robot.outtakeStageOne();
+            while (!robot.outtakeStageReady()) { robot.update(); }
+            robot.outtakeStageTwo();
+            while (!robot.outtakeStageReady()) { robot.update(); }
+            robot.specimenClip();
+            while (!robot.specimenCycleDone()) { robot.update(); }
+            robot.endSpecimenCycle();
             terminateOpModeNow();
         }
     }

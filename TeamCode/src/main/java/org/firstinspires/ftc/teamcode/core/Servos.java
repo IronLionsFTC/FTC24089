@@ -14,6 +14,7 @@ public class Servos {
     public Servo outtakeClawServo;
     public Servo leftArmServo;
     public Servo rightArmServo;
+    public Servo latchServo;
     public double intakeOverridePower = 0.0;
 
 	// Initialize the motors with hardwaremap
@@ -24,21 +25,22 @@ public class Servos {
         outtakeClawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.outtakeClawServo);
         leftArmServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftArmServo);
         rightArmServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightArmServo);
+        latchServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.latchServo);
     }
 
     public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset) {
         double intakeLift = RobotParameters.ServoBounds.intakeFolded;
-        double intakeClaw = RobotParameters.ServoBounds.clawOpen;
+        double intakeClaw = RobotParameters.ServoBounds.clawWideOpen;
         double outtakeLift = RobotParameters.ServoBounds.armDown;
         double outtakeClaw = RobotParameters.ServoBounds.clawOpen;
         double yaw = RobotParameters.ServoBounds.intakeYawZero;
 
         switch (intakeState) {
-            case ExtendedClawDown:
+            case ExtendedClawDown: case ExtendedClawOpen:
                 intakeLift = RobotParameters.ServoBounds.intakeDown;
                 yaw = intakeYaw + sampleOffset;
                 break;
-            case Grabbing:
+            case Grabbing: case ExtendedClawShut:
                 intakeLift = RobotParameters.ServoBounds.intakeDown;
                 intakeClaw = RobotParameters.ServoBounds.clawClosed;
                 yaw = intakeYaw;
@@ -46,17 +48,26 @@ public class Servos {
             case Transfer:
                 intakeClaw = RobotParameters.ServoBounds.clawClosed;
                 break;
+            case ExtendedGrabbingOffWallClawOpen:
+                intakeLift = RobotParameters.ServoBounds.intakeGrabOffWall;
+                yaw = RobotParameters.ServoBounds.intakeYawFlipped;
+                break;
+            case ExtendedGrabbingOffWallClawShut:
+                intakeLift = RobotParameters.ServoBounds.intakeGrabOffWall;
+                yaw = RobotParameters.ServoBounds.intakeYawFlipped;
+                intakeClaw = RobotParameters.ServoBounds.clawClosed;
+                break;
         }
 
         switch (outtakeState) {
-            case DownClawShut: case UpWaitingToFlip:
+            case DownClawShut: case UpWaitingToFlip: case UpWithSpecimenWaitingToFlip:
                 outtakeClaw = RobotParameters.ServoBounds.clawClosed;
                 break;
-            case UpFlipped:
+            case UpFlipped: case UpWithSpecimenFlipped: case UpWithSpecimenOnBar:
                 outtakeClaw = RobotParameters.ServoBounds.clawClosed;
                 outtakeLift = RobotParameters.ServoBounds.armUp;
                 break;
-            case UpClawOpen:
+            case UpClawOpen: case UpWithSpecimentGoingDown:
                 outtakeLift = RobotParameters.ServoBounds.armUp;
                 break;
         }
@@ -65,6 +76,19 @@ public class Servos {
             intakeClaw = RobotParameters.ServoBounds.clawOpen;
         }
 
+        if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Transfer) {
+            if (motors.intakePosition() < 20.0) {
+                latchServo.setPosition(RobotParameters.ServoBounds.latchShut);
+            } else {
+                latchServo.setPosition(RobotParameters.ServoBounds.latchOpen);
+            }
+        } else {
+            latchServo.setPosition(RobotParameters.ServoBounds.latchOpen);
+        }
+
+        outtakeClawServo.setPosition(outtakeClaw);
+        rightArmServo.setPosition(outtakeLift);
+        leftArmServo.setPosition(1.0 - outtakeLift);
         intakeLiftServo.setPosition(intakeLift);
         intakeClawServo.setPosition(intakeClaw);
         intakeYawServo.setPosition(yaw);

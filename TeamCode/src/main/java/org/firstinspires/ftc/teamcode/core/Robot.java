@@ -39,7 +39,7 @@ public class Robot {
         computerVision = new ComputerVision(hardwareMap, colour);
 
         state = new RobotState(computerVision);
-        controls = new Controls(g1, g2);
+        if (g1 != null && g2 != null) controls = new Controls(g1, g2);
 
         drivetrain = new Drivetrain(hardwareMap);
         imu = new RobotIMU(hardwareMap);
@@ -64,7 +64,7 @@ public class Robot {
 
     @Config
     public static class PID_settings {
-        public static double intakeSlide_p = 0.02;
+        public static double intakeSlide_p = 0.05;
         public static double intakeSlide_i = 0.0;
         public static double intakeSlide_d = 0.0;
 
@@ -111,7 +111,7 @@ public class Robot {
             }
             double r = yawCorrection();
             double movementMultiplier = 1.0;
-            if (state.intake.intakeState == IntakeState.ExtendedClawDown) movementMultiplier = 0.4;
+            if (state.intake.intakeState == IntakeState.ExtendedClawDown || state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) movementMultiplier = 0.4;
             motors.powers.leftFront = ((rightPower - forwardPower) * movementMultiplier + r);
             motors.powers.rightFront = ((-rightPower - forwardPower) * movementMultiplier - r);
             motors.powers.leftBack = ((-rightPower - forwardPower) * movementMultiplier + r);
@@ -125,6 +125,13 @@ public class Robot {
             switch (state.outtake.outtakeState) {
                 case UpWaitingToFlip: case UpFlipped: case UpWaitingToGoDown: case UpClawOpen:
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;
+                    break;
+                case UpWithSpecimenWaitingToFlip: case UpWithSpecimenFlipped: case UpWithSpecimentGoingDown:
+                    slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
+                    break;
+                case UpWithSpecimenOnBar:
+                    slideTarget = RobotParameters.SlideBounds.outtakeOnSpecimenBar;
+                    break;
             }
 
             double outtakeSlideResponse = pidSettings.outtakeSlideController.calculate(outtakeSlidePos, slideTarget);
@@ -133,15 +140,19 @@ public class Robot {
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
             if (slideTarget <= 10.0 && outtakeSlidePos < 30) { outtakeSlidePower = 0.0; }
-            if (outtakeSlideResponse < 0.0) { outtakeSlidePower = 0.0; }
+            if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 150.0) { outtakeSlidePower = 0.0; }
+            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
             motors.powers.leftOuttakeSlide = outtakeSlidePower;
             motors.powers.rightOuttakeSlide = outtakeSlidePower;
         }
 
         public void moveIntake(double multiplier) {
+            if (state.outtake.outtakeState != OuttakeState.DownClawOpen && state.outtake.outtakeState != OuttakeState.DownClawShut && state.intake.intakeState == IntakeState.Transfer) {
+                state.intake.intakeState = IntakeState.Retracted;
+            }
             double intakeTarget = RobotParameters.SlideBounds.intakeIn;
             switch (state.intake.intakeState) {
-                case ExtendedClawUp: case ExtendedClawDown: case Grabbing:
+                case ExtendedClawUp: case ExtendedClawDown: case Grabbing: case ExtendedGrabbingOffWallClawShut: case ExtendedGrabbingOffWallClawOpen: case ExtendedClawShut: case ExtendedClawOpen:
                     intakeTarget = RobotParameters.SlideBounds.intakeExtended;
             }
             if (state.intake.intakeState == IntakeState.Transfer && state.intake.foldIntakeBeforeRetraction.getElapsedTime() < 500) {
@@ -151,8 +162,7 @@ public class Robot {
             double error = (intakeTarget - intakeSlidePos);
             double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget) * multiplier;
             // from encoder error (e.g. 1 off error)
-            if (intakeTarget < 5 && intakeSlidePos <= 10) { intakeSlideResponse = 0.0; }
-            if (Math.abs(error) < 2) { intakeSlideResponse = 0.0; }
+            if (intakeTarget < 5 && intakeSlidePos <= 15) { intakeSlideResponse = 0.0; }
             // Apply powers to the motors
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
@@ -176,12 +186,6 @@ public class Robot {
 
             double mx = controls.movement.X();
             double my = controls.movement.Y();
-            double mx_s = controls.movement.precise.X();
-            double my_s = controls.movement.precise.Y();
-            // Slowed movement
-            mx = mx_s != 0 ? mx_s : mx;
-            my = my_s != 0 ? my_s : my;
-
             double yaw = controls.movement.yaw();
             double pitch = controls.movement.pitch();
 
@@ -196,12 +200,20 @@ public class Robot {
                 lastYawWasAnalog = true;
             }
 
+            if (state.intake.intakeState == IntakeState.Transfer && controls.intake.claw.deposit()) {
+                state.intake.intakeState = IntakeState.ExtendedClawShut;
+            }
+
             // Toggle the intake state
-            if (controls.intake.toggle_state()) {
+            if (state.intake.intakeState == IntakeState.ExtendedClawUp && controls.util_button_press()) {
+                state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawOpen;
+            } else if (controls.intake.toggle_state()) {
                 state.intake.toggle();
             }
 
-            if (controls.outtake.toggle_state()) {
+            if (state.outtake.outtakeState == OuttakeState.DownClawShut && controls.util_button_press()) {
+                state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
+            } else if (controls.outtake.toggle_state()) {
                 state.outtake.toggle();
             }
 
@@ -209,13 +221,6 @@ public class Robot {
                 state.outtake.outtakeState = OuttakeState.DownClawOpen;
                 motors.leftOuttakeSlide.resetEncoder();
                 motors.rightOuttakeSlide.resetEncoder();
-            }
-
-            if (controls.util_button_press()) {
-                if (state.intake.intakeState == IntakeState.Retracted) {
-                    imu.targetYaw = 0.0;
-                    lastYawWasAnalog = false;
-                }
             }
 
             if (controls.movement.CW45()) {

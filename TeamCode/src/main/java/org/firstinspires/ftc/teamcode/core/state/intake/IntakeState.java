@@ -5,5 +5,11 @@ public enum IntakeState {
     ExtendedClawUp,
     ExtendedClawDown,
     Grabbing,
-    Transfer
+    Transfer,
+
+    ExtendedGrabbingOffWallClawOpen,
+    ExtendedGrabbingOffWallClawShut,
+
+    ExtendedClawShut,
+    ExtendedClawOpen
 }

@@ -93,21 +93,31 @@ public class RobotParameters {
 
     public static final class ServoBounds {
         public static final double armDown = 0.0;
-        public static final double armUp = 0.7;
+        public static final double armUp = 0.62;
 
         public static final double clawClosed = 0.0;
-        public static final double clawOpen = 0.3;
+        public static final double clawOpen = 0.2;
+        public static final double clawWideOpen = 0.4;
 
         public static final double intakeFolded = 1.0;
         public static final double intakeDown = 0.0;
         public static final double intakeYawZero = 0.64;
+
+        public static final double intakeYawFlipped = 0.09;
+        public static final double intakeGrabOffWall = 0.0;
+
+        public static final double latchOpen = 0.0;
+        public static final double latchShut = 0.4;
     }
 
     public static final class SlideBounds {
         public static final double outtakeDown = 0.02;
-        public static final double outtakeUp = 1000.0;
+        public static final double outtakeUp = 900.0;
         public static final double intakeIn = 0.0;
         public static final double intakeExtended = 120;
+
+        public static final double outtakeBelowSpecimenBar = 150.0;
+        public static final double outtakeOnSpecimenBar = 550.0;
     }
 
     public static final class Thresholds {
@@ -119,7 +129,7 @@ public class RobotParameters {
         public static final double ticksInDegree = 8.33;
 
         // Outtake Slide Settings
-        public static final double outtakeSlideP = 0.02;
+        public static final double outtakeSlideP = 0.004;
         public static final double outtakeSlideI = 0.0;
         public static final double outtakeSlideD = 0.0;
         public static final double outtakeSlideF = 0.15;

@@ -36,6 +36,15 @@ public class Intake {
                 set(IntakeState.Transfer);
                 foldIntakeBeforeRetraction.resetTimer();
                 break;
+            case ExtendedGrabbingOffWallClawOpen:
+                set(IntakeState.ExtendedGrabbingOffWallClawShut);
+                break;
+            case ExtendedGrabbingOffWallClawShut:
+                set(IntakeState.Transfer);
+                break;
+            case ExtendedClawShut:
+                set(IntakeState.ExtendedClawOpen);
+                break;
             default:
                 set(IntakeState.Retracted);
                 break;

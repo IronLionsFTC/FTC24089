@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.core.state.outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Outtake {
-    public OuttakeState outtakeState = OuttakeState.DownClawShut;
+    public OuttakeState outtakeState = OuttakeState.DownClawOpen;
 
     public void set(OuttakeState state) {
         outtakeState = state;
@@ -27,6 +27,20 @@ public class Outtake {
             case UpWaitingToGoDown:
                 set(OuttakeState.DownClawOpen);
                 break;
+
+            case UpWithSpecimenWaitingToFlip:
+                set(OuttakeState.UpWithSpecimenFlipped);
+                break;
+            case UpWithSpecimenFlipped:
+                set(OuttakeState.UpWithSpecimenOnBar);
+                break;
+            case UpWithSpecimenOnBar:
+                set(OuttakeState.UpWithSpecimentGoingDown);
+                break;
+            case UpWithSpecimentGoingDown:
+                set(OuttakeState.DownClawOpen);
+                break;
+
             default:
                 break;
         }

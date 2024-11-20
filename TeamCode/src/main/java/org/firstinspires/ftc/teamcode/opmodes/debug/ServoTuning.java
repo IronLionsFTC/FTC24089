@@ -24,18 +24,20 @@ public class ServoTuning extends LinearOpMode
         public static double armServo = 0.0;
         public static double outtakeClaw = 0.0;
 
-        public static double aP = 0.0;
+        public static double aP = 0.02;
         public static double bI = 0.0;
         public static double cD = 0.0;
 
-        public static double oP = 0.0;
+        public static double oP = 0.02;
         public static double pI = 0.0;
         public static double qD = 0.0;
 
-        public static double oF = 0.0;
+        public static double oF = 0.15;
 
         public static double idTarget = 0.0;
         public static double odTarget = 0.0;
+
+        public static double latchPos = 0.0;
     }
 
     @Override
@@ -73,6 +75,7 @@ public class ServoTuning extends LinearOpMode
             servos.outtakeClawServo.setPosition(Tune.outtakeClaw);
             servos.leftArmServo.setPosition(1.0 - Tune.armServo);
             servos.rightArmServo.setPosition(Tune.armServo);
+            servos.latchServo.setPosition(Tune.latchPos);
 
             telemetry.addData("intake_pos", motors.intakePosition());
             telemetry.addData("outtake_pos_r", motors.rightOuttakeSlide.getCurrentPosition());

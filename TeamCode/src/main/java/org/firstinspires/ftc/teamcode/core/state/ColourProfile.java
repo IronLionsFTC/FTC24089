@@ -8,8 +8,8 @@ public class ColourProfile {
     public int blueCount  = 0;
     public int proxCount  = 0;
 
-    private double frameThreshold = RobotParameters.Thresholds.frameThresh;
-    private double colourFilter = RobotParameters.Thresholds.colourFilter;
+    private double frameThreshold = 3.0;
+    private double colourFilter = 1.0;
 
     public double r;
     public double g;
@@ -34,7 +34,7 @@ public class ColourProfile {
         else { blueCount = 0; }
         if (b * 2.0 < (r + g) && g > r * colourFilter) { yellowCount += 1; }
         else { yellowCount = 0; }
-        if (d < RobotParameters.Thresholds.intakeSamplePresent) { proxCount += 1; }
+        if (d < 4.0) { proxCount += 1; }
     }
 
     public Colour classify() {

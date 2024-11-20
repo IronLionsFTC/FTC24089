@@ -62,6 +62,7 @@ public final class Controls {
         public class Claw {
             public double CW_rotation() { return g1.RT(); }
             public double CCW_rotation() { return g1.LT(); }
+            public boolean deposit() { return g1.DD.press(); }
         } public Claw claw = new Claw();
     } public Intake intake = new Intake();
 
