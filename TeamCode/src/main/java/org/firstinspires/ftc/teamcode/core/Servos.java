@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Servos {
 	// Define motors
@@ -15,6 +16,7 @@ public class Servos {
     public Servo leftArmServo;
     public Servo rightArmServo;
     public Servo latchServo;
+    public Timer transferTimer = new Timer();
     public double intakeOverridePower = 0.0;
 
 	// Initialize the motors with hardwaremap

@@ -114,9 +114,9 @@ public class RobotParameters {
         public static final double outtakeDown = 0.02;
         public static final double outtakeUp = 900.0;
         public static final double intakeIn = 0.0;
-        public static final double intakeExtended = 120;
+        public static final double intakeExtended = 150;
 
-        public static final double outtakeBelowSpecimenBar = 150.0;
+        public static final double outtakeBelowSpecimenBar = 180.0;
         public static final double outtakeOnSpecimenBar = 550.0;
     }
 

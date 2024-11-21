@@ -64,7 +64,7 @@ public class Robot {
 
     @Config
     public static class PID_settings {
-        public static double intakeSlide_p = 0.05;
+        public static double intakeSlide_p = 0.1;
         public static double intakeSlide_i = 0.0;
         public static double intakeSlide_d = 0.0;
 
@@ -118,7 +118,7 @@ public class Robot {
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
 
-        public void moveOuttake() {
+        public void moveOuttake(double powerMul) {
             double outtakeSlidePos = motors.outtakePosition();
             double slideTarget = RobotParameters.SlideBounds.outtakeDown;
 
@@ -142,8 +142,8 @@ public class Robot {
             if (slideTarget <= 10.0 && outtakeSlidePos < 30) { outtakeSlidePower = 0.0; }
             if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 150.0) { outtakeSlidePower = 0.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
-            motors.powers.leftOuttakeSlide = outtakeSlidePower;
-            motors.powers.rightOuttakeSlide = outtakeSlidePower;
+            motors.powers.leftOuttakeSlide = outtakeSlidePower * powerMul;
+            motors.powers.rightOuttakeSlide = outtakeSlidePower * powerMul;
         }
 
         public void moveIntake(double multiplier) {
@@ -164,6 +164,17 @@ public class Robot {
             // from encoder error (e.g. 1 off error)
             if (intakeTarget < 5 && intakeSlidePos <= 15) { intakeSlideResponse = 0.0; }
             // Apply powers to the motors
+
+            if (state.intake.intakeState == IntakeState.Retracted || state.intake.intakeState == IntakeState.Transfer) {
+                if (motors.intakePosition() < 15.0) {
+                    intakeSlideResponse = 0.0;
+                }
+            } else {
+                if (motors.intakePosition() > 100.0) {
+                    intakeSlideResponse = 0.2;
+                }
+            }
+
             motors.powers.leftIntakeSlide = intakeSlideResponse;
             motors.powers.rightIntakeSlide = intakeSlideResponse;
         }
@@ -255,7 +266,7 @@ public class Robot {
         }
 
         public void update_teleop(GamepadEx gamepad, double sampleOffset) {
-            moveOuttake();
+            moveOuttake(1.0);
             moveIntake(1.0);
 
             // DEPRECATED | will be removed soon

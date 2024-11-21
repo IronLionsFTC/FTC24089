@@ -2,24 +2,14 @@ package org.firstinspires.ftc.teamcode.opmodes.debug;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
-import org.firstinspires.ftc.teamcode.core.control.Controller;
-import org.firstinspires.ftc.teamcode.core.Robot;
-import org.firstinspires.ftc.teamcode.core.state.Team;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 @TeleOp
-public class AutoSystemsTesting extends LinearOpMode
+public class SpecimenAutoCycleDemo extends LinearOpMode
 {
-    @Config
-    public static class Tune {
-
-    }
-
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -30,20 +20,21 @@ public class AutoSystemsTesting extends LinearOpMode
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         while (opModeIsActive()) {
-            robot.extendIntake();
+            robot.extendIntakeForSpecimen();
             while (!robot.isIntakeExtended()) { robot.update(); }
             robot.closeIntakeClaw();
-            while (!robot.isGrabbingDone()) { robot.update(); }
-            robot.retractIntake();
-            while (!robot.isTransferReady()) { robot.update(); }
+            while (!robot.isIntakeDone()) { robot.update(); }
             while (!robot.waitForTransfer()) { robot.update(); }
-            robot.outtakeStageOne();
+            while (!robot.specimenStageOne()) { robot.update(); }
             while (!robot.outtakeStageReady()) { robot.update(); }
-            robot.outtakeStageTwo();
+            robot.specimenStageTwo();
             while (!robot.outtakeStageReady()) { robot.update(); }
             robot.specimenClip();
-            while (!robot.specimenCycleDone()) { robot.update(); }
+            while (!robot.waitForClip()) { robot.update(); }
+            robot.specimenStageThree();
+            while (!robot.outtakeStageReady()) { robot.update(); }
             robot.endSpecimenCycle();
+            while (!robot.specimenCycleDone()) { robot.update(); }
             terminateOpModeNow();
         }
     }
