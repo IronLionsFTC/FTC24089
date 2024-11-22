@@ -70,7 +70,6 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
             robot.update();
             follower.update();
         }
-        robot.closeIntakeClaw();
         while (!robot.isIntakeDone()) {
             robot.update();
             follower.update();
