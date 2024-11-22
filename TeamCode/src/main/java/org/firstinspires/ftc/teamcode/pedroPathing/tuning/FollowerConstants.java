@@ -31,8 +31,19 @@ public class FollowerConstants {
 
     // This section is for setting the actual drive vector for the front left wheel, if the robot
     // is facing a heading of 0 radians with the wheel centered at (0,0)
-    private static double xMovement = 53.45;
-    private static double yMovement = 38.09;
+
+    // Trial 1: 59.8018849843567
+    // Trial 2: 60.15744625016091
+    // Trial 3: 60.6489880935502
+    // Average: 60.2027731093
+    private static double xMovement = 60.2027731093;
+
+    // Trial 1: 35.21755134823494
+    // Trial 2: 40.84665201436347
+    // Trial 3: 40.8697766283475
+    // Disregard Trial 1 as outlier.
+    // Average: 40.8582143214
+    private static double yMovement = 40.8582143214;
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
     public static Vector frontLeftVector = MathFunctions.normalizeVector(new Vector(convertToPolar[0],convertToPolar[1]));
 
@@ -92,11 +103,23 @@ public class FollowerConstants {
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double forwardZeroPowerAcceleration = -46.0;
+
+    // Trial 1: -34.170612965931475
+    // Trial 2: -35.041983534816104
+    // Trial 3: -36.89424133606337
+    // Average: -35.3689459456
+    public static double forwardZeroPowerAcceleration = -35.3689459456;
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double lateralZeroPowerAcceleration = -100.0;
+
+    // Trial 1: -77.94549249305129
+    // Trial 2: -83.5399461402924
+    // Trial 3: -76.11630902512758
+    // Trial 4: -85.08556783286923
+    // Trial 5: -81.05322877465375
+    // Average: −80.74810885319885
+    public static double lateralZeroPowerAcceleration = -80.748108853;
 
     // A multiplier for the zero power acceleration to change the speed the robot decelerates at
     // the end of paths.
