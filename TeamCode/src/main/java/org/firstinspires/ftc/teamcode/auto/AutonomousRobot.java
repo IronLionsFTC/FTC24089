@@ -55,9 +55,9 @@ public class AutonomousRobot {
     }
 
     public boolean isIntakeDone() {
-        if (timer.getElapsedTimeSeconds() > 0.8) closeIntakeClaw();
-        if (timer.getElapsedTimeSeconds() > 1.2) {
-            if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.7) {
+        if (timer.getElapsedTimeSeconds() > 0.4) closeIntakeClaw();
+        if (timer.getElapsedTimeSeconds() > 0.8) {
+            if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.3) {
                 robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
             }
             robot.state.intake.intakeState = IntakeState.Transfer;
