@@ -33,7 +33,15 @@ public class harrison_test_for_auto_functions {
                                 new Point(38.549, 84.919, Point.CARTESIAN)
                         )
                     )
-                .setConstantHeadingInterpolation(3.14);
+                .setConstantHeadingInterpolation(-0.125)
+                .addPath(
+                // Line 2
+                new BezierLine(
+                        new Point(38.549, 84.919, Point.CARTESIAN),
+                        new Point(9.757, 84.983, Point.CARTESIAN)
+                )
+        )
+                .setConstantHeadingInterpolation(0.785);
         return builder.build();
     }
 }

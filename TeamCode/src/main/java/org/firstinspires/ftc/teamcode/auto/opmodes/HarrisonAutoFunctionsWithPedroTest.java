@@ -34,6 +34,7 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
     public void loop() {
         while (!follower.atParametricEnd()) {
             follower.update();
+            robot.update();
         }
         robot.extendIntakeForSample();
         while (!robot.isIntakeExtended()) {
@@ -62,6 +63,31 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
         }
         follower.followPath(this.chain.getPath(2));
         while (!follower.atParametricEnd()) {
+            robot.update();
+            follower.update();
+        }
+        robot.extendIntakeForSample();
+        while (!robot.isIntakeExtended()) {
+            robot.update();
+            follower.update();
+        }
+        robot.closeIntakeClaw();
+        while (!robot.isIntakeDone()) {
+            robot.update();
+            follower.update();
+        }
+        follower.followPath(this.chain.getPath(3));
+        while (!follower.atParametricEnd()) {
+            robot.update();
+            follower.update();
+        }
+        robot.raiseSlidesForSampleDump();
+        while (!robot.areSlidesReadyForSampleDump()) {
+            robot.update();
+            follower.update();
+        }
+        robot.performDump();
+        while (!robot.isDumpDone()) {
             robot.update();
             follower.update();
         }
