@@ -109,7 +109,7 @@ public class RobotParameters {
         public static final double intakeYawFlipped = 0.09;
         public static final double intakeGrabOffWall = 0.0;
 
-        public static final double latchOpen = 0.0;
+        public static final double latchOpen = 0.17;
         public static final double latchShut = 0.4;
     }
 

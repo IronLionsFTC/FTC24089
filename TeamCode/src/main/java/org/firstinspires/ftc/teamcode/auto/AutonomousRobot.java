@@ -59,29 +59,10 @@ public class AutonomousRobot {
             robot.state.intake.intakeState = IntakeState.Transfer;
         }
 
-        if (robot.drivetrain.motors.intakePosition() < 15.0) {
+        if (robot.drivetrain.motors.intakePosition() < 20.0) {
             timer.resetTimer();
             return true;
         } else return false;
-    }
-
-    public boolean isGrabbingDone() {
-        return timer.getElapsedTimeSeconds() > 0.1;
-    }
-
-    public void retractIntake() {
-        robot.state.intake.intakeState = IntakeState.Transfer;
-        robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
-    }
-
-    public boolean isTransferReady() {
-        boolean result =  robot.drivetrain.motors.intakePosition() < 15.0 && robot.state.intake.intakeState == IntakeState.Transfer && timer.getElapsedTimeSeconds() > 0.1;
-        if (result) {
-            robot.state.outtake.outtakeState = OuttakeState.DownClawShut;
-            robot.state.intake.intakeState = IntakeState.Retracted;
-            timer.resetTimer();
-        }
-        return result;
     }
 
     public boolean waitForClip() {
@@ -89,7 +70,7 @@ public class AutonomousRobot {
     }
 
     public boolean waitForTransfer() {
-        return timer.getElapsedTimeSeconds() > 0.5;
+        return timer.getElapsedTimeSeconds() > 2.5;
     }
 
     public boolean specimenStageOne() {
@@ -128,16 +109,15 @@ public class AutonomousRobot {
         return robot.drivetrain.motors.outtakePosition() < 50.0 && robot.state.outtake.outtakeState == OuttakeState.DownClawOpen;
     }
 
-    public boolean raiseSlidesForSampleDump () {
+    public void raiseSlidesForSampleDump () {
         robot.state.outtake.outtakeState = OuttakeState.DownClawShut;
-        if (timer.getElapsedTimeSeconds() > 1.0) {
-            robot.state.outtake.outtakeState = OuttakeState.UpWaitingToFlip;
-            return true;
-        }
-        return false;
+        timer.resetTimer();
     }
 
     public boolean areSlidesReadyForSampleDump() {
+        if (timer.getElapsedTimeSeconds() > 0.3) {
+            robot.state.outtake.outtakeState = OuttakeState.UpWaitingToFlip;
+        }
         return robot.state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && robot.drivetrain.motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 200.0;
     }
 

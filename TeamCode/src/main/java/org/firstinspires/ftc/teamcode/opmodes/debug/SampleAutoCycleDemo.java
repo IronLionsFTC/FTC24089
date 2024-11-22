@@ -24,8 +24,7 @@ public class SampleAutoCycleDemo extends LinearOpMode
             while (!robot.isIntakeExtended()) { robot.update(); }
             robot.closeIntakeClaw();
             while (!robot.isIntakeDone()) { robot.update(); }
-            while (!robot.waitForTransfer()) { robot.update(); }
-            while (!robot.raiseSlidesForSampleDump()) { robot.update(); }
+            robot.raiseSlidesForSampleDump();
             while (!robot.areSlidesReadyForSampleDump()) { robot.update(); }
             robot.performDump();
             while (!robot.isDumpDone()) { robot.update(); }

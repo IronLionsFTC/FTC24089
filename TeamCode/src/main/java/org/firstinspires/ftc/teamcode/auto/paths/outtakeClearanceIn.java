@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto.paths;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
-
 import org.firstinspires.ftc.teamcode.auto.constants.Points;
 
 public class outtakeClearanceIn {
