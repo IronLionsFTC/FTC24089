@@ -47,7 +47,7 @@ public class RobotParameters {
         public static final class HardwareMapNames {
             public static final String left = RobotParameters.Motors.HardwareMapNames.rightBack;
             public static final String right = RobotParameters.Motors.HardwareMapNames.leftFront;
-            public static final String sideways = RobotParameters.Motors.HardwareMapNames.rightFront;
+            public static final String sideways = RobotParameters.Motors.HardwareMapNames.leftBack;
         }
         public static final class Reversed {
             public static final boolean left = true;
@@ -56,12 +56,15 @@ public class RobotParameters {
         }
         public static final class CenterOffset_mm {
             // See diagram in LOCALIZATION.md
+            // LEFT: 153mm to the LEFT, 105mm forward
+            // RIGHT: 153mm to the RIGHT, 105mm forward
+            // SIDEWAYS [TEMPORARY, WE MIGHT CHANGE THIS]: 110mm forward, 26mm RIGHT
             public static final double leftx = 105;
-            public static final double lefty = 180;
+            public static final double lefty = 153;
             public static final double rightx = 105;
-            public static final double righty = -180;
-            public static final double sidex = -40;
-            public static final double sidey = 10;
+            public static final double righty = -153;
+            public static final double sidex = 110;
+            public static final double sidey = -26;
         }
         public static final class CenterOffset_in {
             public static final double leftx = RobotParameters.Odometry.CenterOffset_mm.leftx / 25.4;
