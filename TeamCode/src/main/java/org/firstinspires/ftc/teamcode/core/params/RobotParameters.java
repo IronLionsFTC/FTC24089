@@ -52,7 +52,7 @@ public class RobotParameters {
         public static final class Reversed {
             public static final boolean left = true;
             public static final boolean right = true;
-            public static final boolean sideways = true;
+            public static final boolean sideways = false;
         }
         public static final class CenterOffset_mm {
             // See diagram in LOCALIZATION.md
