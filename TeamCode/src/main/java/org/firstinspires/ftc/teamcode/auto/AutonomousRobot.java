@@ -42,18 +42,22 @@ public class AutonomousRobot {
     }
 
     public boolean isIntakeExtended() {
-        return robot.drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 50.0 && (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen || robot.state.intake.intakeState == IntakeState.ExtendedClawDown) && timer.getElapsedTimeSeconds() > 2.0;
+        if (robot.drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 50.0 && (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen || robot.state.intake.intakeState == IntakeState.ExtendedClawDown)) {
+            timer.resetTimer();
+            return true;
+        }
+        return false;
     }
 
     public void closeIntakeClaw() {
         if (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) robot.state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawShut;
         else robot.state.intake.intakeState = IntakeState.Grabbing;
-        timer.resetTimer();
     }
 
     public boolean isIntakeDone() {
-        if (timer.getElapsedTimeSeconds() > 0.1) {
-            if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.0) {
+        if (timer.getElapsedTimeSeconds() > 0.8) closeIntakeClaw();
+        if (timer.getElapsedTimeSeconds() > 1.2) {
+            if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.7) {
                 robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
             }
             robot.state.intake.intakeState = IntakeState.Transfer;

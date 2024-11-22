@@ -41,13 +41,12 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
             robot.update();
             follower.update();
         }
-        robot.closeIntakeClaw();
         while (!robot.isIntakeDone()) {
             robot.update();
             follower.update();
         }
         follower.followPath(this.chain.getPath(1));
-        while (!follower.atParametricEnd()) {
+        while (follower.getCurrentTValue() < 0.5) {
             robot.update();
             follower.update();
         }
@@ -77,7 +76,7 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
             follower.update();
         }
         follower.followPath(this.chain.getPath(3));
-        while (!follower.atParametricEnd()) {
+        while (follower.getCurrentTValue() < 0.5) {
             robot.update();
             follower.update();
         }
