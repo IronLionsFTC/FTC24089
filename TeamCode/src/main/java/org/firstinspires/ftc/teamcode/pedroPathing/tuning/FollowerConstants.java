@@ -63,7 +63,7 @@ public class FollowerConstants {
             0);
 
     // Feed forward constant added on to the translational PIDF
-    public static double translationalPIDFFeedForward = 0.015;
+    public static double translationalPIDFFeedForward = 0.0;
 
 
     // Heading error PIDF coefficients
@@ -74,19 +74,19 @@ public class FollowerConstants {
             0);
 
     // Feed forward constant added on to the heading PIDF
-    public static double headingPIDFFeedForward = 0.01;
+    public static double headingPIDFFeedForward = 0.0;
 
 
     // Drive PIDF coefficients
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.01, // slow, requires increase
+            0.01,
             0,
             0.0001,
             0.6,
-            0.1);
+            0);
 
     // Feed forward constant added on to the drive PIDF
-    public static double drivePIDFFeedForward = 0.01;
+    public static double drivePIDFFeedForward = 0.0;
 
     // Kalman filter parameters for the drive error Kalman filter
     public static KalmanFilterParameters driveKalmanFilterParameters = new KalmanFilterParameters(
@@ -98,7 +98,7 @@ public class FollowerConstants {
     public static double mass = 13.7;
 
     // Centripetal force to power scaling
-    public static double centripetalScaling = 0.006;
+    public static double centripetalScaling = 0.0003;
 
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
