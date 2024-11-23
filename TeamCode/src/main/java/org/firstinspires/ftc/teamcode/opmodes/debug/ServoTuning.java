@@ -28,7 +28,7 @@ public class ServoTuning extends LinearOpMode
         public static double bI = 0.0;
         public static double cD = 0.0;
 
-        public static double oP = 0.02;
+        public static double oP = 0.002;
         public static double pI = 0.0;
         public static double qD = 0.0;
 

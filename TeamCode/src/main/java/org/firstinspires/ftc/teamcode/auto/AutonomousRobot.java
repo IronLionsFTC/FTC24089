@@ -54,19 +54,20 @@ public class AutonomousRobot {
         else robot.state.intake.intakeState = IntakeState.Grabbing;
     }
 
-    public boolean isIntakeDone() {
+    public boolean isIntakeDoneGrabbing() {
         if (timer.getElapsedTimeSeconds() > 0.6) closeIntakeClaw();
         if (timer.getElapsedTimeSeconds() > 1.0) {
             if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.6) {
                 robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
             }
             robot.state.intake.intakeState = IntakeState.Transfer;
-        }
-
-        if (robot.drivetrain.motors.intakePosition() < 20.0) {
-            timer.resetTimer();
             return true;
-        } else return false;
+        }
+        return false;
+    }
+
+    public boolean isTransferReady() {
+        return robot.drivetrain.motors.intakePosition() < 20.0;
     }
 
     public boolean waitForClip() {

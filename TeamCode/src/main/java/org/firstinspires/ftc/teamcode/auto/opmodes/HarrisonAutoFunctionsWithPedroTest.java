@@ -41,17 +41,23 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
             robot.update();
             follower.update();
         }
-        while (!robot.isIntakeDone()) {
+        while (!robot.isIntakeDoneGrabbing()) {
             robot.update();
             follower.update();
         }
         follower.followPath(this.chain.getPath(1));
+        /*
         while (follower.getCurrentTValue() < 0.2) {
             robot.update();
             follower.update();
         }
+        */
+        while (!robot.isTransferReady()) {
+            robot.update();
+            follower.update();
+        }
         robot.raiseSlidesForSampleDump();
-        while (!robot.areSlidesReadyForSampleDump()) {
+        while (!(robot.areSlidesReadyForSampleDump() && follower.atParametricEnd() && robot.isTransferReady())) {
             robot.update();
             follower.update();
         }
@@ -70,17 +76,58 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
             robot.update();
             follower.update();
         }
-        while (!robot.isIntakeDone()) {
+        while (!robot.isIntakeDoneGrabbing()) {
             robot.update();
             follower.update();
         }
         follower.followPath(this.chain.getPath(3));
+        /*
         while (follower.getCurrentTValue() < 0.2) {
             robot.update();
             follower.update();
         }
+        */
+        while (!robot.isTransferReady()) {
+            robot.update();
+            follower.update();
+        }
         robot.raiseSlidesForSampleDump();
-        while (!robot.areSlidesReadyForSampleDump()) {
+        while (!(robot.areSlidesReadyForSampleDump() && follower.atParametricEnd() && robot.isTransferReady())) {
+            robot.update();
+            follower.update();
+        }
+        robot.performDump();
+        while (!robot.isDumpDone()) {
+            robot.update();
+            follower.update();
+        }
+        follower.followPath(this.chain.getPath(4));
+        while (!follower.atParametricEnd()) {
+            robot.update();
+            follower.update();
+        }
+        robot.extendIntakeForSample();
+        while (!robot.isIntakeExtended()) {
+            robot.update();
+            follower.update();
+        }
+        while (!robot.isIntakeDoneGrabbing()) {
+            robot.update();
+            follower.update();
+        }
+        follower.followPath(this.chain.getPath(5));
+        /*
+        while (follower.getCurrentTValue() < 0.2) {
+            robot.update();
+            follower.update();
+        }
+        */
+        while (!robot.isTransferReady()) {
+            robot.update();
+            follower.update();
+        }
+        robot.raiseSlidesForSampleDump();
+        while (!(robot.areSlidesReadyForSampleDump() && follower.atParametricEnd() && robot.isTransferReady())) {
             robot.update();
             follower.update();
         }

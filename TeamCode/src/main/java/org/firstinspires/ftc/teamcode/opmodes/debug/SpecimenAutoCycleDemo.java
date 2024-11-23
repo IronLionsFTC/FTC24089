@@ -23,7 +23,8 @@ public class SpecimenAutoCycleDemo extends LinearOpMode
             robot.extendIntakeForSpecimen();
             while (!robot.isIntakeExtended()) { robot.update(); }
             robot.closeIntakeClaw();
-            while (!robot.isIntakeDone()) { robot.update(); }
+            while (!robot.isIntakeDoneGrabbing()) { robot.update(); }
+            while (!robot.isTransferReady()) { robot.update(); }
             while (!robot.waitForTransfer()) { robot.update(); }
             while (!robot.specimenStageOne()) { robot.update(); }
             while (!robot.outtakeStageReady()) { robot.update(); }
