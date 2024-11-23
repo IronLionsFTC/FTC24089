@@ -14,6 +14,7 @@ public class Paths {
     public static PathChain harrison_test = org.firstinspires.ftc.teamcode.auto.paths.harrison_test_for_auto_functions.path();
     public static PathChain outtakeClearanceIn = org.firstinspires.ftc.teamcode.auto.paths.outtakeClearanceIn.path();
     public static PathChain outtakeClearanceOut = org.firstinspires.ftc.teamcode.auto.paths.outtakeClearanceOut.path();
+    public static PathChain zeroPlusTwo = org.firstinspires.ftc.teamcode.auto.paths.zeroPlusTwo.path();
 
     public static class yellow_spike {
         public static PathChain BOTTOM = org.firstinspires.ftc.teamcode.auto.paths.yellow_spike.BOTTOM.path();

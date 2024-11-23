@@ -63,8 +63,8 @@ public class RobotParameters {
             public static final double lefty = 153;
             public static final double rightx = 105;
             public static final double righty = -153;
-            public static final double sidex = 110;
-            public static final double sidey = -26;
+            public static final double sidex = 120;
+            public static final double sidey = 0;
         }
         public static final class CenterOffset_in {
             public static final double leftx = RobotParameters.Odometry.CenterOffset_mm.leftx / 25.4;

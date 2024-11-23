@@ -56,24 +56,24 @@ public class ThreeWheelLocalizer extends Localizer {
     private Pose strafeEncoderPose;
     private double totalHeading;
 
-    // Trial 1: 0.002019790441003146
-    // Trial 2: 0.0023487855204390616
-    // Trial 3: 0.0020531745288124323
-    // Average: 0.00214058349
-    public static double FORWARD_TICKS_TO_INCHES = 0.00214058349;//8192 * 1.37795 * 2 * Math.PI * 0.5008239963;
+    // Trial 1: 0.0018517514665361604
+    // Trial 2: 0.0018564252382059227
+    // Trial 3: 0.0018561700969959188
+    // Average: 0.00185478226
+    public static double FORWARD_TICKS_TO_INCHES = 0.00185478226;
 
-    // Trial 1: 0.0035183953542951233
-    // Trial 2: 0.00297339356148544
-    // Trial 3: 0.002880738951420881
+    // Trial 1: 0.0027757439050792696
+    // Trial 2: 0.0027762001231266325
+    // Trial 3: 0.0027670464849307674
     // Disregard Trial 1 as OUTLIER
-    // Average: 0.00292706625
-    public static double STRAFE_TICKS_TO_INCHES = 0.00292706625;//8192 * 1.37795 * 2 * Math.PI * 0.5018874659;
+    // Average: 0.00277299683
+    public static double STRAFE_TICKS_TO_INCHES = 0.00277299683;
 
-    // Trial 1: 0.0019231470296365244
-    // Trial 2: 0.0019321795764369483
-    // Trial 3: 0.0019280946301865405
-    // Average: 0.00192780707
-    public static double TURN_TICKS_TO_RADIANS = 0.00192780707; //0.0019690669106655003;//8192 * 1.37795 * 2 * Math.PI * 0.5;
+    // Trial 1: 0.00192480972096053
+    // Trial 2: 0.0019203660117841045
+    // Trial 3: 0.0019244182408728854
+    // Average: 0.00192319799
+    public static double TURN_TICKS_TO_RADIANS = 0.00192319799;
 
 
     /**
