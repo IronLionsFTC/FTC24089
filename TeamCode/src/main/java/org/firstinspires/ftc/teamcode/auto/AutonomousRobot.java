@@ -26,12 +26,12 @@ public class AutonomousRobot {
         return follower.getCurrentTValue() > 0.5;
     }
 
-    public boolean isAtEndOfPath() {
+    public boolean atPathEnd() {
         return follower.getCurrentTValue() > 0.99;
     }
 
     public boolean isAtEndOfPathAndNotMoving() {
-        return isAtEndOfPath() && follower.getVelocityMagnitude() < 0.01;
+        return atPathEnd() && follower.getVelocityMagnitude() < 0.01;
     }
 
     @Config

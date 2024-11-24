@@ -36,7 +36,7 @@ public class ZeroPlusTwo extends OpMode {
         while (robot.isHalfWayThere()) robot.update();
         // Start extending intake, but then keep driving and extending until at sample AND intake is extended
         robot.extendIntakeForSample();
-        while (!(robot.isIntakeExtended() && robot.isAtEndOfPath())) robot.update();
+        while (!(robot.isIntakeExtended() && robot.atPathEnd())) robot.update();
         // Then grab the sample
         while (!robot.isIntakeDoneGrabbing()) robot.update();
         // Once sample is grabbed, we can drive over to the basket
@@ -44,14 +44,14 @@ public class ZeroPlusTwo extends OpMode {
         while (!robot.isTransferReady()) robot.update();
         // Make sure we are at the basket, with the outtake up, before dumping
         robot.raiseSlidesForSampleDump();
-        while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
+        while (!(robot.areSlidesReadyForSampleDump() && robot.atPathEnd() && robot.isTransferReady())) robot.update();
         // Perform the dump and wait for it to finish before moving on
         robot.performDump();
         while (!robot.isDumpDone()) robot.update();
         // Start moving towards the second sample, this is really close so immediately extend intake
         follower.followPath(this.chain.getPath(2));
         robot.extendIntakeForSample();
-        while (!(robot.isAtEndOfPath() && robot.isIntakeExtended())) robot.update();
+        while (!(robot.atPathEnd() && robot.isIntakeExtended())) robot.update();
         // Wait for intake to grab
         while (!robot.isIntakeDoneGrabbing()) robot.update();
         // Head back to the basket while retracting intake
@@ -59,7 +59,7 @@ public class ZeroPlusTwo extends OpMode {
         while (!robot.isTransferReady()) robot.update();
         // Raise the slides, but wait until the robot is ready before dumping
         robot.raiseSlidesForSampleDump();
-        while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
+        while (!(robot.areSlidesReadyForSampleDump() && robot.atPathEnd() && robot.isTransferReady())) robot.update();
         robot.performDump();
         while (!robot.isDumpDone()) robot.update();
         // Now drive over to the basket and finish
