@@ -109,6 +109,11 @@ public class AutonomousRobot extends SubsystemBase {
         return false;
     }
 
+    public void retractIntake() {
+        robot.state.intake.intakeState = IntakeState.Transfer;
+        robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
+    }
+
     public boolean isTransferReady() {
         return robot.drivetrain.motors.intakePosition() < 20.0;
     }

@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 
 public class ExtendIntakeToGripSpecimen extends CommandBase {
-    private AutonomousRobot robot;
+    private final AutonomousRobot robot;
 
     public ExtendIntakeToGripSpecimen(AutonomousRobot autonomousRobot) {
         robot = autonomousRobot;

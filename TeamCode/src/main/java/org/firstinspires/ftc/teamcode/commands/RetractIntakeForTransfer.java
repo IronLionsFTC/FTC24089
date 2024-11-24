@@ -3,22 +3,23 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
+import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 
-public class ExtendIntakeToGripSample extends CommandBase {
+public class RetractIntakeForTransfer extends CommandBase {
     private final AutonomousRobot robot;
 
-    public ExtendIntakeToGripSample(AutonomousRobot autonomousRobot) {
+    public RetractIntakeForTransfer(AutonomousRobot autonomousRobot) {
         robot = autonomousRobot;
         addRequirements(robot);
     }
 
     @Override
     public void initialize() {
-        robot.extendIntakeForSample();
+        robot.retractIntake();
     }
 
     @Override
     public boolean isFinished() {
-        return robot.isIntakeExtended();
+        return robot.isTransferReady();
     }
 }
