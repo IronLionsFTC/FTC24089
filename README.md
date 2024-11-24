@@ -11,3 +11,6 @@ We are a small Australian team based out in the Sunshine Coast. \
 | Taha | [@paradoxiscoding](https://github.com/paradoxiscoding) | Team coordinator<br>Build team |
 | Rowan | [@SolemenF](https://github.com/solemenf) | Outreach, logistics, portfolio, documentation |
 | Jett |   | CAD, 3D printing, assembly |
+
+## Previous versions
+[Regionals](https://github.com/IronLionsFTC/FTC24089/tree/a0c195771a78885c46364d722805ee918ece5e54)
