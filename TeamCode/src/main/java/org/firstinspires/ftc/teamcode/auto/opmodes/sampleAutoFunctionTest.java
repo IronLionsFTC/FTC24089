@@ -27,7 +27,7 @@ public class sampleAutoFunctionTest extends OpMode {
     @Override
     public void start() {
         this.follower.update();
-        this.follower.followPath(this.chain.getPath(this.stage));
+        this.follower.followPath(this.chain.getPath(this.stage), true);
     }
 
     @Override
@@ -36,29 +36,29 @@ public class sampleAutoFunctionTest extends OpMode {
         robot.extendIntakeForSample();
         while (!robot.isIntakeExtended()) robot.update();
         while (!robot.isIntakeDoneGrabbing()) robot.update();
-        follower.followPath(this.chain.getPath(1));
+        follower.followPath(this.chain.getPath(1), true);
         while (!robot.isTransferReady()) robot.update();
         robot.raiseSlidesForSampleDump();
         while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
         robot.performDump();
         while (!robot.isDumpDone()) robot.update();
-        follower.followPath(this.chain.getPath(2));
+        follower.followPath(this.chain.getPath(2), true);
         while (!robot.isAtEndOfPath()) robot.update();
         robot.extendIntakeForSample();
         while (!robot.isIntakeExtended()) robot.update();
         while (!robot.isIntakeDoneGrabbing()) robot.update();
-        follower.followPath(this.chain.getPath(3));
+        follower.followPath(this.chain.getPath(3), true);
         while (!robot.isTransferReady()) robot.update();
         robot.raiseSlidesForSampleDump();
         while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
         robot.performDump();
         while (!robot.isDumpDone()) robot.update();
-        follower.followPath(this.chain.getPath(4));
+        follower.followPath(this.chain.getPath(4), true);
         while (!robot.isAtEndOfPath()) robot.update();
         robot.extendIntakeForSample();
         while (!robot.isIntakeExtended()) robot.update();
         while (!robot.isIntakeDoneGrabbing()) robot.update();
-        follower.followPath(this.chain.getPath(5));
+        follower.followPath(this.chain.getPath(5), true);
         while (!robot.isTransferReady()) robot.update();
         robot.raiseSlidesForSampleDump();
         while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
