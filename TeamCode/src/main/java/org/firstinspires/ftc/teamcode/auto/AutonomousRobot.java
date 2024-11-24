@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,14 +13,20 @@ import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
-public class AutonomousRobot {
+public class AutonomousRobot extends SubsystemBase {
     public Robot robot;
-    public Timer timer = new Timer();
+    public Timer intakeTimer = new Timer();
+    public Timer outtakeTimer = new Timer();
     public Follower follower;
 
     public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f) {
         robot = new Robot(hardwareMap, t, null, null, Team.Red);
         follower = f;
+    }
+
+    @Override
+    public void periodic() {
+        this.update();
     }
 
     public boolean isHalfWayThere() {
@@ -41,7 +48,7 @@ public class AutonomousRobot {
 
     public void update() {
         if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown) {
-            if (timer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
+            if (outtakeTimer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
         }
         follower.update();
         robot.telemetry.update();
@@ -61,17 +68,17 @@ public class AutonomousRobot {
 
     public void extendIntakeForSpecimen() {
         robot.state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawOpen;
-        timer.resetTimer();
+        intakeTimer.resetTimer();
     }
 
     public void extendIntakeForSample() {
         robot.state.intake.intakeState = IntakeState.ExtendedClawDown;
-        timer.resetTimer();
+        intakeTimer.resetTimer();
     }
 
     public boolean isIntakeExtended() {
         if (robot.drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 50.0 && (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen || robot.state.intake.intakeState == IntakeState.ExtendedClawDown)) {
-            timer.resetTimer();
+            intakeTimer.resetTimer();
             return true;
         }
         return false;
@@ -83,16 +90,16 @@ public class AutonomousRobot {
     }
 
     public boolean isIntakeDoneGrabbing() {
-        if (timer.getElapsedTimeSeconds() > 0.6 && robot.state.intake.intakeState == IntakeState.ExtendedClawDown) closeIntakeClaw();
-        if (timer.getElapsedTimeSeconds() > 1.0 && robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) closeIntakeClaw();
-        if (timer.getElapsedTimeSeconds() > 1.0 && robot.state.intake.intakeState == IntakeState.Grabbing) {
+        if (intakeTimer.getElapsedTimeSeconds() > 0.6 && robot.state.intake.intakeState == IntakeState.ExtendedClawDown) closeIntakeClaw();
+        if (intakeTimer.getElapsedTimeSeconds() > 1.0 && robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) closeIntakeClaw();
+        if (intakeTimer.getElapsedTimeSeconds() > 1.0 && robot.state.intake.intakeState == IntakeState.Grabbing) {
             if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.6) {
                 robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
             }
             robot.state.intake.intakeState = IntakeState.Transfer;
             return true;
         }
-        if (timer.getElapsedTimeSeconds() > 2.0 && robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut) {
+        if (intakeTimer.getElapsedTimeSeconds() > 2.0 && robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut) {
             if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.6) {
                 robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
             }
@@ -107,57 +114,22 @@ public class AutonomousRobot {
     }
 
     public boolean isClipDone() {
-        if (timer.getElapsedTimeSeconds() > 3.0 || robot.drivetrain.motors.outtakePosition() > AutonomousTune.outtakeHeightToCancel) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 3.0 || robot.drivetrain.motors.outtakePosition() > AutonomousTune.outtakeHeightToCancel) {
             robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimentGoingDown; // Set state here to be idiot proof [will always stop the slides]
-            timer.resetTimer();
+            outtakeTimer.resetTimer();
             return true;
         }
         return false;
-    }
-
-    public boolean waitForTransfer() {
-        return timer.getElapsedTimeSeconds() > 2.5;
-    }
-
-    public boolean specimenStageOne() {
-        if (timer.getElapsedTimeSeconds() > 0.3) {
-            timer.resetTimer();
-            robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean outtakeStageReady() {
-        return timer.getElapsedTimeSeconds() > 1.5;
-    }
-
-    public void specimenStageTwo() {
-        timer.resetTimer();
-        robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenFlipped;
     }
 
     public void specimenClip() {
-        timer.resetTimer();
+        outtakeTimer.resetTimer();
         robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenOnBar;
-    }
-
-    public void specimenStageThree() {
-        timer.resetTimer();
-        robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimentGoingDown;
-    }
-
-    public void endSpecimenCycle() {
-        robot.state.outtake.outtakeState = OuttakeState.DownClawOpen;
-    }
-
-    public boolean specimenCycleDone() {
-        return robot.drivetrain.motors.outtakePosition() < 50.0 && robot.state.outtake.outtakeState == OuttakeState.DownClawOpen;
     }
 
     public void raiseSlidesForSampleDump () {
         robot.state.outtake.outtakeState = OuttakeState.DownClawShut;
-        timer.resetTimer();
+        outtakeTimer.resetTimer();
     }
 
     public void raiseSlidesForSpecimenDump () {
@@ -165,35 +137,35 @@ public class AutonomousRobot {
     }
 
     public boolean areSlidesReadyForSampleDump() {
-        if (timer.getElapsedTimeSeconds() > 0.3) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 0.3) {
             robot.state.outtake.outtakeState = OuttakeState.UpWaitingToFlip;
         }
         return robot.state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && robot.drivetrain.motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 200.0;
     }
 
     public boolean areSlidesReadyForSpecimenDump() {
-        if (timer.getElapsedTimeSeconds() > 0.3) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 0.3) {
             robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
         }
-        if (timer.getElapsedTimeSeconds() > 0.7) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 0.7) {
             robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenFlipped;
         }
-        return timer.getElapsedTimeSeconds() > 1.5;
+        return outtakeTimer.getElapsedTimeSeconds() > 1.5;
     }
 
     public void performDump() {
-        timer.resetTimer();
+        outtakeTimer.resetTimer();
         robot.state.outtake.outtakeState = OuttakeState.UpFlipped;
     }
 
     public boolean isDumpDone() {
-        if (timer.getElapsedTimeSeconds() > 0.5) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 0.5) {
             robot.state.outtake.outtakeState = OuttakeState.UpClawOpen;
         }
-        if (timer.getElapsedTimeSeconds() > 0.7) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 0.7) {
             robot.state.outtake.outtakeState = OuttakeState.UpWaitingToGoDown;
         }
-        if (timer.getElapsedTimeSeconds() > 1.2) {
+        if (outtakeTimer.getElapsedTimeSeconds() > 1.2) {
             robot.state.outtake.outtakeState = OuttakeState.DownClawOpen;
             return true;
         }
