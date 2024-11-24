@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
-@Autonomous(name = "ZeroPlusTwo", group = "Testing")
-public class ZeroPlusTwo extends OpMode {
+@Autonomous(name = "sampleAutoTest", group = "Testing")
+public class sampleAutoFunctionTest extends OpMode {
     public PathChain chain;
     public Follower follower;
     public AutonomousRobot robot;
@@ -20,8 +20,8 @@ public class ZeroPlusTwo extends OpMode {
     public void init() {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
-        this.follower.setStartingPose(new Pose(9.757, 84.983, 0.0));
-        this.chain = Paths.zeroPlusTwo;
+        this.follower.setStartingPose(new Pose(0.0, 0.0, 0.0));
+        this.chain = Paths.harrison_test;
     }
 
     @Override
@@ -32,39 +32,38 @@ public class ZeroPlusTwo extends OpMode {
 
     @Override
     public void loop() {
-        // Drive to the first pre-placed sample, start extending intake early
-        while (robot.isHalfWayThere()) robot.update();
-        // Start extending intake, but then keep driving and extending until at sample AND intake is extended
+        while (follower.getCurrentTValue() < 0.5) follower.update();
         robot.extendIntakeForSample();
-        while (!(robot.isIntakeExtended() && robot.isAtEndOfPath())) robot.update();
-        // Then grab the sample
+        while (!robot.isIntakeExtended()) robot.update();
         while (!robot.isIntakeDoneGrabbing()) robot.update();
-        // Once sample is grabbed, we can drive over to the basket
         follower.followPath(this.chain.getPath(1));
         while (!robot.isTransferReady()) robot.update();
-        // Make sure we are at the basket, with the outtake up, before dumping
         robot.raiseSlidesForSampleDump();
         while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
-        // Perform the dump and wait for it to finish before moving on
         robot.performDump();
         while (!robot.isDumpDone()) robot.update();
-        // Start moving towards the second sample, this is really close so immediately extend intake
         follower.followPath(this.chain.getPath(2));
+        while (!robot.isAtEndOfPath()) robot.update();
         robot.extendIntakeForSample();
-        while (!(robot.isAtEndOfPath() && robot.isIntakeExtended())) robot.update();
-        // Wait for intake to grab
+        while (!robot.isIntakeExtended()) robot.update();
         while (!robot.isIntakeDoneGrabbing()) robot.update();
-        // Head back to the basket while retracting intake
         follower.followPath(this.chain.getPath(3));
         while (!robot.isTransferReady()) robot.update();
-        // Raise the slides, but wait until the robot is ready before dumping
         robot.raiseSlidesForSampleDump();
         while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
         robot.performDump();
         while (!robot.isDumpDone()) robot.update();
-        // Now drive over to the basket and finish
         follower.followPath(this.chain.getPath(4));
-        while (!follower.atParametricEnd()) robot.update();
+        while (!robot.isAtEndOfPath()) robot.update();
+        robot.extendIntakeForSample();
+        while (!robot.isIntakeExtended()) robot.update();
+        while (!robot.isIntakeDoneGrabbing()) robot.update();
+        follower.followPath(this.chain.getPath(5));
+        while (!robot.isTransferReady()) robot.update();
+        robot.raiseSlidesForSampleDump();
+        while (!(robot.areSlidesReadyForSampleDump() && robot.isAtEndOfPath() && robot.isTransferReady())) robot.update();
+        robot.performDump();
+        while (!robot.isDumpDone()) robot.update();
         terminateOpModeNow();
     }
 }
