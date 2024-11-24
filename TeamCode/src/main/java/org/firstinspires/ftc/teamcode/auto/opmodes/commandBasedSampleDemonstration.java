@@ -4,11 +4,13 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
 import org.firstinspires.ftc.teamcode.commands.Commands;
+import org.firstinspires.ftc.teamcode.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -30,12 +32,16 @@ public class commandBasedSampleDemonstration extends CommandOpMode {
             new RunCommand(robot::update),
             new SequentialCommandGroup(
                     new WaitUntilCommand(this::opModeIsActive),
-                    Commands.ExtendIntakeToGripSample(robot),
+                    Commands.followPath(follower, chain.getPath(0)).alongWith(
+                            Commands.ExtendIntakeToGripSample(robot)
+                    ),
                     Commands.GrabGameObjectWithIntake(robot),
-                    Commands.RetractIntakeForTransfer(robot),
-                    Commands.RaiseSlidesForSampleDump(robot),
-                    Commands.DumpSample(robot),
-                    new InstantCommand(this::terminateOpModeNow)
+                    Commands.RetractIntakeForTransfer(robot).alongWith(
+                            Commands.followPath(follower, chain.getPath(1))
+                    ).andThen(
+                        Commands.RaiseSlidesForSampleDump(robot)
+                    ),
+                    Commands.DumpSample(robot)
             )
         );
     }

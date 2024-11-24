@@ -13,7 +13,10 @@ public class GrabGameObjectWithIntake extends CommandBase {
         addRequirements(robot);
     }
 
-    // No initialise because it waits BEFORE doing anything.
+    @Override
+    public void initialize() {
+        robot.intakeTimer.resetTimer();
+    }
 
     @Override
     public void execute() {
