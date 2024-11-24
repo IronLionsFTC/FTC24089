@@ -25,6 +25,9 @@ public class AutonomousRobot {
     }
 
     public void update() {
+        if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown) {
+            if (timer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
+        }
         robot.drivetrain.moveIntake(0.5);
         robot.drivetrain.moveOuttake(0.8);
         robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, 0.64, 0.0);
@@ -55,8 +58,16 @@ public class AutonomousRobot {
     }
 
     public boolean isIntakeDoneGrabbing() {
-        if (timer.getElapsedTimeSeconds() > 0.6) closeIntakeClaw();
-        if (timer.getElapsedTimeSeconds() > 1.0) {
+        if (timer.getElapsedTimeSeconds() > 0.6 && robot.state.intake.intakeState == IntakeState.ExtendedClawDown) closeIntakeClaw();
+        if (timer.getElapsedTimeSeconds() > 1.0 && robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) closeIntakeClaw();
+        if (timer.getElapsedTimeSeconds() > 1.0 && robot.state.intake.intakeState == IntakeState.Grabbing) {
+            if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.6) {
+                robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
+            }
+            robot.state.intake.intakeState = IntakeState.Transfer;
+            return true;
+        }
+        if (timer.getElapsedTimeSeconds() > 2.0 && robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut) {
             if (robot.state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 2.6) {
                 robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
             }
@@ -70,8 +81,13 @@ public class AutonomousRobot {
         return robot.drivetrain.motors.intakePosition() < 20.0;
     }
 
-    public boolean waitForClip() {
-        return timer.getElapsedTimeSeconds() > 3.0 || robot.drivetrain.motors.outtakePosition() > AutonomousTune.outtakeHeightToCancel;
+    public boolean isClipDone() {
+        if (timer.getElapsedTimeSeconds() > 3.0 || robot.drivetrain.motors.outtakePosition() > AutonomousTune.outtakeHeightToCancel) {
+            robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimentGoingDown; // Set state here to be idiot proof [will always stop the slides]
+            timer.resetTimer();
+            return true;
+        }
+        return false;
     }
 
     public boolean waitForTransfer() {
@@ -119,11 +135,25 @@ public class AutonomousRobot {
         timer.resetTimer();
     }
 
+    public void raiseSlidesForSpecimenDump () {
+        raiseSlidesForSampleDump(); // Same first step, just named differently to avoid confusion
+    }
+
     public boolean areSlidesReadyForSampleDump() {
         if (timer.getElapsedTimeSeconds() > 0.3) {
             robot.state.outtake.outtakeState = OuttakeState.UpWaitingToFlip;
         }
         return robot.state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && robot.drivetrain.motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 200.0;
+    }
+
+    public boolean areSlidesReadyForSpecimenDump() {
+        if (timer.getElapsedTimeSeconds() > 0.3) {
+            robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
+        }
+        if (timer.getElapsedTimeSeconds() > 0.7) {
+            robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenFlipped;
+        }
+        return timer.getElapsedTimeSeconds() > 1.5;
     }
 
     public void performDump() {
