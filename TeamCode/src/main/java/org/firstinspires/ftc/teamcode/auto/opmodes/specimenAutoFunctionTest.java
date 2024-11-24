@@ -8,9 +8,7 @@ import org.firstinspires.ftc.teamcode.auto.paths.Paths;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierPoint;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
 @Autonomous(name = "specimenAutoTest", group = "Testing")
 public class specimenAutoFunctionTest extends OpMode {
@@ -38,7 +36,7 @@ public class specimenAutoFunctionTest extends OpMode {
         while (!robot.isHalfWayThere()) robot.update();
         // Start extending intake, but then keep driving and extending until at sample AND intake is extended
         robot.extendIntakeForSpecimen();
-        while (!(robot.isIntakeExtended() && robot.isAtEndOfPath())) robot.update();
+        while (!(robot.isIntakeExtended() && robot.atPathEnd())) robot.update();
         // Then grab the sample
         while (!robot.isIntakeDoneGrabbing()) robot.update();
         // Once sample is grabbed, we can drive over to the basket
@@ -46,7 +44,7 @@ public class specimenAutoFunctionTest extends OpMode {
         while (!robot.isTransferReady()) robot.update();
         // Make sure we are at the basket, with the outtake up, before dumping
         robot.raiseSlidesForSpecimenDump();
-        while (!(robot.areSlidesReadyForSpecimenDump() && robot.isAtEndOfPath() && robot.isTransferReady())) {
+        while (!(robot.areSlidesReadyForSpecimenDump() && robot.atPathEnd() && robot.isTransferReady())) {
             robot.robot.telemetry.addData("atEnd", follower.atParametricEnd());
             robot.robot.telemetry.addData("isBusy", follower.isBusy());
             robot.robot.telemetry.addData("TV", follower.getCurrentTValue());
