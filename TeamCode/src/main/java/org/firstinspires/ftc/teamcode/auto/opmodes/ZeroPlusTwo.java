@@ -19,7 +19,7 @@ public class ZeroPlusTwo extends OpMode {
     @Override
     public void init() {
         this.follower = new Follower(hardwareMap);
-        this.robot = new AutonomousRobot(telemetry, hardwareMap);
+        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(9.757, 84.983, 0.0));
         this.chain = Paths.zeroPlusTwo;
     }

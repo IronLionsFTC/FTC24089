@@ -19,7 +19,7 @@ public class HarrisonAutoFunctionsWithPedroTest extends OpMode {
     @Override
     public void init() {
         this.follower = new Follower(hardwareMap);
-        this.robot = new AutonomousRobot(telemetry, hardwareMap);
+        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(0.0, 0.0, 0.0));
         this.chain = Paths.harrison_test;
     }

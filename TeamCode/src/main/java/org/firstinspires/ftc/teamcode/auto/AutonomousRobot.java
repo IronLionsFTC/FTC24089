@@ -9,14 +9,29 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
+import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class AutonomousRobot {
     public Robot robot;
     public Timer timer = new Timer();
+    public Follower follower;
 
-    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap) {
+    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f) {
         robot = new Robot(hardwareMap, t, null, null, Team.Red);
+        follower = f;
+    }
+
+    public boolean isHalfWayThere() {
+        return follower.getCurrentTValue() > 0.5;
+    }
+
+    public boolean isAtEndOfPath() {
+        return follower.getCurrentTValue() > 0.99;
+    }
+
+    public boolean isAtEndOfPathAndNotMoving() {
+        return isAtEndOfPath() && follower.getVelocityMagnitude() < 0.01;
     }
 
     @Config
@@ -28,10 +43,20 @@ public class AutonomousRobot {
         if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown) {
             if (timer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
         }
+        follower.update();
+        robot.telemetry.update();
         robot.drivetrain.moveIntake(0.5);
         robot.drivetrain.moveOuttake(0.8);
         robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, 0.64, 0.0);
         robot.drivetrain.motors.setOtherPowers();
+    }
+
+    public void logDouble(String description, double value) {
+        robot.telemetry.addData(description, value);
+    }
+
+    public void logBool(String description, boolean value) {
+        robot.telemetry.addData(description, value);
     }
 
     public void extendIntakeForSpecimen() {
