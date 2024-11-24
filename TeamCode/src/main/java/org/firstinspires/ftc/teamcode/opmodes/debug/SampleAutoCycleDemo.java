@@ -13,22 +13,12 @@ public class SampleAutoCycleDemo extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        AutonomousRobot robot = new AutonomousRobot(telemetry, hardwareMap);
         if (isStopRequested()) return;
         waitForStart();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         while (opModeIsActive()) {
-            robot.extendIntakeForSample();
-            while (!robot.isIntakeExtended()) { robot.update(); }
-            robot.closeIntakeClaw();
-            while (!robot.isIntakeDoneGrabbing()) { robot.update(); }
-            while (!robot.isTransferReady()) { robot.update(); }
-            robot.raiseSlidesForSampleDump();
-            while (!robot.areSlidesReadyForSampleDump()) { robot.update(); }
-            robot.performDump();
-            while (!robot.isDumpDone()) { robot.update(); }
             terminateOpModeNow();
         }
     }

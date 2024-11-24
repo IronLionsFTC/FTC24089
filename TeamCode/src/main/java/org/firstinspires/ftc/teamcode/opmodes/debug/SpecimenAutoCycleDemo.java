@@ -13,7 +13,6 @@ public class SpecimenAutoCycleDemo extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        AutonomousRobot robot = new AutonomousRobot(telemetry, hardwareMap);
         if (isStopRequested()) return;
         waitForStart();
 
