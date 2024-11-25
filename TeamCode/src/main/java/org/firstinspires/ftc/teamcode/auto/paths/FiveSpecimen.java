@@ -15,14 +15,14 @@ public class FiveSpecimen {
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(635,300);
+    private static final Point dump1 = pointmm(615,300);
     private static final Point int1 = pointmm(550,-650);
     private static final Point hook1_1 = pointmm(1100, -650);
-    private static final Point hook1_2 = pointmm(1100, -770);
-    private static final Point push1 = pointmm(200, -770);
-    private static final Point hook2_1 = pointmm(1100, -920);
-    private static final Point hook2_2 = pointmm(1100, -1070);
-    private static final Point push2 = pointmm(200, -1070);
+    private static final Point hook1_2 = pointmm(1100, -710);
+    private static final Point push1 = pointmm(200, -740);
+    private static final Point hook2_1 = pointmm(1100, -810);
+    private static final Point hook2_2 = pointmm(1100, -870);
+    private static final Point push2 = pointmm(200, -950);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
