@@ -7,4 +7,5 @@ public class Paths {
     public static PathChain zeroPlusFour = ZeroPlusFour.path();
 
     public static PathChain fiveSpecimen = FiveSpecimen.path();
+    public static PathChain fourPlusZero = FourPlusZero.path();
 }

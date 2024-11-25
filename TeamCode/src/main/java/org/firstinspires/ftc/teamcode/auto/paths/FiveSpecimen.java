@@ -27,25 +27,25 @@ public class FiveSpecimen {
                                 start,
                                 dump1
                         )
-                ).setConstantHeadingInterpolation(0)
+                ).setConstantHeadingInterpolation(rad(180))
                 .addPath(
                         new BezierLine(
                                 dump1,
                                 int1
                         )
-                ).setLinearHeadingInterpolation(0,rad(90))
+                ).setLinearHeadingInterpolation(rad(180),rad(-90))
                 .addPath(
                         new BezierLine(
                                 int1,
                                 hook1
                         )
-                ).setLinearHeadingInterpolation(rad(90), rad(90))
+                ).setLinearHeadingInterpolation(rad(-90), rad(-90))
                 .addPath(
                         new BezierLine(
                                 hook1,
                                 push1
                         )
-                ).setLinearHeadingInterpolation(rad(90),0)
+                ).setLinearHeadingInterpolation(rad(-90),rad(180))
 
                 .build();
     }

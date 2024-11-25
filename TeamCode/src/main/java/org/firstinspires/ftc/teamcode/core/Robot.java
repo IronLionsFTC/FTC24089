@@ -127,7 +127,7 @@ public class Robot {
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;
                     break;
                 case UpWithSpecimenWaitingToFlip: case UpWithSpecimenFlipped: case UpWithSpecimentGoingDown:
-                    if (auto) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar - 80;
+                    if (auto) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar - 20;
                     else slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
                     break;
                 case UpWithSpecimenOnBar:

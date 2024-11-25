@@ -23,7 +23,7 @@ public class FiveSpecimen extends CommandOpMode {
     public void initialize() {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
-        this.follower.setStartingPose(new Pose(0, 0, 0));
+        this.follower.setStartingPose(new Pose(0, 0, Math.PI));
         this.chain = Paths.fiveSpecimen; // This is also a valid path for a simple sample run, just forwards then back
 
         schedule(
