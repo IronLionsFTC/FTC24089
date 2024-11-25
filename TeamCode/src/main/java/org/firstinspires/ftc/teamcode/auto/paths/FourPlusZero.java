@@ -77,17 +77,29 @@ public class FourPlusZero {
                 .addPath(
                     new BezierLine(
                             new Point(-48.4, 47.4, Point.CARTESIAN),
-                            new Point(-28.4, 20.0, Point.CARTESIAN)
+                            new Point(-15, 20, Point.CARTESIAN)
                     )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(45))
                 .addPath(
-                new BezierLine(
-                        new Point(-28.4, 20, Point.CARTESIAN),
-                        new Point(-25.6, 4.0, Point.CARTESIAN)
+                    new BezierLine(
+                            new Point(-20, 15, Point.CARTESIAN),
+                            new Point(-25.6, 5.0, Point.CARTESIAN)
+                    )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath( new BezierLine(
+                        new Point(-25.6, 5, Point.CARTESIAN),
+                        new Point(-20, 15.0, Point.CARTESIAN)
                 )
         )
-                .setConstantHeadingInterpolation(Math.toRadians(45));
+                .setConstantHeadingInterpolation(Math.toRadians(45))
+                .addPath( new BezierLine(
+                        new Point(-20, 15.0, Point.CARTESIAN),
+                        new Point(-25.6, -5, Point.CARTESIAN)
+                )
+        )
+                .setConstantHeadingInterpolation(Math.toRadians(0));
         return builder.build();
     }
 }

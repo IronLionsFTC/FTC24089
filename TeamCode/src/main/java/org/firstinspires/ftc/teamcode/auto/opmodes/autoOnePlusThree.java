@@ -35,7 +35,9 @@ public class autoOnePlusThree extends CommandOpMode {
                     ).andThen(Commands.sleep(800)),
                     Commands.ClipSpecimen(robot),
                     Commands.followPath(follower, chain.getPath(1)).alongWith(
-                            Commands.ExtendIntakeToGripSample(robot)
+                            Commands.sleep(1000).andThen(
+                                    Commands.ExtendIntakeToGripSample(robot)
+                            )
                     ),
                     Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot).alongWith(

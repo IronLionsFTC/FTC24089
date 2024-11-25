@@ -23,6 +23,7 @@ public class Commands {
     // Pedro Pathing
     public static Command followPath(Follower follower, PathChain path) { return new FollowPathCommand(follower, path); }
     public static Command followPath(Follower follower, Path path) { return new FollowPathCommand(follower, path).andThen(new WaitCommand(300)); }
+    public static Command fastPath(Follower follower, Path path) { return new FollowPathFast(follower, path); }
 
     // Intake Commands ---------------------------------------------------------------------------------------------------
 

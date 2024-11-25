@@ -30,19 +30,36 @@ public class FourPlusZero extends CommandOpMode {
                 new RunCommand(robot::update),
                 new SequentialCommandGroup(
                         Commands.followPath(follower, chain.getPath(0)).alongWith(
+                                Commands.RaiseSlidesForSpecimenDump(robot).andThen(Commands.sleep(800))
+                        ),
+                        Commands.ClipSpecimen(robot),
+                        Commands.fastPath(follower, chain.getPath(1)),
+                        Commands.fastPath(follower, chain.getPath(2)),
+                        Commands.fastPath(follower, chain.getPath(3)),
+                        Commands.fastPath(follower, chain.getPath(4)),
+                        Commands.fastPath(follower, chain.getPath(5)),
+                        Commands.fastPath(follower, chain.getPath(6)),
+                        Commands.fastPath(follower, chain.getPath(7)),
+                        Commands.fastPath(follower, chain.getPath(8)),
+                        Commands.followPath(follower, chain.getPath(9)),
+                        Commands.ExtendIntakeToGripSpecimen(robot),
+                        Commands.sleep(1000),
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.RetractIntakeForTransfer(robot),
+                        Commands.followPath(follower, chain.getPath(10)).alongWith(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         ),
                         Commands.ClipSpecimen(robot),
-                        Commands.followPath(follower, chain.getPath(1)),
-                        Commands.followPath(follower, chain.getPath(2)),
-                        Commands.followPath(follower, chain.getPath(3)),
-                        Commands.followPath(follower, chain.getPath(4)),
-                        Commands.followPath(follower, chain.getPath(5)),
-                        Commands.followPath(follower, chain.getPath(6)),
-                        Commands.followPath(follower, chain.getPath(7)),
-                        Commands.followPath(follower, chain.getPath(8)),
-                        Commands.followPath(follower, chain.getPath(9)),
-                        Commands.followPath(follower, chain.getPath(10))
+                        Commands.followPath(follower, chain.getPath(11)).alongWith(
+                                Commands.ExtendIntakeToGripSpecimen(robot)
+                        ),
+                        Commands.sleep(1000),
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.RetractIntakeForTransfer(robot),
+                        Commands.followPath(follower, chain.getPath(12)).alongWith(
+                                Commands.RaiseSlidesForSampleDump(robot)
+                        ),
+                        Commands.ClipSpecimen(robot)
                 )
         );
     }
