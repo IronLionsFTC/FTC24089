@@ -16,7 +16,7 @@ public class FiveSpecimen {
 
     private static Point start = pointmm(0,0);
     private static Point dump1 = pointmm(700,300);
-    private static Point int1 = pointmm(700,-400);
+    private static Point int1 = pointmm(600,-400);
     private static Point hook1_1 = pointmm(1100, -400);
     private static Point hook1_2 = pointmm(1100, -550);
     private static Point push1 = pointmm(200, -1300);
