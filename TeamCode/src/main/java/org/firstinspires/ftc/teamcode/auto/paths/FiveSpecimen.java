@@ -14,9 +14,9 @@ public class FiveSpecimen {
     private static double rad(double deg) { return deg / 180 * Math.PI; }
 
     private static Point start = pointmm(0,0);
-    private static Point dump1 = pointmm(650,330);
-    private static Point int1 = pointmm(650,-400);
-    private static Point hook1 = pointmm(1100, -400);
+    private static Point dump1 = pointmm(650,300);
+    private static Point int1 = pointmm(650,-450);
+    private static Point hook1 = pointmm(1100, -450);
     private static Point push1 = pointmm(200, 1300);
 
     public static PathChain path() {
