@@ -32,10 +32,10 @@ public class FiveSpecimen {
                 // Push first floor
                 .addPath(
                         line(dump1, int1)
-                ).setLinearHeadingInterpolation(rad(180),rad(-90))
+                ).setLinearHeadingInterpolation(rad(180),rad(180))
                 .addPath(
                         line(int1, hook1_1)
-                ).setLinearHeadingInterpolation(rad(-90), rad(-90))
+                ).setLinearHeadingInterpolation(rad(180), rad(-90))
                 .addPath(
                         line(hook1_1, hook1_2)
                 ).setLinearHeadingInterpolation(rad(-90), rad(-90))
