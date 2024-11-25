@@ -3,6 +3,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Outtake {
     public OuttakeState outtakeState = OuttakeState.DownClawOpen;
+    public Timer outtakeAutomaticFoldDown = new Timer();
 
     public void set(OuttakeState state) {
         outtakeState = state;
@@ -20,9 +21,11 @@ public class Outtake {
                 break;
             case UpFlipped:
                 set(OuttakeState.UpClawOpen);
+                outtakeAutomaticFoldDown.resetTimer();
                 break;
             case UpClawOpen:
                 set(OuttakeState.UpWaitingToGoDown);
+                outtakeAutomaticFoldDown.resetTimer();
                 break;
             case UpWaitingToGoDown:
                 set(OuttakeState.DownClawOpen);

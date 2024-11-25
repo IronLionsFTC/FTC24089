@@ -122,6 +122,25 @@ public class Robot {
             double outtakeSlidePos = motors.outtakePosition();
             double slideTarget = RobotParameters.SlideBounds.outtakeDown;
 
+            // Automatically lower outtake
+            if (state.outtake.outtakeState == OuttakeState.UpClawOpen || state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown) {
+                if (state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.3) {
+                    state.outtake.toggle();
+                }
+            }
+
+            // Automatically perform transfer
+            if (state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
+                if (motors.intakePosition() < 5.0) {
+                    state.outtake.outtakeState = OuttakeState.DownClawShut;
+                }
+            }
+
+            // Automatically flip outtake on raise
+            if (state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 150) {
+                state.outtake.toggle();
+            }
+
             switch (state.outtake.outtakeState) {
                 case UpWaitingToFlip: case UpFlipped: case UpWaitingToGoDown: case UpClawOpen:
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;

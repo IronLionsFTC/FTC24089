@@ -13,7 +13,7 @@ public class FourPlusZero {
         double x_4 = -9.0;
 
         // 810 left, 420 back
-        Point pickup = new Point(-18, 31, 1);
+        Point pickup = new Point(-17.2, 31, 1);
         double pickupAngle = 0.0;
 
         PathBuilder builder = new PathBuilder();
@@ -51,13 +51,13 @@ public class FourPlusZero {
                 .addPath(
                         new BezierLine(
                                 new Point(-48.4, 37.4, Point.CARTESIAN),
-                                new Point(-3, 37.4, Point.CARTESIAN)
+                                new Point(-3, 42.4, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(0)
                 .addPath(
                     new BezierLine(
-                            new Point(-3, 37.4, Point.CARTESIAN),
+                            new Point(-3, 42.4, Point.CARTESIAN),
                             pickup
                     )
                 )
