@@ -23,7 +23,7 @@ public class FourPlusZero extends CommandOpMode {
     public void initialize() {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
-        this.follower.setStartingPose(new Pose(0, 0, Math.PI));
+        this.follower.setStartingPose(new Pose(0, 0, 0));
         this.chain = Paths.fourPlusZero; // This is also a valid path for a simple sample run, just forwards then back
 
         schedule(
@@ -42,8 +42,7 @@ public class FourPlusZero extends CommandOpMode {
                         Commands.followPath(follower, chain.getPath(7)),
                         Commands.followPath(follower, chain.getPath(8)),
                         Commands.followPath(follower, chain.getPath(9)),
-                        Commands.followPath(follower, chain.getPath(10)),
-                        Commands.followPath(follower, chain.getPath(11))
+                        Commands.followPath(follower, chain.getPath(10))
                 )
         );
     }
