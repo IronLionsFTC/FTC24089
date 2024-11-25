@@ -6,6 +6,7 @@ public class Paths {
     public static PathChain onePlusThree = OnePlusThree.path();
     public static PathChain zeroPlusFour = ZeroPlusFour.path();
 
-    public static PathChain fiveSpecimen = FiveSpecimen.path();
-    public static PathChain fourPlusZero = FourPlusZero.path();
+    public static PathChain fiveSpecimen_initial = FiveSpecimen.initial_dump();
+    public static PathChain fiveSpecimen_pushes = FiveSpecimen.pushes();
+    public static PathChain fourSpecimen = FourPlusZero.path();
 }

@@ -24,17 +24,22 @@ public class FiveSpecimen {
     private static final Point hook2_2 = pointmm(1100, -1070);
     private static final Point push2 = pointmm(200, -1070);
 
-    public static PathChain path() {
+    public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
         return builder
                 // Preloaded specimen
                 .addPath(
                         line(start, dump1)
                 ).setConstantHeadingInterpolation(rad(180))
-                // Push first floor
+                .build();
+    }
+    public static PathChain pushes() {
+        return new PathBuilder()
+                // Go from dump to first
                 .addPath(
                         line(dump1, int1)
                 ).setConstantHeadingInterpolation(rad(180))
+                // Push first floor
                 .addPath(
                         line(int1, hook1_1)
                 ).setLinearHeadingInterpolation(rad(180), rad(-90))
@@ -55,8 +60,6 @@ public class FiveSpecimen {
                 .addPath(
                         line(hook2_2, push2)
                 ).setLinearHeadingInterpolation(rad(-90), rad(180))
-
-
                 .build();
     }
 }

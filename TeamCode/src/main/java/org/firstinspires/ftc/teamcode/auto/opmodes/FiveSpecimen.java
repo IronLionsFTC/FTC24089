@@ -24,14 +24,21 @@ public class FiveSpecimen extends CommandOpMode {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(0, 0, Math.PI));
-        this.chain = Paths.fiveSpecimen; // This is also a valid path for a simple sample run, just forwards then back
 
         schedule(
             new RunCommand(robot::update),
             new SequentialCommandGroup(
                     Commands.sleepUntil(this::opModeIsActive),
 
-                    Commands.followPath(follower, this.chain)
+                    // Dump preloaded specimen
+                    Commands.followPath(follower, Paths.fiveSpecimen_initial).alongWith(
+                            Commands.RaiseSlidesForSpecimenDump(robot)
+                    ),
+                    Commands.ClipSpecimen(robot),
+
+                    // Push two spike mark samples into human player zone
+                    Commands.followPath(follower, Paths.fiveSpecimen_pushes)
+//                    Commands.followPath(follower, this.chain)
             )
         );
     }
