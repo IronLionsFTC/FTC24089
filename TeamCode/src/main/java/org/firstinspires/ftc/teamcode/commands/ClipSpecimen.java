@@ -20,7 +20,7 @@ public class ClipSpecimen extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 3.0 || robot.robot.drivetrain.motors.outtakePosition() > AutonomousRobot.AutonomousTune.outtakeHeightToCancel) {
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 1.5 || robot.robot.drivetrain.motors.outtakePosition() > AutonomousRobot.AutonomousTune.outtakeHeightToCancel) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimentGoingDown; // Set state here to be idiot proof [will always stop the slides]
             robot.outtakeTimer.resetTimer();
             return true;

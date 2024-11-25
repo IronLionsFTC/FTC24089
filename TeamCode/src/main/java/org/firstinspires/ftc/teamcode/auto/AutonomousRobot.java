@@ -45,7 +45,7 @@ public class AutonomousRobot extends SubsystemBase {
 
     @Config
     public static class AutonomousTune {
-        public static double outtakeHeightToCancel = 430.0;
+        public static double outtakeHeightToCancel = 400.0;
     }
 
     public void update() {
