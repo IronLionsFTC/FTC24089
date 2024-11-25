@@ -12,7 +12,9 @@ public class FourPlusZero {
         double x_3 = -6.0;
         double x_4 = -9.0;
 
-        Point pickup = new Point(-15, 23, 1);
+        // 810 left, 420 back
+        Point pickup = new Point(-16.5, 31, 1);
+        double pickupAngle = 0.0;
 
         PathBuilder builder = new PathBuilder();
         builder
@@ -59,7 +61,7 @@ public class FourPlusZero {
                             pickup
                     )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(45))
+                .setConstantHeadingInterpolation(Math.toRadians(pickupAngle))
                 .addPath(
                     new BezierLine(
                             pickup,
@@ -72,7 +74,7 @@ public class FourPlusZero {
                         pickup
                 )
         )
-                .setConstantHeadingInterpolation(Math.toRadians(45))
+                .setConstantHeadingInterpolation(Math.toRadians(pickupAngle))
                 .addPath( new BezierLine(
                         pickup,
                         new Point(-25.6, x_3, Point.CARTESIAN)
@@ -84,7 +86,7 @@ public class FourPlusZero {
                                 pickup
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(45))
+                .setConstantHeadingInterpolation(Math.toRadians(pickupAngle))
                 .addPath( new BezierLine(
                                 pickup,
                                 new Point(-25.6, x_4, Point.CARTESIAN)
