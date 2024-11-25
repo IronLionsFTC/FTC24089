@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.paths.yellow_spike;
+package org.firstinspires.ftc.teamcode.auto.paths.old.yellow_spike;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
 import org.firstinspires.ftc.teamcode.auto.constants.Points;
 
-public class MIDDLE {
+public class MIDDLE_return {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
 
@@ -15,11 +15,11 @@ public class MIDDLE {
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                Points.basketOuttake,
-                                new Point(22.0, 132.0, Point.CARTESIAN)
+                                new Point(30.0, 132.0, Point.CARTESIAN),
+                                Points.basketOuttake
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0));
+                .setLinearHeadingInterpolation(0, Math.toRadians(-45));
 
         return builder.build();
     }

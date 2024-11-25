@@ -1,13 +1,12 @@
-package org.firstinspires.ftc.teamcode.auto.paths;
+package org.firstinspires.ftc.teamcode.auto.paths.old;
 
-import org.firstinspires.ftc.teamcode.auto.constants.Points;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
-public class PushThenParkNoDodge {
+public class PushThenParkWithDodge {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
         builder
@@ -32,15 +31,16 @@ public class PushThenParkNoDodge {
                         // Line 3
                         new BezierLine(
                                 new Point(13.292, 130.265, Point.CARTESIAN),
-                                new Point(12.849, 62.252, Point.CARTESIAN)
+                                new Point(32.788, 96.369, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(90))
                 .addPath(
                         // Line 4
-                        new BezierLine(
-                                new Point(12.849, 62.252, Point.CARTESIAN),
-                                new Point(9.969, 35.889, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(32.788, 96.369, Point.CARTESIAN),
+                                new Point(42.314, 18.166, Point.CARTESIAN),
+                                new Point(10.191, 25.255, Point.CARTESIAN)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(90));

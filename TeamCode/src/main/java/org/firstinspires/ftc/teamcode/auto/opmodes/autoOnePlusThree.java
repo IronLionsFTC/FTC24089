@@ -29,10 +29,10 @@ public class autoOnePlusThree extends CommandOpMode {
         schedule(
             new RunCommand(robot::update),
             new SequentialCommandGroup(
-                    new WaitUntilCommand(this::opModeIsActive),
+                    Commands.sleepUntil(this::opModeIsActive),
                     Commands.followPath(follower, chain.getPath(0)).alongWith(
                             Commands.RaiseSlidesForSpecimenDump(robot)
-                    ).andThen(new WaitCommand(800)),
+                    ).andThen(Commands.sleep(800)),
                     Commands.ClipSpecimen(robot),
                     Commands.followPath(follower, chain.getPath(1)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)

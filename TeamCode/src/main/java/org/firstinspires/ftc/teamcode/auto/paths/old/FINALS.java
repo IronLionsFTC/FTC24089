@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.auto.paths;
+package org.firstinspires.ftc.teamcode.auto.paths.old;
 
-import org.firstinspires.ftc.teamcode.auto.constants.Points;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
