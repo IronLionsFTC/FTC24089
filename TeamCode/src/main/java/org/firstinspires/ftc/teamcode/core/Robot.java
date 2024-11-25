@@ -118,7 +118,7 @@ public class Robot {
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
 
-        public void moveOuttake(double powerMul) {
+        public void moveOuttake(double powerMul, boolean auto) {
             double outtakeSlidePos = motors.outtakePosition();
             double slideTarget = RobotParameters.SlideBounds.outtakeDown;
 
@@ -127,7 +127,8 @@ public class Robot {
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;
                     break;
                 case UpWithSpecimenWaitingToFlip: case UpWithSpecimenFlipped: case UpWithSpecimentGoingDown:
-                    slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
+                    if (auto) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar - 80;
+                    else slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
                     break;
                 case UpWithSpecimenOnBar:
                     slideTarget = RobotParameters.SlideBounds.outtakeOnSpecimenBar;
@@ -266,13 +267,13 @@ public class Robot {
         }
 
         public void update_teleop(GamepadEx gamepad, double sampleOffset) {
-            moveOuttake(1.0);
+            moveOuttake(1.0, false);
             moveIntake(1.0);
 
             // DEPRECATED | will be removed soon
             // servos.intakeOverridePower = controller.RT() - controller.LT();
 
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset);
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset, false);
             motors.setDrivePowers();
             motors.setOtherPowers();
         }

@@ -30,7 +30,7 @@ public class Servos {
         latchServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.latchServo);
     }
 
-    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset) {
+    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset, boolean auto) {
         double intakeLift = RobotParameters.ServoBounds.intakeFolded;
         double intakeClaw = RobotParameters.ServoBounds.clawWideOpen;
         double outtakeLift = RobotParameters.ServoBounds.armDown;
@@ -67,7 +67,8 @@ public class Servos {
                 break;
             case UpFlipped: case UpWithSpecimenFlipped: case UpWithSpecimenOnBar:
                 outtakeClaw = RobotParameters.ServoBounds.clawClosed;
-                outtakeLift = RobotParameters.ServoBounds.armUp;
+                if (auto) outtakeLift = RobotParameters.ServoBounds.armUp - 0.05;
+                else outtakeLift = RobotParameters.ServoBounds.armUp;
                 break;
             case UpClawOpen: case UpWithSpecimentGoingDown:
                 outtakeLift = RobotParameters.ServoBounds.armUp;

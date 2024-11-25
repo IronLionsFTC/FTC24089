@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
@@ -10,11 +12,12 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 public class Commands {
     // Pedro Pathing
     public static Command followPath(Follower follower, PathChain path) { return new FollowPathCommand(follower, path); }
-    public static Command followPath(Follower follower, Path path) { return new FollowPathCommand(follower, path); }
+    public static Command followPath(Follower follower, Path path) { return new FollowPathCommand(follower, path).andThen(new WaitCommand(300)); }
 
     // Intake Commands ---------------------------------------------------------------------------------------------------
 
     // Extend into various states
+    public static InstantCommand RotateClaw45Degrees(AutonomousRobot robot) { return new InstantCommand(robot::clawTo45Degrees); }
     public static Command ExtendIntakeToGripSample(AutonomousRobot robot) { return new ExtendIntakeToGripSample(robot); }
     public static Command ExtendIntakeToGripSpecimen(AutonomousRobot robot) { return new ExtendIntakeToGripSpecimen(robot); }
 

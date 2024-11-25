@@ -18,6 +18,7 @@ public class AutonomousRobot extends SubsystemBase {
     public Timer intakeTimer = new Timer();
     public Timer outtakeTimer = new Timer();
     public Follower follower;
+    public double clawPos = RobotParameters.ServoBounds.intakeYawZero;
 
     public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f) {
         robot = new Robot(hardwareMap, t, null, null, Team.Red);
@@ -53,9 +54,13 @@ public class AutonomousRobot extends SubsystemBase {
         follower.update();
         robot.telemetry.update();
         robot.drivetrain.moveIntake(0.5);
-        robot.drivetrain.moveOuttake(0.8);
-        robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, 0.64, 0.0);
+        robot.drivetrain.moveOuttake(0.8, true);
+        robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, clawPos, 0.0, true);
         robot.drivetrain.motors.setOtherPowers();
+    }
+
+    public void clawTo45Degrees() {
+        clawPos = RobotParameters.ServoBounds.intakeYawZero - 0.12;
     }
 
     public void logDouble(String description, double value) {
@@ -67,11 +72,13 @@ public class AutonomousRobot extends SubsystemBase {
     }
 
     public void extendIntakeForSpecimen() {
+        clawPos = RobotParameters.ServoBounds.intakeYawZero;
         robot.state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawOpen;
         intakeTimer.resetTimer();
     }
 
     public void extendIntakeForSample() {
+        clawPos = RobotParameters.ServoBounds.intakeYawZero;
         robot.state.intake.intakeState = IntakeState.ExtendedClawDown;
         intakeTimer.resetTimer();
     }
@@ -115,7 +122,7 @@ public class AutonomousRobot extends SubsystemBase {
     }
 
     public boolean isTransferReady() {
-        return robot.drivetrain.motors.intakePosition() < 20.0;
+        return robot.drivetrain.motors.intakePosition() < 15.0;
     }
 
     public boolean isClipDone() {

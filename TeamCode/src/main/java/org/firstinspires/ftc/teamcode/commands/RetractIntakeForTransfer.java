@@ -15,11 +15,12 @@ public class RetractIntakeForTransfer extends CommandBase {
 
     @Override
     public void initialize() {
+        robot.intakeTimer.resetTimer();
         robot.retractIntake();
     }
 
     @Override
     public boolean isFinished() {
-        return robot.isTransferReady();
+        return robot.isTransferReady() && robot.intakeTimer.getElapsedTimeSeconds() > 1.5;
     }
 }
