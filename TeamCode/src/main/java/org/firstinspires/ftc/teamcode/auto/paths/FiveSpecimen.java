@@ -14,18 +14,15 @@ public class FiveSpecimen {
     private static double rad(double deg) { return deg / 180 * Math.PI; }
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
-    private static Point start = pointmm(0,0);
-    private static Point dump1 = pointmm(650,300);
-    private static Point int1 = pointmm(550,-650);
-    private static Point hook1_1 = pointmm(1100, -650);
-    private static Point hook1_2 = pointmm(1100, -770);
-    private static Point push1 = pointmm(200, -770);
-    private static Point hook2_1 = pointmm(1100, -920);
-    private static Point hook2_2 = pointmm(1100, -1070);
-    private static Point push2 = pointmm(200, -1070);
-    private static Point hook3_control = pointmm(1100, -1070);
-    private static Point hook3_end = pointmm(1100, -1330);
-    private static Point push3 = pointmm(200, -1330);
+    private static final Point start = pointmm(0,0);
+    private static final Point dump1 = pointmm(650,300);
+    private static final Point int1 = pointmm(550,-650);
+    private static final Point hook1_1 = pointmm(1100, -650);
+    private static final Point hook1_2 = pointmm(1100, -770);
+    private static final Point push1 = pointmm(200, -770);
+    private static final Point hook2_1 = pointmm(1100, -920);
+    private static final Point hook2_2 = pointmm(1100, -1070);
+    private static final Point push2 = pointmm(200, -1070);
 
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
@@ -58,18 +55,6 @@ public class FiveSpecimen {
                 .addPath(
                         line(hook2_2, push2)
                 ).setLinearHeadingInterpolation(rad(-90), rad(180))
-                // Go to third
-                .addPath(
-                        new BezierCurve(
-                                push2,
-                                hook3_control,
-                                hook3_end
-                        )
-                ).setConstantHeadingInterpolation(rad(180))
-                // Push third
-                .addPath(
-                        line(hook3_end, push3)
-                ).setConstantHeadingInterpolation(rad(180))
 
 
                 .build();
