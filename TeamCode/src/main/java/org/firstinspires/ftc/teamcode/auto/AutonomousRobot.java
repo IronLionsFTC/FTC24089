@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.Team;
+import org.firstinspires.ftc.teamcode.core.state.intake.Intake;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
@@ -140,6 +141,7 @@ public class AutonomousRobot extends SubsystemBase {
     }
 
     public void raiseSlidesForSampleDump () {
+        robot.state.intake.intakeState = IntakeState.Retracted;
         robot.state.outtake.outtakeState = OuttakeState.DownClawShut;
         outtakeTimer.resetTimer();
     }
