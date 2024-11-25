@@ -31,6 +31,16 @@ public class FollowPathCommand extends CommandBase {
         return this;
     }
 
+    /**
+     * Sets the follower's maximum speed
+     * @param speed Between 0 and 1
+     * @return This command for compatibility in command groups
+     */
+    public FollowPathCommand setSpeed(double speed) {
+        this.follower.setMaxPower(speed);
+        return this;
+    }
+
     @Override
     public void initialize() {
         follower.followPath(path, holdEnd);
