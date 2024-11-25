@@ -131,7 +131,7 @@ public class Robot {
 
             // Automatically perform transfer
             if (state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
-                if (motors.intakePosition() < 1.0) {
+                if (motors.intakePosition() < 10.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.0) {
                     state.outtake.outtakeState = OuttakeState.DownClawShut;
                 }
             }
@@ -174,6 +174,7 @@ public class Robot {
             switch (state.intake.intakeState) {
                 case ExtendedClawUp: case ExtendedClawDown: case Grabbing: case ExtendedGrabbingOffWallClawShut: case ExtendedGrabbingOffWallClawOpen: case ExtendedClawShut: case ExtendedClawOpen:
                     intakeTarget = RobotParameters.SlideBounds.intakeExtended;
+                    state.outtake.outtakeState = OuttakeState.DownClawOpen;
             }
             if (state.intake.intakeState == IntakeState.Transfer && state.intake.foldIntakeBeforeRetraction.getElapsedTime() < 500) {
                 intakeTarget = RobotParameters.SlideBounds.intakeExtended;
