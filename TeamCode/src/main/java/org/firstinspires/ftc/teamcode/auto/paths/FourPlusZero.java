@@ -16,7 +16,7 @@ public class FourPlusZero {
                                 new Point(-25.6, 0.0, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-235))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         // Line 1
                         new BezierLine(
@@ -24,63 +24,70 @@ public class FourPlusZero {
                                 new Point(-25.6, 25.6, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-180))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(-25.6, 25.6, Point.CARTESIAN),
                                 new Point(-48.4, 25.6, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-180), Math.toRadians(-235))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(-48.4, 25.6, Point.CARTESIAN),
                                 new Point(-48.4, 37.4, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-180))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(-48.4, 37.4, Point.CARTESIAN),
                                 new Point(0, 37.4, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-180), Math.toRadians(-235))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(0, 37.4, Point.CARTESIAN),
                                 new Point(-48.4, 37.4, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-135))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(-48.4, 37.4, Point.CARTESIAN),
                                 new Point(-48.4, 47.4, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-135), Math.toRadians(-235))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(-48.4, 47.4, Point.CARTESIAN),
                                 new Point(0, 47.4, Point.CARTESIAN)
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(-270))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
                                 new Point(0, 47.4, Point.CARTESIAN),
                                 new Point(-48.4, 47.4, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-270), Math.toRadians(-630))
+                .setConstantHeadingInterpolation(0)
                 .addPath(
                         new BezierLine(
-                                new Point(-5.0, 10.0, Point.CARTESIAN),
-                                new Point(1.0, 50.0, Point.CARTESIAN)
+                                new Point(-48.4, 47.4, Point.CARTESIAN),
+                                new Point(-48.4, 57.4, Point.CARTESIAN)
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(-630))
+                .setConstantHeadingInterpolation(0)
+                .addPath(
+                        new BezierLine(
+                                new Point(-48.4, 57.4, Point.CARTESIAN),
+                                new Point(0, 57.4, Point.CARTESIAN)
+                        )
+                )
+                .setConstantHeadingInterpolation(0)
         ;
         return builder.build();
     }
