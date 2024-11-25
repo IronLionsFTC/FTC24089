@@ -13,7 +13,7 @@ public class FourPlusZero {
         double x_4 = -9.0;
 
         // 810 left, 420 back
-        Point pickup = new Point(-16.5, 31, 1);
+        Point pickup = new Point(-18, 31, 1);
         double pickupAngle = 0.0;
 
         PathBuilder builder = new PathBuilder();
