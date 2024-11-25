@@ -15,7 +15,7 @@ public class FiveSpecimen {
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(650,300);
+    private static final Point dump1 = pointmm(635,300);
     private static final Point int1 = pointmm(550,-650);
     private static final Point hook1_1 = pointmm(1100, -650);
     private static final Point hook1_2 = pointmm(1100, -770);

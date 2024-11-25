@@ -12,6 +12,8 @@ public class FourPlusZero {
         double x_3 = -6.0;
         double x_4 = -9.0;
 
+        Point pickup = new Point(-15, 23, 1);
+
         PathBuilder builder = new PathBuilder();
         builder
                 .addPath(
@@ -54,37 +56,37 @@ public class FourPlusZero {
                 .addPath(
                     new BezierLine(
                             new Point(-3, 37.4, Point.CARTESIAN),
-                            new Point(-15, 23, Point.CARTESIAN)
+                            pickup
                     )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(45))
                 .addPath(
                     new BezierLine(
-                            new Point(-15, 23, Point.CARTESIAN),
+                            pickup,
                             new Point(-25.6, x_2, Point.CARTESIAN)
                     )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath( new BezierLine(
                         new Point(-25.6, x_2, Point.CARTESIAN),
-                        new Point(-15, 23.0, Point.CARTESIAN)
+                        pickup
                 )
         )
                 .setConstantHeadingInterpolation(Math.toRadians(45))
                 .addPath( new BezierLine(
-                        new Point(-15, 23.0, Point.CARTESIAN),
+                        pickup,
                         new Point(-25.6, x_3, Point.CARTESIAN)
                 )
         )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .addPath( new BezierLine(
                                 new Point(-25.6, x_3, Point.CARTESIAN),
-                                new Point(-15, 23.0, Point.CARTESIAN)
+                                pickup
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(45))
                 .addPath( new BezierLine(
-                                new Point(-15, 23.0, Point.CARTESIAN),
+                                pickup,
                                 new Point(-25.6, x_4, Point.CARTESIAN)
                         )
                 )

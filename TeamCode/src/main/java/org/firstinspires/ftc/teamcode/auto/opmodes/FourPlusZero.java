@@ -24,7 +24,7 @@ public class FourPlusZero extends CommandOpMode {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(0, 0, 0));
-        this.chain = Paths.fourPlusZero; // This is also a valid path for a simple sample run, just forwards then back
+        this.chain = Paths.fourSpecimen; // This is also a valid path for a simple sample run, just forwards then back
 
         schedule(
                 new RunCommand(robot::update),
