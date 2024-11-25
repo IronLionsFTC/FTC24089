@@ -52,9 +52,11 @@ public class FourPlusZero extends CommandOpMode {
                                 )
                         ),
                         Commands.GrabGameObjectWithIntake(robot),
-                        Commands.RetractIntakeForTransfer(robot),
                         Commands.followPath(follower, chain.getPath(8)).alongWith(
-                                Commands.RaiseSlidesForSpecimenDump(robot)
+                                Commands.sleep(500).andThen(
+                                Commands.RetractIntakeForTransfer(robot).andThen(
+                                        Commands.RaiseSlidesForSpecimenDump(robot)
+                                ))
                         ),
                         Commands.ClipSpecimen(robot),
 
@@ -66,9 +68,11 @@ public class FourPlusZero extends CommandOpMode {
                                 )
                         ),
                         Commands.GrabGameObjectWithIntake(robot),
-                        Commands.RetractIntakeForTransfer(robot),
                         Commands.followPath(follower, chain.getPath(10)).alongWith(
-                                Commands.RaiseSlidesForSpecimenDump(robot)
+                                Commands.sleep(500).andThen(
+                                        Commands.RetractIntakeForTransfer(robot).andThen(
+                                                Commands.RaiseSlidesForSpecimenDump(robot)
+                                        ))
                         ),
                         Commands.ClipSpecimen(robot)
                 )
