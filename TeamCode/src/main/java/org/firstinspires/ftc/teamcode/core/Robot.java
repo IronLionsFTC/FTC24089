@@ -131,7 +131,7 @@ public class Robot {
 
             // Automatically perform transfer
             if (state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
-                if (motors.intakePosition() < 5.0) {
+                if (motors.intakePosition() < 1.0) {
                     state.outtake.outtakeState = OuttakeState.DownClawShut;
                 }
             }
