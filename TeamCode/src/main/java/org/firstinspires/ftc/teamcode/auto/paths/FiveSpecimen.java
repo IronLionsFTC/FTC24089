@@ -16,16 +16,16 @@ public class FiveSpecimen {
 
     private static Point start = pointmm(0,0);
     private static Point dump1 = pointmm(650,300);
-    private static Point int1 = pointmm(550,-680);
-    private static Point hook1_1 = pointmm(1100, -680);
-    private static Point hook1_2 = pointmm(1100, -800);
-    private static Point push1 = pointmm(200, -800);
-    private static Point hook2_1 = pointmm(1100, -950);
-    private static Point hook2_2 = pointmm(1100, -1100);
-    private static Point push2 = pointmm(200, -1100);
-    private static Point hook3_control = pointmm(1100, -1100);
-    private static Point hook3_end = pointmm(1100, -1360);
-    private static Point push3 = pointmm(200, -1360);
+    private static Point int1 = pointmm(550,-650);
+    private static Point hook1_1 = pointmm(1100, -650);
+    private static Point hook1_2 = pointmm(1100, -770);
+    private static Point push1 = pointmm(200, -770);
+    private static Point hook2_1 = pointmm(1100, -920);
+    private static Point hook2_2 = pointmm(1100, -1070);
+    private static Point push2 = pointmm(200, -1070);
+    private static Point hook3_control = pointmm(1100, -1070);
+    private static Point hook3_end = pointmm(1100, -1330);
+    private static Point push3 = pointmm(200, -1330);
 
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
