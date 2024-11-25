@@ -17,11 +17,11 @@ public class FiveSpecimen {
     private static final Point start = pointmm(0,0);
     private static final Point dump1 = pointmm(615,300);
     private static final Point int1 = pointmm(550,-650);
-    private static final Point hook1_1 = pointmm(1100, -620);
-    private static final Point hook1_2 = pointmm(1100, -710);
+    private static final Point hook1_1 = pointmm(800, -620);
+    private static final Point hook1_2 = pointmm(800, -710);
     private static final Point push1 = pointmm(200, -740);
-    private static final Point hook2_1 = pointmm(1100, -770);
-    private static final Point hook2_2 = pointmm(1100, -830);
+    private static final Point hook2_1 = pointmm(800, -770);
+    private static final Point hook2_2 = pointmm(800, -860);
     private static final Point push2 = pointmm(200, -900);
 
     public static PathChain initial_dump() {
