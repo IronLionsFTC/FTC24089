@@ -29,7 +29,21 @@ public class FourPlusZero extends CommandOpMode {
         schedule(
                 new RunCommand(robot::update),
                 new SequentialCommandGroup(
-                        Commands.followPath(follower, chain.getPath(0))
+                        Commands.followPath(follower, chain.getPath(0)).alongWith(
+                                Commands.RaiseSlidesForSpecimenDump(robot)
+                        ),
+                        Commands.ClipSpecimen(robot),
+                        Commands.followPath(follower, chain.getPath(1)),
+                        Commands.followPath(follower, chain.getPath(2)),
+                        Commands.followPath(follower, chain.getPath(3)),
+                        Commands.followPath(follower, chain.getPath(4)),
+                        Commands.followPath(follower, chain.getPath(5)),
+                        Commands.followPath(follower, chain.getPath(6)),
+                        Commands.followPath(follower, chain.getPath(7)),
+                        Commands.followPath(follower, chain.getPath(8)),
+                        Commands.followPath(follower, chain.getPath(9)),
+                        Commands.followPath(follower, chain.getPath(10)),
+                        Commands.followPath(follower, chain.getPath(11))
                 )
         );
     }
