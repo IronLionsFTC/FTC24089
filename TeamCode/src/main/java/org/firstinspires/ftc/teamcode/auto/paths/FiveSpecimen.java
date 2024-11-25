@@ -15,7 +15,8 @@ public class FiveSpecimen {
     private static Point dump1 = point(-650,0);
 
     public static PathChain path() {
-        return new PathBuilder()
+        PathBuilder builder = new PathBuilder();
+        return builder
                 .addPath(
                         // Line 1
                         new BezierLine(
