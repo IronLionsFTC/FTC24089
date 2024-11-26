@@ -21,9 +21,9 @@ public class Commands {
     public static Command instant(Runnable toRun, Subsystem... requirements) { return new InstantCommand(toRun, requirements); }
 
     // Pedro Pathing
-    public static Command followPath(Follower follower, PathChain path) { return new FollowPathCommand(follower, path); }
-    public static Command followPath(Follower follower, Path path) { return new FollowPathCommand(follower, path).andThen(new WaitCommand(300)); }
-    public static Command fastPath(Follower follower, Path path) { return new FollowPathFast(follower, path); }
+    public static FollowPathCommand followPath(Follower follower, PathChain path) { return new FollowPathCommand(follower, path); }
+    public static FollowPathCommand followPath(Follower follower, Path path) { return new FollowPathCommand(follower, path); }
+    public static FollowPathFast fastPath(Follower follower, Path path) { return new FollowPathFast(follower, path); }
 
     // Intake Commands ---------------------------------------------------------------------------------------------------
 

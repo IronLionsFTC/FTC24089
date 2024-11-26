@@ -8,14 +8,17 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
+@Config
 public class FiveSpecimen {
     private static Point pointmm(double x, double y) { return new Point(x/25.4,y/25.4,Point.CARTESIAN); }
     private static Point pointin(double x, double y) { return new Point(x,y,Point.CARTESIAN); }
     private static double rad(double deg) { return deg / 180 * Math.PI; }
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
+    private static final int dumpX = 615;
+
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(615,300);
+    private static final Point dump1 = pointmm(dumpX,300);
     private static final Point int1 = pointmm(550,-650);
     private static final Point hook1_1 = pointmm(800, -620);
     private static final Point hook1_2 = pointmm(800, -710);
@@ -24,11 +27,11 @@ public class FiveSpecimen {
     private static final Point hook2_2 = pointmm(800, -890);
     private static final Point push2 = pointmm(200, -900);
 
-    private static final Point humanPlayerSpecimenIntake = pointmm(650, -300);
-    private static final Point o1 = pointmm(615,250);
-    private static final Point o2 = pointmm(615,250);
-    private static final Point o3 = pointmm(615,200);
-    private static final Point o4 = pointmm(615,150);
+    private static final Point humanPlayerSpecimenIntake = pointmm(380, -550);
+    private static final Point o1 = pointmm(dumpX,250);
+    private static final Point o2 = pointmm(dumpX,250);
+    private static final Point o3 = pointmm(dumpX,200);
+    private static final Point o4 = pointmm(dumpX,150);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
