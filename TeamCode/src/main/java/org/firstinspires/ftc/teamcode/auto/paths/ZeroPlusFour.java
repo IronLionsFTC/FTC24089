@@ -14,14 +14,14 @@ public class ZeroPlusFour {
                         // Line 1
                         new BezierLine(
                                 new Point(0.0, 0.0, Point.CARTESIAN),
-                                basket
+                                new Point(-1, -39, 1)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-235))
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                basket,
+                                new Point(-1, -39, 1),
                                 new Point(-8, -31.0, Point.CARTESIAN)
                         )
                 )

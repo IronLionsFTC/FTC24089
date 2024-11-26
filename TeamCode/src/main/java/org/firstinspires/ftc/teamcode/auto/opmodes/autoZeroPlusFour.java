@@ -60,8 +60,9 @@ public class autoZeroPlusFour extends CommandOpMode {
                     Commands.followPath(follower, chain.getPath(5)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)
                     ),
+                    Commands.RotateClaw(robot, 45),
                     Commands.sleep(1000), // Adjust over top of sample before grab
-                    Commands.GrabGameObjectWithIntake(robot).alongWith(Commands.RotateClaw45Degrees(robot)),
+                    Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot).alongWith(
                             Commands.followPath(follower, chain.getPath(6))
                     ).andThen(

@@ -64,10 +64,6 @@ public class AutonomousRobot extends SubsystemBase {
         clawPos = RobotParameters.ServoBounds.intakeYawZero - 0.12;
     }
 
-    public void rotateClaw(double degrees) {
-        clawPos = RobotParameters.ServoBounds.intakeYawZero - 0.12 * (degrees / 45);
-    }
-
     public void logDouble(String description, double value) {
         robot.telemetry.addData(description, value);
     }
@@ -77,13 +73,11 @@ public class AutonomousRobot extends SubsystemBase {
     }
 
     public void extendIntakeForSpecimen() {
-        clawPos = RobotParameters.ServoBounds.intakeYawZero;
         robot.state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawOpen;
         intakeTimer.resetTimer();
     }
 
     public void extendIntakeForSample() {
-        clawPos = RobotParameters.ServoBounds.intakeYawZero;
         robot.state.intake.intakeState = IntakeState.ExtendedClawDown;
         intakeTimer.resetTimer();
     }
@@ -134,6 +128,7 @@ public class AutonomousRobot extends SubsystemBase {
     public void retractIntake() {
         robot.state.intake.intakeState = IntakeState.Transfer;
         robot.state.intake.foldIntakeBeforeRetraction.resetTimer();
+        clawPos = RobotParameters.ServoBounds.intakeYawZero;
     }
 
     public boolean isTransferReady() {

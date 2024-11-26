@@ -17,7 +17,7 @@ public class RotateClaw extends CommandBase {
 
     @Override
     public void initialize() {
-        robot.clawPos = (degrees / 355);
+        robot.clawPos = (degrees / -355);
     }
 
     @Override
