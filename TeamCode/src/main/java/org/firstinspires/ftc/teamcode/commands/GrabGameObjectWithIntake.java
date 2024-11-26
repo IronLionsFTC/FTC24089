@@ -26,7 +26,7 @@ public class GrabGameObjectWithIntake extends CommandBase {
     @Override
     public boolean isFinished() {
         boolean sampleDone = (robot.intakeTimer.getElapsedTimeSeconds() > 0.3 && robot.robot.state.intake.intakeState == IntakeState.Grabbing);
-        boolean specimenDone = (robot.intakeTimer.getElapsedTimeSeconds() > 0.3 && robot.robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut);
+        boolean specimenDone = (robot.intakeTimer.getElapsedTimeSeconds() > 0.6 && robot.robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut);
         return sampleDone || specimenDone;
     }
 }

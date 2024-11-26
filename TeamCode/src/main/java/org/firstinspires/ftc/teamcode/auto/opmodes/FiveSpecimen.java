@@ -27,15 +27,32 @@ public class FiveSpecimen extends CommandOpMode {
     public static int slideRaiseDelay = 1000;
 
     private Command dump(int s) {
+//        return Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
+//                Commands.ExtendIntakeToGripSpecimen(robot)
+//        ).andThen(
+//                Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
+//                Commands.sleep(outtakePathDelay).andThen(
+//                                Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s))
+//                        )
+//                        .alongWith(
+//                                Commands.GrabGameObjectWithIntake(robot).andThen(
+//                                        Commands.sleep(slideRaiseDelay)
+//                                ).andThen(
+//                                        Commands.RaiseSlidesForSpecimenDump(robot)
+//                                )
+//                        ),
+//                Commands.ClipSpecimen(robot)
+//        );
         return Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
                 Commands.ExtendIntakeToGripSpecimen(robot)
         ).andThen(
                 Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
-                Commands.RetractIntakeForTransfer(robot),
-                Commands.GrabGameObjectWithIntake(robot).alongWith(
-                        Commands.sleep(outtakePathDelay),
-                        Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s)).alongWith(
-                                Commands.sleep(slideRaiseDelay),
+                Commands.sleep(outtakePathDelay).andThen(
+                        Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s))
+                ).alongWith(
+                        Commands.GrabGameObjectWithIntake(robot).andThen(
+                                Commands.RetractIntakeForTransfer(robot)
+                        ).andThen(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         )
                 ),
