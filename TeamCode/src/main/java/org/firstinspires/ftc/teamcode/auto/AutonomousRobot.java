@@ -86,8 +86,18 @@ public class AutonomousRobot extends SubsystemBase {
 
     public boolean isIntakeExtended() {
         if (robot.drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 50.0 && (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen || robot.state.intake.intakeState == IntakeState.ExtendedClawDown)) {
-            intakeTimer.resetTimer();
-            return true;
+            if (robot.state.intake.intakeState == IntakeState.ExtendedClawDown) {
+                if (intakeTimer.getElapsedTimeSeconds() > 0.6) {
+                    intakeTimer.resetTimer();
+                    return true;
+                }
+            }
+            if (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) {
+                if (intakeTimer.getElapsedTimeSeconds() > 1.0) {
+                    intakeTimer.resetTimer();
+                    return true;
+                }
+            }
         }
         return false;
     }

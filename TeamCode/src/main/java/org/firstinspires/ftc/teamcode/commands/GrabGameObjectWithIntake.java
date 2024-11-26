@@ -20,14 +20,13 @@ public class GrabGameObjectWithIntake extends CommandBase {
 
     @Override
     public void execute() {
-        if (robot.intakeTimer.getElapsedTimeSeconds() > 0.6 && robot.robot.state.intake.intakeState == IntakeState.ExtendedClawDown) robot.closeIntakeClaw();
-        if (robot.intakeTimer.getElapsedTimeSeconds() > 1.0 && robot.robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) robot.closeIntakeClaw();
+        robot.closeIntakeClaw();
     }
 
     @Override
     public boolean isFinished() {
-        boolean sampleDone = (robot.intakeTimer.getElapsedTimeSeconds() > 0.9 && robot.robot.state.intake.intakeState == IntakeState.Grabbing);
-        boolean specimenDone = (robot.intakeTimer.getElapsedTimeSeconds() > 1.3 && robot.robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut);
+        boolean sampleDone = (robot.intakeTimer.getElapsedTimeSeconds() > 0.3 && robot.robot.state.intake.intakeState == IntakeState.Grabbing);
+        boolean specimenDone = (robot.intakeTimer.getElapsedTimeSeconds() > 0.3 && robot.robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut);
         return sampleDone || specimenDone;
     }
 }
