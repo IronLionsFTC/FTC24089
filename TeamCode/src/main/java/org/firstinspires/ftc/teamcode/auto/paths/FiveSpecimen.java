@@ -17,11 +17,11 @@ public class FiveSpecimen {
     public static int dumpX = 660;
 
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(dumpX-25,150);
+    private static final Point dump1 = pointmm(dumpX-30,150);
     private static final Point int2 = pointmm(650, -800);
 
     private static final Point grab1 = pointmm(400, -560);
-    private static final Point grab2 = pointmm(400, -800);
+    private static final Point grab2 = pointmm(400, -770);
     private static final Point give = pointmm(450, -600);
 
     private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
