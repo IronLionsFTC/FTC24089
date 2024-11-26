@@ -10,6 +10,7 @@ public class FollowPathFast extends CommandBase {
     private final Follower follower;
     private final PathChain path;
     private boolean holdEnd = false;
+    private double maxSpeed = 1;
 
     public FollowPathFast(Follower follower, PathChain path) {
         this.follower = follower;
@@ -37,7 +38,7 @@ public class FollowPathFast extends CommandBase {
      * @return This command for compatibility in command groups
      */
     public FollowPathFast setSpeed(double speed) {
-        this.follower.setMaxPower(speed);
+        this.maxSpeed = speed;
         return this;
     }
 
@@ -49,5 +50,10 @@ public class FollowPathFast extends CommandBase {
     @Override
     public boolean isFinished() {
         return follower.getCurrentTValue() > 0.95;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        follower.setMaxPower(1);
     }
 }
