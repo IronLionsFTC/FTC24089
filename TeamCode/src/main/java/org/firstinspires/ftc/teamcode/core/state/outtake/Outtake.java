@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.core.state.outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Outtake {
-    public OuttakeState outtakeState = OuttakeState.DownClawOpen;
+    public OuttakeState outtakeState = OuttakeState.DownClawShut;
     public Timer outtakeAutomaticFoldDown = new Timer();
 
     public void set(OuttakeState state) {

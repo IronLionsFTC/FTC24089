@@ -18,7 +18,7 @@ public class FiveSpecimen {
     public static int dumpX = 640;
 
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(dumpX,300);
+    private static final Point dump1 = pointmm(dumpX,150);
     private static final Point int1 = pointmm(550,-650);
     private static final Point hook1_1 = pointmm(800, -620);
     private static final Point hook1_2 = pointmm(800, -710);
@@ -30,10 +30,10 @@ public class FiveSpecimen {
 
     private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
     private static final Point humanPlayerSpecimenIntake= pointmm(400, -530);
-    private static final Point o1 = pointmm(dumpX,250);
-    private static final Point o2 = pointmm(dumpX,250);
-    private static final Point o3 = pointmm(dumpX,200);
-    private static final Point o4 = pointmm(dumpX,150);
+    private static final Point o1 = pointmm(dumpX,100);
+    private static final Point o2 = pointmm(dumpX,50);
+    private static final Point o3 = pointmm(dumpX,0);
+    private static final Point o4 = pointmm(dumpX,-50);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
