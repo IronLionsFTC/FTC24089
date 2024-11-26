@@ -36,6 +36,8 @@ public class Commands {
 
     // Sample & Specimen Grab Function
     public static Command GrabGameObjectWithIntake(AutonomousRobot robot) { return new GrabGameObjectWithIntake(robot); }
+    public static Command Hold(AutonomousRobot robot) { return new Hold(robot); }
+    public static Command Release(AutonomousRobot robot) { return new Release(robot); }
 
     // Retract the intake and end when a transfer is possible, doesn't actually transfer
     public static Command RetractIntakeForTransfer(AutonomousRobot robot) { return new RetractIntakeForTransfer(robot); }

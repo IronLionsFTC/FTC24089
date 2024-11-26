@@ -80,6 +80,14 @@ public class FiveSpecimen {
                 .build();
     }
 
+    public static PathChain prepare_for_cycles() {
+        return new PathBuilder()
+                .addPath(
+                        line(give, int2)
+                ).setConstantHeadingInterpolation(rad(-135))
+                .build();
+    }
+
     public static PathChain intake(int s) {
         Point current;
 

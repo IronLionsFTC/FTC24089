@@ -79,7 +79,24 @@ public class FiveSpecimen extends CommandOpMode {
                         Commands.ClipSpecimen(robot),
 
                         // Push two spike mark samples into human player zone
-                        Commands.fastPath(follower, Paths.fiveSpecimen_pushes),
+                        // Prepare
+                        Commands.fastPath(follower, Paths.fiveSpecimen_goto_1).alongWith(
+                                Commands.ExtendIntakeToGripSample(robot)
+                        ),
+                        // First
+                        Commands.Hold(robot),
+                        Commands.fastPath(follower, Paths.fiveSpecimen_give_1),
+                        Commands.Release(robot),
+                        // Second
+                        Commands.fastPath(follower, Paths.fiveSpecimen_goto_2),
+                        Commands.Hold(robot),
+                        Commands.fastPath(follower, Paths.fiveSpecimen_give_2),
+                        Commands.Release(robot),
+                        // Prepare for intaking
+                        Commands.RetractIntakeForTransfer(robot).alongWith(
+                                Commands.followPath(follower, Paths.fiveSpecimen_prepare)
+                        ),
+
 
                         // SPECIMEN CYCLING ==========================================================
                         // Do the four specimens
