@@ -64,6 +64,10 @@ public class AutonomousRobot extends SubsystemBase {
         clawPos = RobotParameters.ServoBounds.intakeYawZero - 0.12;
     }
 
+    public void rotateClaw(double degrees) {
+        clawPos = RobotParameters.ServoBounds.intakeYawZero - 0.12 * (degrees / 45);
+    }
+
     public void logDouble(String description, double value) {
         robot.telemetry.addData(description, value);
     }
