@@ -22,7 +22,7 @@ public class FiveSpecimen {
     private static final Point int1 = pointmm(550,-650);
     private static final Point hook1_1 = pointmm(800, -620);
     private static final Point hook1_2 = pointmm(800, -710);
-    private static final Point push1 = pointmm(200, -740);
+    private static final Point push1 = pointmm(200, -950);
     private static final Point hook2_1 = pointmm(800, -770);
     private static final Point hook2_2 = pointmm(800, -890);
     private static final Point push2 = pointmm(200, -1100);

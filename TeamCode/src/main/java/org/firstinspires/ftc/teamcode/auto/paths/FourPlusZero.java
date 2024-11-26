@@ -1,125 +1,123 @@
 package org.firstinspires.ftc.teamcode.auto.paths;
 
+import com.acmerobotics.dashboard.config.Config;
+
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
+@Config
 public class FourPlusZero {
-    public static PathChain path() {
-        double x_1 = 0.0;
-        double x_2 = -3.0;
-        double x_3 = -6.0;
-        double x_4 = -9.0;
+    private static Point pointmm(double x, double y) { return new Point(x/25.4,y/25.4,Point.CARTESIAN); }
+    private static Point pointin(double x, double y) { return new Point(x,y,Point.CARTESIAN); }
+    private static double rad(double deg) { return deg / 180 * Math.PI; }
+    private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
-        // 810 left, 420 back
-        Point prepickup = new Point(-22.2, 31, 1);
-        Point pickup = new Point(-17.2, 31, 1);
-        double pickupAngle = 0.0;
+    public static int dumpX = 660;
 
+    private static final Point start = pointmm(0,0);
+    private static final Point dump1 = pointmm(dumpX-20,150);
+    private static final Point int1 = pointmm(550,-650);
+    private static final Point hook1_1 = pointmm(800, -620);
+    private static final Point hook1_2 = pointmm(800, -710);
+    private static final Point push1 = pointmm(200, -950);
+    private static final Point hook2_1 = pointmm(800, -770);
+    private static final Point hook2_2 = pointmm(800, -890);
+    private static final Point push2 = pointmm(200, -1100);
+    private static final Point int2 = pointmm(650, -1100);
+
+    private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
+    private static final Point humanPlayerSpecimenIntake= pointmm(400, -530);
+    private static final Point o1 = pointmm(dumpX,100);
+    private static final Point o2 = pointmm(dumpX,50);
+    private static final Point o3 = pointmm(dumpX+5,0);
+    private static final Point o4 = pointmm(dumpX+5,-50);
+
+    public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
-        builder
-                // ------------------------------------------ PREPLACED
+        return builder
+                // Preloaded specimen
                 .addPath(
-                        // Line 1
-                        new BezierLine(
-                                new Point(0.0, 0.0, Point.CARTESIAN),
-                                new Point(-25.6, x_1, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(0)
+                        line(start, dump1)
+                ).setConstantHeadingInterpolation(rad(180))
+                .build();
+    }
+    public static PathChain pushes() {
+        return new PathBuilder()
+                // Go from dump to first
                 .addPath(
-                        // Line 1
-                        new BezierLine(
-                                new Point(-25.6, x_1, Point.CARTESIAN),
-                                new Point(-25.6, 25.6, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(0)
+                        line(dump1, int1)
+                ).setConstantHeadingInterpolation(rad(180))
+                // Push first floor
                 .addPath(
-                        new BezierLine(
-                                new Point(-25.6, 25.6, Point.CARTESIAN),
-                                new Point(-48.4, 25.6, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(0)
+                        line(int1, hook1_1)
+                ).setLinearHeadingInterpolation(rad(180), rad(-90))
                 .addPath(
-                        new BezierLine(
-                                new Point(-48.4, 25.6, Point.CARTESIAN),
-                                new Point(-48.4, 37.4, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(0)
+                        line(hook1_1, hook1_2)
+                ).setConstantHeadingInterpolation(rad(-90))
                 .addPath(
-                        new BezierLine(
-                                new Point(-48.4, 37.4, Point.CARTESIAN),
-                                new Point(-3, 42.4, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(0)
+                        line(hook1_2, push1)
+                ).setLinearHeadingInterpolation(rad(-90),rad(180))
+                // Go to second
+                .addPath(
+                        line(push1, hook2_1)
+                ).setLinearHeadingInterpolation(rad(180), rad(-90))
+                // Push second
+                .addPath(
+                        line(hook2_1, hook2_2)
+                ).setConstantHeadingInterpolation(rad(-90))
+                .addPath(
+                        line(hook2_2, push2)
+                ).setLinearHeadingInterpolation(rad(-90), rad(180))
+                .addPath(
+                        line(push2, int2)
+                ).setConstantHeadingInterpolation(180)
+                .build();
+    }
 
-                // --------------------------------- DRIVE TO EXTENSION POINT
-                .addPath(
-                    new BezierLine(
-                            new Point(-3, 42.4, Point.CARTESIAN),
-                            prepickup
-                    )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(pickupAngle))
-                .addPath(
-                        new BezierLine(
-                                prepickup,
-                                pickup
-                        )
-                )
-                .setConstantHeadingInterpolation(0.0)
-                .addPath(
-                    new BezierLine(
-                            pickup,
-                            new Point(-25.6, x_2, Point.CARTESIAN)
-                    )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+    public static PathChain intake(int s) {
+        Point current;
 
-                // ------------------------------ DRIVE TO EXENSION POINT
-                .addPath( new BezierLine(
-                        new Point(-25.6, x_2, Point.CARTESIAN),
-                        prepickup
-                )
-        )
-                .setConstantHeadingInterpolation(0.0)
+        switch (s) {
+            case 1: current = int2; break;
+            case 2: current = o1; break;
+            case 3: current = o2; break;
+            case 4: current = o3; break;
+            default: return new PathChain();
+        }
+
+        return new PathBuilder()
                 .addPath(
-                        new BezierLine(
-                                prepickup,
-                                pickup
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(pickupAngle))
-                .addPath( new BezierLine(
-                        pickup,
-                        new Point(-25.6, x_3, Point.CARTESIAN)
-                )
-        )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath( new BezierLine(
-                                new Point(-25.6, x_3, Point.CARTESIAN),
-                                prepickup
-                        )
-                )
-                .setConstantHeadingInterpolation(0.0)
+                        line(current, humanPlayerSpecimenIntake_prep)
+                ).setLinearHeadingInterpolation(rad(180), rad(-135))
+                .build();
+    }
+
+    public static PathChain outtake(int s) {
+        Point target;
+
+        switch (s) {
+            case 1: target = o1; break;
+            case 2: target = o2; break;
+            case 3: target = o3; break;
+            case 4: target = o4; break;
+            default: return new PathChain();
+        }
+
+        return new PathBuilder()
                 .addPath(
-                        new BezierLine(
-                                prepickup,
-                                pickup
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(pickupAngle))
-                .addPath( new BezierLine(
-                                pickup,
-                                new Point(-25.6, x_4, Point.CARTESIAN)
-                        )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(0));
-        return builder.build();
+                        line(humanPlayerSpecimenIntake, target)
+                ).setLinearHeadingInterpolation(rad(-135), rad(180))
+                .build();
+    }
+
+    public static PathChain driveOntoSpecimen() {
+        return new PathBuilder()
+                .addPath(
+                        line(humanPlayerSpecimenIntake_prep, humanPlayerSpecimenIntake)
+                ).setConstantHeadingInterpolation(rad(-135))
+                .build();
     }
 }
