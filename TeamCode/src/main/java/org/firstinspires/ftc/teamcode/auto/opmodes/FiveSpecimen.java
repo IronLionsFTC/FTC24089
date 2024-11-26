@@ -81,7 +81,9 @@ public class FiveSpecimen extends CommandOpMode {
                         // Push two spike mark samples into human player zone
                         // Prepare
                         Commands.fastPath(follower, Paths.fiveSpecimen_goto_1).alongWith(
-                                Commands.ExtendIntakeToGripSample(robot)
+                                Commands.ExtendIntakeToGripSample(robot).andThen(
+                                        Commands.RotateClaw45DegreesCCW(robot)
+                                )
                         ),
                         // First
                         Commands.Hold(robot),
@@ -89,6 +91,8 @@ public class FiveSpecimen extends CommandOpMode {
                         Commands.Release(robot),
                         // Second
                         Commands.fastPath(follower, Paths.fiveSpecimen_goto_2),
+                        Commands.RotateClaw45DegreesCCW(robot),
+                        Commands.sleep(200),
                         Commands.Hold(robot),
                         Commands.fastPath(follower, Paths.fiveSpecimen_give_2),
                         Commands.Release(robot),

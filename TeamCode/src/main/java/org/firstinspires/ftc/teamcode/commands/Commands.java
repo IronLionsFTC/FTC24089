@@ -30,6 +30,7 @@ public class Commands {
 
     // Extend into various states
     public static InstantCommand RotateClaw45Degrees(AutonomousRobot robot) { return new InstantCommand(robot::clawTo45Degrees); }
+    public static InstantCommand RotateClaw45DegreesCCW(AutonomousRobot robot) { return new InstantCommand(robot::clawToNeg45Degrees); }
     public static Command ExtendIntakeToGripSample(AutonomousRobot robot) { return new ExtendIntakeToGripSample(robot); }
     public static Command ExtendIntakeToGripSpecimen(AutonomousRobot robot) { return new ExtendIntakeToGripSpecimen(robot); }
     public static Command RotateClaw(AutonomousRobot robot, double degrees) { return new RotateClaw(robot, degrees); }
