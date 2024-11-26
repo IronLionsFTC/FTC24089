@@ -38,6 +38,7 @@ public class autoZeroPlusFour extends CommandOpMode {
                     Commands.followPath(follower, chain.getPath(1)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)
                     ),
+                    Commands.sleep(1000), // Adjust over top of sample before grab
                     Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot).alongWith(
                             Commands.followPath(follower, chain.getPath(2))
@@ -48,6 +49,7 @@ public class autoZeroPlusFour extends CommandOpMode {
                     Commands.followPath(follower, chain.getPath(3)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)
                     ),
+                    Commands.sleep(1000), // Adjust over top of sample before grab
                     Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot).alongWith(
                             Commands.followPath(follower, chain.getPath(4))
@@ -58,6 +60,7 @@ public class autoZeroPlusFour extends CommandOpMode {
                     Commands.followPath(follower, chain.getPath(5)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)
                     ),
+                    Commands.sleep(1000), // Adjust over top of sample before grab
                     Commands.GrabGameObjectWithIntake(robot).alongWith(Commands.RotateClaw45Degrees(robot)),
                     Commands.RetractIntakeForTransfer(robot).alongWith(
                             Commands.followPath(follower, chain.getPath(6))

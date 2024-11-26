@@ -47,7 +47,7 @@ public class FourPlusZero extends CommandOpMode {
                                 Commands.ExtendIntakeToGripSpecimen(robot)
                         ),
                         Commands.followPath(follower, chain.getPath(6)),
-                        Commands.sleep(1500),
+
                         Commands.GrabGameObjectWithIntake(robot),
                         Commands.RetractIntakeForTransfer(robot),
                         Commands.followPath(follower, chain.getPath(6)).alongWith(
@@ -59,7 +59,6 @@ public class FourPlusZero extends CommandOpMode {
 
                         // Drive to the new path
                         Commands.followPath(follower, chain.getPath(7)),
-                        Commands.sleep(500),
                         Commands.GrabGameObjectWithIntake(robot),
                         Commands.followPath(follower, chain.getPath(8)).alongWith(
                                 Commands.sleep(500).andThen(
