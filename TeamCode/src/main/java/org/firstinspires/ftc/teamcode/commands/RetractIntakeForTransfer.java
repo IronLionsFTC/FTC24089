@@ -21,6 +21,6 @@ public class RetractIntakeForTransfer extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return robot.isTransferReady() && robot.intakeTimer.getElapsedTimeSeconds() > 1.5;
+        return robot.isTransferReady() && robot.intakeTimer.getElapsedTimeSeconds() > 0.5; // 1.5
     }
 }
