@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.opmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
+@Config
 @Autonomous(name = "5 Specimen", group = "MAIN")
 public class FiveSpecimen extends CommandOpMode {
     public PathChain chain;
@@ -21,6 +23,8 @@ public class FiveSpecimen extends CommandOpMode {
     public AutonomousRobot robot;
 
     private static double movementSpeedToIntake = 0.5;
+    public static int outtakePathDelay = 500;
+    public static int slideRaiseDelay = 1000;
 
     private Command dump(int s) {
         return Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
@@ -29,9 +33,9 @@ public class FiveSpecimen extends CommandOpMode {
                 Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
                 Commands.RetractIntakeForTransfer(robot),
                 Commands.GrabGameObjectWithIntake(robot).alongWith(
-                        Commands.sleep(500),
+                        Commands.sleep(outtakePathDelay),
                         Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s)).alongWith(
-                                Commands.sleep(1300),
+                                Commands.sleep(slideRaiseDelay),
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         )
                 ),
