@@ -8,5 +8,8 @@ public class Paths {
 
     public static PathChain fiveSpecimen_initial = FiveSpecimen.initial_dump();
     public static PathChain fiveSpecimen_pushes = FiveSpecimen.pushes();
+    public static PathChain fiveSpecimen_intake(int s) { return FiveSpecimen.intake(s); }
+    public static PathChain fiveSpecimen_outtake(int s) { return FiveSpecimen.outtake(s); }
+
     public static PathChain fourSpecimen = FourPlusZero.path();
 }

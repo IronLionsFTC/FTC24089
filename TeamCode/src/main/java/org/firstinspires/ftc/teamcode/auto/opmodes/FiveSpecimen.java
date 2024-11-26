@@ -37,8 +37,49 @@ public class FiveSpecimen extends CommandOpMode {
                     Commands.ClipSpecimen(robot),
 
                     // Push two spike mark samples into human player zone
-                    Commands.followPath(follower, Paths.fiveSpecimen_pushes)
-//                    Commands.followPath(follower, this.chain)
+                    Commands.followPath(follower, Paths.fiveSpecimen_pushes),
+
+                    // SPECIMEN CYCLING ==========================================================
+                    // Do the four specimens
+                    Commands.followPath(follower, Paths.fiveSpecimen_intake(1)),
+                    // TODO: could be done at the same time, do some testing
+                    Commands.ExtendIntakeToGripSpecimen(robot),
+                    Commands.GrabGameObjectWithIntake(robot),
+                    Commands.RetractIntakeForTransfer(robot),
+                    Commands.followPath(follower, Paths.fiveSpecimen_outtake(1)).alongWith(
+                            Commands.RaiseSlidesForSpecimenDump(robot)
+                    ),
+                    Commands.ClipSpecimen(robot),
+
+                    Commands.followPath(follower, Paths.fiveSpecimen_intake(2)),
+                    // TODO: could be done at the same time, do some testing
+                    Commands.ExtendIntakeToGripSpecimen(robot),
+                    Commands.GrabGameObjectWithIntake(robot),
+                    Commands.RetractIntakeForTransfer(robot),
+                    Commands.followPath(follower, Paths.fiveSpecimen_outtake(2)).alongWith(
+                            Commands.RaiseSlidesForSpecimenDump(robot)
+                    ),
+                    Commands.ClipSpecimen(robot),
+
+                    Commands.followPath(follower, Paths.fiveSpecimen_intake(3)),
+                    // TODO: could be done at the same time, do some testing
+                    Commands.ExtendIntakeToGripSpecimen(robot),
+                    Commands.GrabGameObjectWithIntake(robot),
+                    Commands.RetractIntakeForTransfer(robot),
+                    Commands.followPath(follower, Paths.fiveSpecimen_outtake(3)).alongWith(
+                            Commands.RaiseSlidesForSpecimenDump(robot)
+                    ),
+                    Commands.ClipSpecimen(robot),
+
+                    Commands.followPath(follower, Paths.fiveSpecimen_intake(4)),
+                    // TODO: could be done at the same time, do some testing
+                    Commands.ExtendIntakeToGripSpecimen(robot),
+                    Commands.GrabGameObjectWithIntake(robot),
+                    Commands.RetractIntakeForTransfer(robot),
+                    Commands.followPath(follower, Paths.fiveSpecimen_outtake(4)).alongWith(
+                            Commands.RaiseSlidesForSpecimenDump(robot)
+                    ),
+                    Commands.ClipSpecimen(robot)
             )
         );
     }

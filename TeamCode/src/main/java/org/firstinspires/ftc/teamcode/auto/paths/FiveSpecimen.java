@@ -21,8 +21,14 @@ public class FiveSpecimen {
     private static final Point hook1_2 = pointmm(800, -710);
     private static final Point push1 = pointmm(200, -740);
     private static final Point hook2_1 = pointmm(800, -770);
-    private static final Point hook2_2 = pointmm(800, -860);
+    private static final Point hook2_2 = pointmm(800, -890);
     private static final Point push2 = pointmm(200, -900);
+
+    private static final Point humanPlayerSpecimenIntake = pointmm(650, -300);
+    private static final Point o1 = pointmm(615,250);
+    private static final Point o2 = pointmm(615,250);
+    private static final Point o3 = pointmm(615,200);
+    private static final Point o4 = pointmm(615,150);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
@@ -60,6 +66,42 @@ public class FiveSpecimen {
                 .addPath(
                         line(hook2_2, push2)
                 ).setLinearHeadingInterpolation(rad(-90), rad(180))
+                .build();
+    }
+
+    public static PathChain intake(int s) {
+        Point current;
+
+        switch (s) {
+            case 1: current = push2; break;
+            case 2: current = o1; break;
+            case 3: current = o2; break;
+            case 4: current = o3; break;
+            default: return new PathChain();
+        }
+
+        return new PathBuilder()
+                .addPath(
+                        line(current, humanPlayerSpecimenIntake)
+                ).setLinearHeadingInterpolation(rad(180), rad(-135))
+                .build();
+    }
+
+    public static PathChain outtake(int s) {
+        Point target;
+
+        switch (s) {
+            case 1: target = o1; break;
+            case 2: target = o2; break;
+            case 3: target = o3; break;
+            case 4: target = o4; break;
+            default: return new PathChain();
+        }
+
+        return new PathBuilder()
+                .addPath(
+                        line(humanPlayerSpecimenIntake, target)
+                ).setLinearHeadingInterpolation(rad(-135), rad(180))
                 .build();
     }
 }
