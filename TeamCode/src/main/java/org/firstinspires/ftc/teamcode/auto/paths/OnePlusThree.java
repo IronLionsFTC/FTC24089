@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 public class OnePlusThree {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
-        Point basket = new Point(0.0, -33, 1);
+        Point basket = new Point(-3.0, -37, 1);
         builder
                 .addPath(
                         // Line 1
@@ -22,13 +22,13 @@ public class OnePlusThree {
                         // Line 1
                         new BezierLine(
                                 new Point(-25.0, 4.0, Point.CARTESIAN),
-                                new Point(-7.5, -29.0, Point.CARTESIAN)
+                                new Point(-8.0, -29.0, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-180))
                 .addPath(
                         new BezierLine(
-                                new Point(-7.5, -29.0, Point.CARTESIAN),
+                                new Point(-8, -29.0, Point.CARTESIAN),
                                 basket
                         )
                 )
@@ -36,7 +36,7 @@ public class OnePlusThree {
                 .addPath(
                         new BezierLine(
                                 basket,
-                                new Point(-7.5, -39.0, Point.CARTESIAN)
+                                new Point(-8, -39.0, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-180))
@@ -64,10 +64,17 @@ public class OnePlusThree {
                 .addPath(
                         new BezierLine(
                                 basket,
-                                new Point(-5.0, -5.0, Point.CARTESIAN)
+                                new Point(-45.0, -34.0, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-90))
+                .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(90))
+                .addPath(
+                        new BezierLine(
+                                new Point(-45.0, -34.0, Point.CARTESIAN),
+                                new Point(-45.0, -15.0, Point.CARTESIAN)
+                        )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(90))
         ;
         return builder.build();
     }

@@ -66,8 +66,7 @@ public class autoZeroPlusFour extends CommandOpMode {
                     ),
                     Commands.DumpSample(robot),
                     Commands.followPath(follower, chain.getPath(7)),
-                    Commands.followPath(follower, chain.getPath(8)),
-                    Commands.followPath(follower, chain.getPath(9))
+                    Commands.followPath(follower, chain.getPath(8))
             )
         );
     }

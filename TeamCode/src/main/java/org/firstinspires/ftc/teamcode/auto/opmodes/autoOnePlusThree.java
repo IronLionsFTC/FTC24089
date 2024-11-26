@@ -66,7 +66,8 @@ public class autoOnePlusThree extends CommandOpMode {
                             Commands.RaiseSlidesForSampleDump(robot)
                     ),
                     Commands.DumpSample(robot),
-                    Commands.followPath(follower, chain.getPath(7))
+                    Commands.followPath(follower, chain.getPath(7)),
+                    Commands.followPath(follower, chain.getPath(8))
             )
         );
     }
