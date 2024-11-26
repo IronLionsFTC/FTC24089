@@ -98,7 +98,7 @@ public class FiveSpecimen extends CommandOpMode {
                         Commands.Release(robot),
                         // Prepare for intaking
                         Commands.RetractIntakeForTransfer(robot).alongWith(
-                                Commands.followPath(follower, Paths.fiveSpecimen_prepare)
+                                Commands.fastPath(follower, Paths.fiveSpecimen_prepare)
                         ),
 
 
