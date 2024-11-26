@@ -73,20 +73,19 @@ public class FourPlusZero extends CommandOpMode {
                         Commands.sleepUntil(this::opModeIsActive),
 
                         // Dump preloaded specimen
-                        Commands.fastPath(follower, Paths.fiveSpecimen_initial).alongWith(
+                        Commands.fastPath(follower, Paths.fourSpecimen_initial).alongWith(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         ),
                         Commands.ClipSpecimen(robot),
 
                         // Push two spike mark samples into human player zone
-                        Commands.fastPath(follower, Paths.fiveSpecimen_pushes),
+                        Commands.fastPath(follower, Paths.fourSpecimen_pushes),
 
                         // SPECIMEN CYCLING ==========================================================
                         // Do the four specimens
                         dump(1),
                         dump(2),
-                        dump(3),
-                        dump(4)
+                        dump(3)
                 )
         );
     }

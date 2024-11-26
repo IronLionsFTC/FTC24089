@@ -61,6 +61,7 @@ public class FourPlusZero {
                         line(hook1_2, push1)
                 ).setLinearHeadingInterpolation(rad(-90),rad(180))
                 // Go to second
+                /*
                 .addPath(
                         line(push1, hook2_1)
                 ).setLinearHeadingInterpolation(rad(180), rad(-90))
@@ -74,6 +75,7 @@ public class FourPlusZero {
                 .addPath(
                         line(push2, int2)
                 ).setConstantHeadingInterpolation(180)
+                 */
                 .build();
     }
 
