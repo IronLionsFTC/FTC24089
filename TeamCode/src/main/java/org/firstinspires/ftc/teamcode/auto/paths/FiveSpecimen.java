@@ -17,7 +17,6 @@ public class FiveSpecimen {
     public static int dumpX = 660;
 
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(dumpX-30,150);
     private static final Point int2 = pointmm(650, -800);
 
     private static final Point grab1 = pointmm(400, -560);
@@ -26,17 +25,19 @@ public class FiveSpecimen {
 
     private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
     private static final Point humanPlayerSpecimenIntake = pointmm(400, -530);
-    private static final Point o1 = pointmm(dumpX,100);
-    private static final Point o2 = pointmm(dumpX,50);
+
+    private static final Point o0 = pointmm(dumpX-30,225);
+    private static final Point o1 = pointmm(dumpX,150);
+    private static final Point o2 = pointmm(dumpX,75);
     private static final Point o3 = pointmm(dumpX+5,0);
-    private static final Point o4 = pointmm(dumpX+5,-60);
+    private static final Point o4 = pointmm(dumpX+5,-75);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
         return builder
                 // Preloaded specimen
                 .addPath(
-                        line(start, dump1)
+                        line(start, o0)
                 ).setConstantHeadingInterpolation(rad(180))
                 .build();
     }
@@ -44,7 +45,7 @@ public class FiveSpecimen {
     public static PathChain goto_first_spike() {
         return new PathBuilder()
                 .addPath(
-                        line(dump1, grab1)
+                        line(o0, grab1)
                 ).setLinearHeadingInterpolation(rad(180), rad(-45))
                 .build();
     }
