@@ -64,7 +64,7 @@ public class ZeroPlusFour {
                 .addPath(
                         new BezierLine(
                                 basket,
-                                new Point(-55.0, -34.0, Point.CARTESIAN)
+                                new Point(-45.0, -34.0, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(90))
