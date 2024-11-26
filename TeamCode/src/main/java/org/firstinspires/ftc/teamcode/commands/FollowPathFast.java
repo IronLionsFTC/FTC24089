@@ -44,6 +44,7 @@ public class FollowPathFast extends CommandBase {
 
     @Override
     public void initialize() {
+        follower.setMaxPower(this.maxSpeed);
         follower.followPath(path, holdEnd);
     }
 
