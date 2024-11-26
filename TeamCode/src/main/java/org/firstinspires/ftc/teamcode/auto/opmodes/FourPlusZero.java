@@ -29,17 +29,24 @@ public class FourPlusZero extends CommandOpMode {
         schedule(
                 new RunCommand(robot::update),
                 new SequentialCommandGroup(
+                        // Drive backwards whilst raising slides
                         Commands.followPath(follower, chain.getPath(0)).alongWith(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         ),
+                        // Clip preplaced specimen
                         Commands.ClipSpecimen(robot),
+
+                        // Drive left, back, left, forward to dump sample into observation zone
                         Commands.fastPath(follower, chain.getPath(1)),
                         Commands.fastPath(follower, chain.getPath(2)),
                         Commands.fastPath(follower, chain.getPath(3)),
                         Commands.fastPath(follower, chain.getPath(4)),
+
+
                         Commands.followPath(follower, chain.getPath(5)).alongWith(
                                 Commands.ExtendIntakeToGripSpecimen(robot)
                         ),
+                        Commands.followPath(follower, chain.getPath(6)),
                         Commands.sleep(1500),
                         Commands.GrabGameObjectWithIntake(robot),
                         Commands.RetractIntakeForTransfer(robot),
