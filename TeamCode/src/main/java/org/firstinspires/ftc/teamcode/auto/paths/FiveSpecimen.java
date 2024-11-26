@@ -15,7 +15,7 @@ public class FiveSpecimen {
     private static double rad(double deg) { return deg / 180 * Math.PI; }
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
-    private static final int dumpX = 620;
+    public static int dumpX = 640;
 
     private static final Point start = pointmm(0,0);
     private static final Point dump1 = pointmm(dumpX,300);
@@ -26,9 +26,10 @@ public class FiveSpecimen {
     private static final Point hook2_1 = pointmm(800, -770);
     private static final Point hook2_2 = pointmm(800, -890);
     private static final Point push2 = pointmm(200, -1100);
-    private static final Point int2 = pointmm(550, -1100);
+    private static final Point int2 = pointmm(650, -1100);
 
-    private static final Point humanPlayerSpecimenIntake = pointmm(400, -530);
+    private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
+    private static final Point humanPlayerSpecimenIntake= pointmm(400, -530);
     private static final Point o1 = pointmm(dumpX,250);
     private static final Point o2 = pointmm(dumpX,250);
     private static final Point o3 = pointmm(dumpX,200);
@@ -89,7 +90,7 @@ public class FiveSpecimen {
 
         return new PathBuilder()
                 .addPath(
-                        line(current, humanPlayerSpecimenIntake)
+                        line(current, humanPlayerSpecimenIntake_prep)
                 ).setLinearHeadingInterpolation(rad(180), rad(-135))
                 .build();
     }
@@ -109,6 +110,14 @@ public class FiveSpecimen {
                 .addPath(
                         line(humanPlayerSpecimenIntake, target)
                 ).setLinearHeadingInterpolation(rad(-135), rad(180))
+                .build();
+    }
+
+    public static PathChain driveOntoSpecimen() {
+        return new PathBuilder()
+                .addPath(
+                        line(humanPlayerSpecimenIntake_prep, humanPlayerSpecimenIntake)
+                ).setConstantHeadingInterpolation(rad(-135))
                 .build();
     }
 }

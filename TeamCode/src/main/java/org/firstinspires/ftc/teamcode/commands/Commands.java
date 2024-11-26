@@ -24,6 +24,7 @@ public class Commands {
     public static FollowPathCommand followPath(Follower follower, PathChain path) { return new FollowPathCommand(follower, path); }
     public static FollowPathCommand followPath(Follower follower, Path path) { return new FollowPathCommand(follower, path); }
     public static FollowPathFast fastPath(Follower follower, Path path) { return new FollowPathFast(follower, path); }
+    public static FollowPathFast fastPath(Follower follower, PathChain path) { return new FollowPathFast(follower, path); }
 
     // Intake Commands ---------------------------------------------------------------------------------------------------
 

@@ -25,7 +25,7 @@ public class FiveSpecimen extends CommandOpMode {
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(0, 0, Math.PI));
 
-        double movementSpeedToIntake = 0.7;
+        double movementSpeedToIntake = 0.5;
 
         schedule(
             new RunCommand(robot::update),
@@ -43,9 +43,10 @@ public class FiveSpecimen extends CommandOpMode {
 
                     // SPECIMEN CYCLING ==========================================================
                     // Do the four specimens
-                    Commands.followPath(follower, Paths.fiveSpecimen_intake(1)).setSpeed(movementSpeedToIntake),
-                    // TODO: could be done at the same time, do some testing
-                    Commands.ExtendIntakeToGripSpecimen(robot),
+                    Commands.followPath(follower, Paths.fiveSpecimen_intake(1)).alongWith(
+                        Commands.ExtendIntakeToGripSpecimen(robot)
+                    ),
+                    Commands.fastPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
                     Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot),
                     Commands.followPath(follower, Paths.fiveSpecimen_outtake(1)).alongWith(
