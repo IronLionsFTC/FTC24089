@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.opmodes;
 
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -19,41 +20,53 @@ public class FiveSpecimen extends CommandOpMode {
     public Follower follower;
     public AutonomousRobot robot;
 
+    private static double movementSpeedToIntake = 0.5;
+
+    private Command dump(int s) {
+        return Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
+                Commands.ExtendIntakeToGripSpecimen(robot)
+        ).andThen(
+                Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
+                Commands.RetractIntakeForTransfer(robot),
+                Commands.GrabGameObjectWithIntake(robot).alongWith(
+                        Commands.sleep(500),
+                        Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s)).alongWith(
+                                Commands.sleep(1300),
+                                Commands.RaiseSlidesForSpecimenDump(robot)
+                        )
+                ),
+                Commands.ClipSpecimen(robot)
+        );
+    }
+
     @Override
     public void initialize() {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(0, 0, Math.PI));
 
-        double movementSpeedToIntake = 0.5;
 
         schedule(
-            new RunCommand(robot::update),
-            new SequentialCommandGroup(
-                    Commands.sleepUntil(this::opModeIsActive),
+                new RunCommand(robot::update),
+                new SequentialCommandGroup(
+                        Commands.sleepUntil(this::opModeIsActive),
 
-                    // Dump preloaded specimen
-                    Commands.followPath(follower, Paths.fiveSpecimen_initial).alongWith(
-                            Commands.RaiseSlidesForSpecimenDump(robot)
-                    ),
-                    Commands.ClipSpecimen(robot),
+                        // Dump preloaded specimen
+                        Commands.fastPath(follower, Paths.fiveSpecimen_initial).alongWith(
+                                Commands.RaiseSlidesForSpecimenDump(robot)
+                        ),
+                        Commands.ClipSpecimen(robot),
 
-                    // Push two spike mark samples into human player zone
-                    Commands.followPath(follower, Paths.fiveSpecimen_pushes),
+                        // Push two spike mark samples into human player zone
+                        Commands.fastPath(follower, Paths.fiveSpecimen_pushes),
 
-                    // SPECIMEN CYCLING ==========================================================
-                    // Do the four specimens
-                    Commands.followPath(follower, Paths.fiveSpecimen_intake(1)).alongWith(
-                        Commands.ExtendIntakeToGripSpecimen(robot)
-                    ),
-                    Commands.fastPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
-                    Commands.GrabGameObjectWithIntake(robot),
-                    Commands.RetractIntakeForTransfer(robot),
-                    Commands.followPath(follower, Paths.fiveSpecimen_outtake(1)).alongWith(
-                            Commands.RaiseSlidesForSpecimenDump(robot)
-                    ),
-                    Commands.ClipSpecimen(robot)
-            )
+                        // SPECIMEN CYCLING ==========================================================
+                        // Do the four specimens
+                        dump(1),
+                        dump(2),
+                        dump(3),
+                        dump(4)
+                )
         );
     }
 }
