@@ -7,7 +7,10 @@ public class Paths {
     public static PathChain zeroPlusFour = ZeroPlusFour.path();
 
     public static PathChain fiveSpecimen_initial = FiveSpecimen.initial_dump();
-    public static PathChain fiveSpecimen_pushes = FiveSpecimen.pushes();
+    public static PathChain fiveSpecimen_goto_1 = FiveSpecimen.goto_first_spike();
+    public static PathChain fiveSpecimen_give_1 = FiveSpecimen.give_first_spike();
+    public static PathChain fiveSpecimen_goto_2 = FiveSpecimen.goto_second_spike();
+    public static PathChain fiveSpecimen_give_2 = FiveSpecimen.give_second_spike();
     public static PathChain fiveSpecimen_intake(int s) { return FiveSpecimen.intake(s); }
     public static PathChain fiveSpecimen_outtake(int s) { return FiveSpecimen.outtake(s); }
     public static PathChain fiveSpecimen_driveOntoSpecimen = FiveSpecimen.driveOntoSpecimen();

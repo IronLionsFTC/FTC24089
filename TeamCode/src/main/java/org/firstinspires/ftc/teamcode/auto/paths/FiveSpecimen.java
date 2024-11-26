@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.auto.paths;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -28,6 +27,10 @@ public class FiveSpecimen {
     private static final Point push2 = pointmm(200, -1100);
     private static final Point int2 = pointmm(650, -1100);
 
+    private static final Point grab1 = pointmm(700, -500);
+    private static final Point grab2 = pointmm(700, -780);
+    private static final Point give = pointmm(450, -600);
+
     private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
     private static final Point humanPlayerSpecimenIntake= pointmm(400, -530);
     private static final Point o1 = pointmm(dumpX,100);
@@ -44,36 +47,36 @@ public class FiveSpecimen {
                 ).setConstantHeadingInterpolation(rad(180))
                 .build();
     }
-    public static PathChain pushes() {
+
+    public static PathChain goto_first_spike() {
         return new PathBuilder()
-                // Go from dump to first
                 .addPath(
-                        line(dump1, int1)
-                ).setConstantHeadingInterpolation(rad(180))
-                // Push first floor
+                        line(dump1, grab1)
+                ).setLinearHeadingInterpolation(rad(180), rad(-45))
+                .build();
+    }
+
+    public static PathChain give_first_spike() {
+        return new PathBuilder()
                 .addPath(
-                        line(int1, hook1_1)
-                ).setLinearHeadingInterpolation(rad(180), rad(-90))
+                        line(grab1, give)
+                ).setLinearHeadingInterpolation(rad(-45), rad(-135))
+                .build();
+    }
+
+    public static PathChain goto_second_spike() {
+        return new PathBuilder()
                 .addPath(
-                        line(hook1_1, hook1_2)
-                ).setConstantHeadingInterpolation(rad(-90))
+                        line(give, grab2)
+                ).setLinearHeadingInterpolation(rad(-135), rad(-45))
+                .build();
+    }
+
+    public static PathChain give_second_spike() {
+        return new PathBuilder()
                 .addPath(
-                        line(hook1_2, push1)
-                ).setLinearHeadingInterpolation(rad(-90),rad(180))
-                // Go to second
-                .addPath(
-                        line(push1, hook2_1)
-                ).setLinearHeadingInterpolation(rad(180), rad(-90))
-                // Push second
-                .addPath(
-                        line(hook2_1, hook2_2)
-                ).setConstantHeadingInterpolation(rad(-90))
-                .addPath(
-                        line(hook2_2, push2)
-                ).setLinearHeadingInterpolation(rad(-90), rad(180))
-                .addPath(
-                        line(push2, int2)
-                ).setConstantHeadingInterpolation(180)
+                        line(grab2, give)
+                ).setLinearHeadingInterpolation(rad(-45), rad(-135))
                 .build();
     }
 
