@@ -27,7 +27,7 @@ public class FiveSpecimen {
     private static final Point hook2_2 = pointmm(800, -890);
     private static final Point push2 = pointmm(200, -900);
 
-    private static final Point humanPlayerSpecimenIntake = pointmm(380, -550);
+    private static final Point humanPlayerSpecimenIntake = pointmm(300, -530);
     private static final Point o1 = pointmm(dumpX,250);
     private static final Point o2 = pointmm(dumpX,250);
     private static final Point o3 = pointmm(dumpX,200);
