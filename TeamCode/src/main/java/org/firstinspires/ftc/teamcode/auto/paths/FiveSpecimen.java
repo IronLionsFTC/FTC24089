@@ -15,7 +15,7 @@ public class FiveSpecimen {
     private static double rad(double deg) { return deg / 180 * Math.PI; }
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
-    private static final int dumpX = 615;
+    private static final int dumpX = 620;
 
     private static final Point start = pointmm(0,0);
     private static final Point dump1 = pointmm(dumpX,300);
@@ -26,8 +26,9 @@ public class FiveSpecimen {
     private static final Point hook2_1 = pointmm(800, -770);
     private static final Point hook2_2 = pointmm(800, -890);
     private static final Point push2 = pointmm(200, -1100);
+    private static final Point int2 = pointmm(550, -1100);
 
-    private static final Point humanPlayerSpecimenIntake = pointmm(300, -530);
+    private static final Point humanPlayerSpecimenIntake = pointmm(400, -530);
     private static final Point o1 = pointmm(dumpX,250);
     private static final Point o2 = pointmm(dumpX,250);
     private static final Point o3 = pointmm(dumpX,200);
@@ -69,6 +70,9 @@ public class FiveSpecimen {
                 .addPath(
                         line(hook2_2, push2)
                 ).setLinearHeadingInterpolation(rad(-90), rad(180))
+                .addPath(
+                        line(push2, int2)
+                ).setConstantHeadingInterpolation(180)
                 .build();
     }
 
@@ -76,7 +80,7 @@ public class FiveSpecimen {
         Point current;
 
         switch (s) {
-            case 1: current = push2; break;
+            case 1: current = int2; break;
             case 2: current = o1; break;
             case 3: current = o2; break;
             case 4: current = o3; break;
