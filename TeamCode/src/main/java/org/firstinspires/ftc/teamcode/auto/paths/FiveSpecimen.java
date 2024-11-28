@@ -14,23 +14,23 @@ public class FiveSpecimen {
     private static double rad(double deg) { return deg / 180 * Math.PI; }
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
-    public static int dumpX = 660;
+    public static int dumpX = 650;
 
     private static final Point start = pointmm(0,0);
     private static final Point int2 = pointmm(650, -400);
 
-    private static final Point grab1 = pointmm(440, -560);
-    private static final Point grab2 = pointmm(440, -800);
+    private static final Point grab1 = pointmm(430, -615);
+    private static final Point grab2 = pointmm(470, -815);
     private static final Point give = pointmm(450, -600);
 
-    private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
-    private static final Point humanPlayerSpecimenIntake = pointmm(400, -530);
+    private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -400);
+    private static final Point humanPlayerSpecimenIntake = pointmm(450, -550);
 
-    private static final Point o0 = pointmm(dumpX-30,225);
-    private static final Point o1 = pointmm(dumpX,150);
-    private static final Point o2 = pointmm(dumpX,75);
-    private static final Point o3 = pointmm(dumpX+5,0);
-    private static final Point o4 = pointmm(dumpX+5,-75);
+    private static final Point o0 = pointmm(dumpX-15,225);
+    private static final Point o1 = pointmm(dumpX+10,150);
+    private static final Point o2 = pointmm(dumpX+15,75);
+    private static final Point o3 = pointmm(dumpX+20,0);
+    private static final Point o4 = pointmm(dumpX+25,-75);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();

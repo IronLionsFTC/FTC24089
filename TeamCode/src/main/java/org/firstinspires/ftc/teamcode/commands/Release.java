@@ -25,6 +25,6 @@ public class Release extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return robot.intakeTimer.getElapsedTimeSeconds() > 0.3;
     }
 }

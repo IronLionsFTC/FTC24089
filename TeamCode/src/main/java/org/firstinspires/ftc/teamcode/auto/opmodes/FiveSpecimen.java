@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
-@Config
 @Autonomous(name = "5 Specimen", group = "MAIN")
 public class FiveSpecimen extends CommandOpMode {
     public PathChain chain;
@@ -80,7 +79,7 @@ public class FiveSpecimen extends CommandOpMode {
 
                         // Push two spike mark samples into human player zone
                         // Prepare
-                        Commands.fastPath(follower, Paths.fiveSpecimen_goto_1).alongWith(
+                        Commands.followPath(follower, Paths.fiveSpecimen_goto_1).alongWith(
                                 Commands.ExtendIntakeToGripSample(robot).andThen(
                                         Commands.RotateClaw45DegreesCCW(robot)
                                 )
@@ -91,7 +90,6 @@ public class FiveSpecimen extends CommandOpMode {
                         Commands.Release(robot),
                         // Second
                         Commands.fastPath(follower, Paths.fiveSpecimen_goto_2),
-                        Commands.RotateClaw45DegreesCCW(robot),
                         Commands.sleep(300),
                         Commands.Hold(robot),
                         Commands.fastPath(follower, Paths.fiveSpecimen_give_2),

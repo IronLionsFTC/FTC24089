@@ -67,7 +67,7 @@ public class Servos {
                 break;
             case UpFlipped: case UpWithSpecimenFlipped: case UpWithSpecimenOnBar:
                 outtakeClaw = RobotParameters.ServoBounds.clawClosed;
-                outtakeLift = RobotParameters.ServoBounds.armUp;
+                outtakeLift = RobotParameters.ServoBounds.armUp + 0.07;
                 break;
             case UpClawOpen: case UpWithSpecimentGoingDown:
                 outtakeLift = RobotParameters.ServoBounds.armUp;
