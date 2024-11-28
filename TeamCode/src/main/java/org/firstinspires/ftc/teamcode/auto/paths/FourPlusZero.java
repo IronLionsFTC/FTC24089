@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.auto.paths;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -15,67 +14,71 @@ public class FourPlusZero {
     private static double rad(double deg) { return deg / 180 * Math.PI; }
     private static BezierLine line(Point start, Point end) { return new BezierLine(start, end); }
 
-    public static int dumpX = 660;
+    public static int dumpX = 650;
 
     private static final Point start = pointmm(0,0);
-    private static final Point dump1 = pointmm(dumpX-20,150);
-    private static final Point int1 = pointmm(550,-650);
-    private static final Point hook1_1 = pointmm(800, -620);
-    private static final Point hook1_2 = pointmm(800, -710);
-    private static final Point push1 = pointmm(200, -950);
-    private static final Point hook2_1 = pointmm(800, -770);
-    private static final Point hook2_2 = pointmm(800, -890);
-    private static final Point push2 = pointmm(200, -1100);
-    private static final Point int2 = pointmm(650, -1100);
+    private static final Point int2 = pointmm(650, -400);
 
-    private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
-    private static final Point humanPlayerSpecimenIntake= pointmm(400, -530);
-    private static final Point o1 = pointmm(dumpX,100);
-    private static final Point o2 = pointmm(dumpX,50);
-    private static final Point o3 = pointmm(dumpX+5,0);
-    private static final Point o4 = pointmm(dumpX+5,-50);
+    private static final Point grab1 = pointmm(430, -615);
+    private static final Point grab2 = pointmm(470, -815);
+    private static final Point give = pointmm(450, -600);
+
+    private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -400);
+    private static final Point humanPlayerSpecimenIntake = pointmm(450, -550);
+
+    private static final Point o0 = pointmm(dumpX-15,225);
+    private static final Point o1 = pointmm(dumpX+10,150);
+    private static final Point o2 = pointmm(dumpX+15,75);
+    private static final Point o3 = pointmm(dumpX+20,0);
+    private static final Point o4 = pointmm(dumpX+25,-75);
 
     public static PathChain initial_dump() {
         PathBuilder builder = new PathBuilder();
         return builder
                 // Preloaded specimen
                 .addPath(
-                        line(start, dump1)
+                        line(start, o0)
                 ).setConstantHeadingInterpolation(rad(180))
                 .build();
     }
-    public static PathChain pushes() {
+
+    public static PathChain goto_first_spike() {
         return new PathBuilder()
-                // Go from dump to first
                 .addPath(
-                        line(dump1, int1)
-                ).setConstantHeadingInterpolation(rad(180))
-                // Push first floor
+                        line(o0, grab1)
+                ).setLinearHeadingInterpolation(rad(180), rad(-45))
+                .build();
+    }
+
+    public static PathChain give_first_spike() {
+        return new PathBuilder()
                 .addPath(
-                        line(int1, hook1_1)
-                ).setLinearHeadingInterpolation(rad(180), rad(-90))
+                        line(grab1, give)
+                ).setLinearHeadingInterpolation(rad(-45), rad(-135))
+                .build();
+    }
+
+    public static PathChain goto_second_spike() {
+        return new PathBuilder()
                 .addPath(
-                        line(hook1_1, hook1_2)
-                ).setConstantHeadingInterpolation(rad(-90))
+                        line(give, grab2)
+                ).setLinearHeadingInterpolation(rad(-135), rad(-45))
+                .build();
+    }
+
+    public static PathChain give_second_spike() {
+        return new PathBuilder()
                 .addPath(
-                        line(hook1_2, push1)
-                ).setLinearHeadingInterpolation(rad(-90),rad(180))
-                // Go to second
-                /*
+                        line(grab2, give)
+                ).setLinearHeadingInterpolation(rad(-45), rad(-135))
+                .build();
+    }
+
+    public static PathChain prepare_for_cycles() {
+        return new PathBuilder()
                 .addPath(
-                        line(push1, hook2_1)
-                ).setLinearHeadingInterpolation(rad(180), rad(-90))
-                // Push second
-                .addPath(
-                        line(hook2_1, hook2_2)
-                ).setConstantHeadingInterpolation(rad(-90))
-                .addPath(
-                        line(hook2_2, push2)
-                ).setLinearHeadingInterpolation(rad(-90), rad(180))
-                .addPath(
-                        line(push2, int2)
-                ).setConstantHeadingInterpolation(180)
-                 */
+                        line(give, int2)
+                ).setConstantHeadingInterpolation(rad(-135))
                 .build();
     }
 

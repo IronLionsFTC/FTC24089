@@ -15,8 +15,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
-@Config
-@Autonomous(name = "4+0", group = "MAIN")
+@Autonomous(name = "5 Specimen", group = "MAIN")
 public class FourPlusZero extends CommandOpMode {
     public PathChain chain;
     public Follower follower;
@@ -73,13 +72,28 @@ public class FourPlusZero extends CommandOpMode {
                         Commands.sleepUntil(this::opModeIsActive),
 
                         // Dump preloaded specimen
-                        Commands.fastPath(follower, Paths.fourSpecimen_initial).alongWith(
+                        Commands.fastPath(follower, Paths.fiveSpecimen_initial).alongWith(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         ),
                         Commands.ClipSpecimen(robot),
 
                         // Push two spike mark samples into human player zone
-                        Commands.fastPath(follower, Paths.fourSpecimen_pushes),
+                        // Prepare
+                        Commands.followPath(follower, Paths.fiveSpecimen_goto_1).alongWith(
+                                Commands.ExtendIntakeToGripSample(robot).andThen(
+                                        Commands.RotateClaw45DegreesCCW(robot)
+                                )
+                        ),
+                        // First
+                        Commands.Hold(robot),
+                        Commands.fastPath(follower, Paths.fiveSpecimen_give_1),
+                        Commands.Release(robot),
+
+                        // Prepare for intaking
+                        Commands.RetractIntakeForTransfer(robot).alongWith(
+                                Commands.fastPath(follower, Paths.fiveSpecimen_prepare)
+                        ),
+
 
                         // SPECIMEN CYCLING ==========================================================
                         // Do the four specimens
