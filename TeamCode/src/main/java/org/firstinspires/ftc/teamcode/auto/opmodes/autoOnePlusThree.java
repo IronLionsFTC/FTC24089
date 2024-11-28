@@ -22,7 +22,7 @@ public class autoOnePlusThree extends CommandOpMode {
     @Override
     public void initialize() {
         this.follower = new Follower(hardwareMap);
-        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
+        this.robot = new AutonomousRobot(telemetry, hardwareMap, this.follower, true);
         this.follower.setStartingPose(new Pose(0.0, 0.0, 0.0));
         this.chain = Paths.onePlusThree; // This is also a valid path for a simple sample run, just forwards then back
 
@@ -30,9 +30,9 @@ public class autoOnePlusThree extends CommandOpMode {
             new RunCommand(robot::update),
             new SequentialCommandGroup(
                     Commands.sleepUntil(this::opModeIsActive),
-                    Commands.followPath(follower, chain.getPath(0)).alongWith(
-                            Commands.RaiseSlidesForSpecimenDump(robot)
-                    ).andThen(Commands.sleep(800)),
+                    Commands.RaiseSlidesForSpecimenDump(robot),
+                    Commands.followPath(follower, chain.getPath(0)),
+                    Commands.sleep(800),
                     Commands.ClipSpecimen(robot),
                     Commands.followPath(follower, chain.getPath(1)).alongWith(
                             Commands.sleep(1000).andThen(

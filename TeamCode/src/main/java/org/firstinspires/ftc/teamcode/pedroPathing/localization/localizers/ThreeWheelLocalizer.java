@@ -60,20 +60,20 @@ public class ThreeWheelLocalizer extends Localizer {
     // Trial 2: 0.0018564252382059227
     // Trial 3: 0.0018561700969959188
     // Average: 0.00185478226
-    public static double FORWARD_TICKS_TO_INCHES = 0.00185478226;
+    public static double FORWARD_TICKS_TO_INCHES = 0.00197;
 
     // Trial 1: 0.0027757439050792696
     // Trial 2: 0.0027762001231266325
     // Trial 3: 0.0027670464849307674
     // Disregard Trial 1 as OUTLIER
     // Average: 0.00277299683
-    public static double STRAFE_TICKS_TO_INCHES = 0.00277299683;
+    public static double STRAFE_TICKS_TO_INCHES = 0.00197;
 
     // Trial 1: 0.00192480972096053
     // Trial 2: 0.0019203660117841045
     // Trial 3: 0.0019244182408728854
     // Average: 0.00192319799
-    public static double TURN_TICKS_TO_RADIANS = 0.00192319799;
+    public static double TURN_TICKS_TO_RADIANS = 0.001928;
 
 
     /**

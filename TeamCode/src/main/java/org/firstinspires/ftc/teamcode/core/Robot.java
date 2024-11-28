@@ -118,26 +118,31 @@ public class Robot {
             motors.powers.rightBack = ((rightPower - forwardPower) * movementMultiplier - r);
         }
 
-        public void moveOuttake(double powerMul, boolean auto) {
+        public void moveOuttake(double powerMul, boolean auto, boolean raiseHigher) {
             double outtakeSlidePos = motors.outtakePosition();
             double slideTarget = RobotParameters.SlideBounds.outtakeDown;
 
-            // Automatically lower outtake
-            if (state.outtake.outtakeState == OuttakeState.UpClawOpen || state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown) {
+            // Automatically lower outtake, auto functions do this separately
+            if (!auto && (state.outtake.outtakeState == OuttakeState.UpClawOpen || state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown)) {
                 if (state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.3) {
                     state.outtake.toggle();
                 }
             }
 
-            // Automatically perform transfer
-            if (state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
+            // Automatically perform transfer, auto functions do this separately
+            if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
                 if (motors.intakePosition() < 10.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.0) {
                     state.outtake.outtakeState = OuttakeState.DownClawShut;
                 }
             }
 
-            // Automatically flip outtake on raise
-            if (state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 150) {
+            // Automatically flip outtake on raise, auto functions do this separately
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 150) {
+                state.outtake.toggle();
+            }
+
+            // If waiting to flip up do so, auto functions do this separately
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimenWaitingToFlip && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.3) {
                 state.outtake.toggle();
             }
 
@@ -146,7 +151,7 @@ public class Robot {
                     slideTarget = RobotParameters.SlideBounds.outtakeUp;
                     break;
                 case UpWithSpecimenWaitingToFlip: case UpWithSpecimenFlipped: case UpWithSpecimentGoingDown:
-                    if (auto) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar - 20;
+                    if (auto && raiseHigher) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar + 130;
                     else slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
                     break;
                 case UpWithSpecimenOnBar:
@@ -159,32 +164,39 @@ public class Robot {
             double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
-            if (slideTarget <= 10.0 && outtakeSlidePos < 30) { outtakeSlidePower = 0.0; }
-            if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 150.0) { outtakeSlidePower = 0.0; }
+            if (slideTarget < 10.0 && outtakeSlidePos < 5) { outtakeSlidePower = 0.0; }
+            if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 200.0) { outtakeSlidePower = 0.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
             motors.powers.leftOuttakeSlide = outtakeSlidePower * powerMul;
             motors.powers.rightOuttakeSlide = outtakeSlidePower * powerMul;
         }
 
-        public void moveIntake(double multiplier) {
-            if (state.outtake.outtakeState != OuttakeState.DownClawOpen && state.outtake.outtakeState != OuttakeState.DownClawShut && state.intake.intakeState == IntakeState.Transfer) {
+        public void moveIntake(double multiplier, boolean auto) {
+            // Automatically let go of intake claw when transferring in teleop
+            if (!auto && state.outtake.outtakeState != OuttakeState.DownClawOpen && state.outtake.outtakeState != OuttakeState.DownClawShut && state.intake.intakeState == IntakeState.Transfer) {
                 state.intake.intakeState = IntakeState.Retracted;
             }
+
             double intakeTarget = RobotParameters.SlideBounds.intakeIn;
             switch (state.intake.intakeState) {
                 case ExtendedClawUp: case ExtendedClawDown: case Grabbing: case ExtendedGrabbingOffWallClawShut: case ExtendedGrabbingOffWallClawOpen: case ExtendedClawShut: case ExtendedClawOpen:
                     intakeTarget = RobotParameters.SlideBounds.intakeExtended;
                     state.outtake.outtakeState = OuttakeState.DownClawOpen;
             }
+
+            // Delay slide retraction until intake has folded. Teleop & Auto
             if (state.intake.intakeState == IntakeState.Transfer && state.intake.foldIntakeBeforeRetraction.getElapsedTime() < 500) {
                 intakeTarget = RobotParameters.SlideBounds.intakeExtended;
             }
+
             double intakeSlidePos = motors.intakePosition();
-            double error = (intakeTarget - intakeSlidePos);
             double intakeSlideResponse = pidSettings.intakeSlideController.calculate(intakeSlidePos, intakeTarget) * multiplier;
-            // from encoder error (e.g. 1 off error)
             if (intakeTarget < 5 && intakeSlidePos <= 15) { intakeSlideResponse = 0.0; }
-            // Apply powers to the motors
+
+            // Let go of sample with intake when outtake has grabbed
+            if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawShut) {
+                state.intake.toggle();
+            }
 
             if (state.intake.intakeState == IntakeState.Retracted || state.intake.intakeState == IntakeState.Transfer) {
                 if (motors.intakePosition() < 15.0) {
@@ -245,6 +257,7 @@ public class Robot {
 
             if (state.outtake.outtakeState == OuttakeState.DownClawShut && controls.util_button_press()) {
                 state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
+                state.outtake.outtakeAutomaticFoldDown.resetTimer();
             } else if (controls.outtake.toggle_state()) {
                 state.outtake.toggle();
             }
@@ -282,13 +295,18 @@ public class Robot {
 
             state.intake.clawYaw -= (controls.intake.claw.CW_rotation() - controls.intake.claw.CCW_rotation()) * 0.02;
 
+            if (controls.outtake.pullDown()) {
+                motors.powers.leftOuttakeSlide = -0.5;
+                motors.powers.rightOuttakeSlide = -0.5;
+            }
+
             // EMERGENCY STOP
             return controls.EMERGENCY_STOP();
         }
 
         public void update_teleop(GamepadEx gamepad, double sampleOffset) {
-            moveOuttake(1.0, false);
-            moveIntake(1.0);
+            moveOuttake(1.0, false, false);
+            moveIntake(1.0, false);
 
             // DEPRECATED | will be removed soon
             // servos.intakeOverridePower = controller.RT() - controller.LT();

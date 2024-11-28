@@ -14,23 +14,21 @@ public class DumpSample extends CommandBase {
 
     @Override
     public void initialize() {
-        robot.performDump();
+        robot.robot.state.outtake.outtakeState = OuttakeState.UpFlipped;
+        robot.outtakeTimer.resetTimer();
     }
 
     @Override
     public void execute() {
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.5) {
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.4) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpClawOpen;
-        }
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.7) {
-            robot.robot.state.outtake.outtakeState = OuttakeState.UpWaitingToGoDown;
         }
     }
 
     @Override
     public boolean isFinished() {
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 1.2) {
-            robot.robot.state.outtake.outtakeState = OuttakeState.DownClawOpen;
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.7) {
+            robot.robot.state.outtake.outtakeState = OuttakeState.UpWaitingToGoDown;
             return true;
         }
         return false;

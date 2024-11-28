@@ -64,7 +64,7 @@ public class RobotParameters {
             public static final double rightx = 105;
             public static final double righty = -153;
             public static final double sidex = 120;
-            public static final double sidey = 0;
+            public static final double sidey = 65;
         }
         public static final class CenterOffset_in {
             public static final double leftx = RobotParameters.Odometry.CenterOffset_mm.leftx / 25.4;
@@ -95,11 +95,11 @@ public class RobotParameters {
     }
 
     public static final class ServoBounds {
-        public static final double armDown = 0.02;
-        public static final double armUp = 0.575;
+        public static final double armDown = 1.0;
+        public static final double armUp = 0.3;
 
         public static final double clawClosed = 0.0;
-        public static final double clawOpen = 0.08;
+        public static final double clawOpen = 0.035;
         public static final double clawWideOpen = 0.45;
 
         public static final double intakeFolded = 1.0;
@@ -115,7 +115,7 @@ public class RobotParameters {
 
     public static final class SlideBounds {
         public static final double outtakeDown = 0.02;
-        public static final double outtakeUp = 900.0;
+        public static final double outtakeUp = 1000.0;
         public static final double intakeIn = 0.0;
         public static final double intakeExtended = 150;
 

@@ -4,74 +4,74 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.auto.paths.Points;
 
 public class OnePlusThree {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
-        Point basket = new Point(-3.0, -37, 1);
         builder
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(0.0, 0.0, Point.CARTESIAN),
-                                new Point(-25.0, 4.0, Point.CARTESIAN)
+                                Points.SampleStart.start,
+                                Points.SampleStart.submersible
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(-25.0, 4.0, Point.CARTESIAN),
-                                new Point(-8.0, -29.0, Point.CARTESIAN)
+                                Points.SampleStart.submersible,
+                                Points.SampleStart.sampleA
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-180))
                 .addPath(
                         new BezierLine(
-                                new Point(-8, -29.0, Point.CARTESIAN),
-                                basket
+                                Points.SampleStart.sampleA,
+                                Points.SampleStart.basket
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-180), Math.toRadians(-235))
                 .addPath(
                         new BezierLine(
-                                basket,
-                                new Point(-8, -39.0, Point.CARTESIAN)
+                                Points.SampleStart.basket,
+                                Points.SampleStart.sampleB
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-180))
                 .addPath(
                         new BezierLine(
-                                new Point(-7.5, -39.0, Point.CARTESIAN),
-                                basket
+                                Points.SampleStart.sampleB,
+                                Points.SampleStart.basket
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-180), Math.toRadians(-235))
                 .addPath(
                         new BezierLine(
-                                basket,
-                                new Point(-14.0, -34.0, Point.CARTESIAN)
+                                Points.SampleStart.basket,
+                                Points.SampleStart.sampleC
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(-135))
                 .addPath(
                         new BezierLine(
-                                new Point(-14.0, -34.0, Point.CARTESIAN),
-                                basket
+                                Points.SampleStart.sampleC,
+                                Points.SampleStart.basket
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-135), Math.toRadians(-235))
                 .addPath(
                         new BezierLine(
-                                basket,
-                                new Point(-45.0, -34.0, Point.CARTESIAN)
+                                Points.SampleStart.basket,
+                                Points.SampleStart.parkCorner
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(90))
                 .addPath(
                         new BezierLine(
-                                new Point(-45.0, -34.0, Point.CARTESIAN),
-                                new Point(-45.0, -15.0, Point.CARTESIAN)
+                                Points.SampleStart.parkCorner,
+                                Points.SampleStart.park
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(90))

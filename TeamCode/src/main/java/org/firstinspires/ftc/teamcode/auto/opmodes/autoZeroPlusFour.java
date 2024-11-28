@@ -32,9 +32,9 @@ public class autoZeroPlusFour extends CommandOpMode {
             new SequentialCommandGroup(
                     new WaitUntilCommand(this::opModeIsActive),
                     Commands.followPath(follower, chain.getPath(0)).alongWith(
-                            Commands.RaiseSlidesForSampleDump(robot)
-                    ).andThen(new WaitCommand(800)),
-                    Commands.DumpSample(robot),
+                            Commands.RaiseSlidesForSampleDumpAndFlip(robot)
+                    ),
+                    Commands.DropSample(robot),
                     Commands.followPath(follower, chain.getPath(1)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)
                     ),
@@ -60,7 +60,7 @@ public class autoZeroPlusFour extends CommandOpMode {
                     Commands.followPath(follower, chain.getPath(5)).alongWith(
                             Commands.ExtendIntakeToGripSample(robot)
                     ),
-                    Commands.RotateClaw(robot, 45),
+                    Commands.RotateClaw45Degrees(robot),
                     Commands.sleep(1000), // Adjust over top of sample before grab
                     Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot).alongWith(

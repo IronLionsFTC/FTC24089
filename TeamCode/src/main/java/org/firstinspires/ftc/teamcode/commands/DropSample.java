@@ -5,23 +5,26 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.core.state.outtake.OuttakeState;
 
-public class RotateClaw extends CommandBase {
+public class DropSample extends CommandBase {
     private final AutonomousRobot robot;
-    private double degrees;
 
-    public RotateClaw(AutonomousRobot autonomousRobot, double d) {
+    public DropSample(AutonomousRobot autonomousRobot) {
         robot = autonomousRobot;
         addRequirements(robot);
-        degrees = d;
     }
 
     @Override
     public void initialize() {
-        robot.clawPos = 0.64 - (degrees / 355);
+        robot.robot.state.outtake.outtakeState = OuttakeState.UpClawOpen;
+        robot.outtakeTimer.resetTimer();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.6) {
+            robot.robot.state.outtake.outtakeState = OuttakeState.UpWaitingToGoDown;
+            return true;
+        }
+        return false;
     }
 }

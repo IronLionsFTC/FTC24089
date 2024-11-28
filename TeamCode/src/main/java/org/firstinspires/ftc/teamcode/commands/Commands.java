@@ -19,6 +19,7 @@ public class Commands {
     public static Command sleep(long ms) { return new WaitCommand(ms); }
     public static Command sleepUntil(BooleanSupplier condition) { return new WaitUntilCommand(condition); }
     public static Command instant(Runnable toRun, Subsystem... requirements) { return new InstantCommand(toRun, requirements); }
+    public static Command reset(AutonomousRobot robot) { return new ResetOpmode(robot); }
 
     // Pedro Pathing
     public static FollowPathCommand followPath(Follower follower, PathChain path) { return new FollowPathCommand(follower, path); }
@@ -47,9 +48,11 @@ public class Commands {
 
     // First stage outtake commands
     public static Command RaiseSlidesForSampleDump(AutonomousRobot robot)  { return new RaiseSlidesForSampleDump(robot); }
+    public static Command RaiseSlidesForSampleDumpAndFlip(AutonomousRobot robot)  { return new RaiseSlidesForSampleDumpAndFlip(robot); }
     public static Command RaiseSlidesForSpecimenDump(AutonomousRobot robot) { return new RaiseSlidesForSpecimenDump(robot); }
 
     // Clip / dump commands, clip automatically lets go when reached to be idiot proof and not damage slides
     public static Command DumpSample(AutonomousRobot robot) { return new DumpSample(robot); }
+    public static Command DropSample(AutonomousRobot robot) { return new DropSample(robot); }
     public static Command ClipSpecimen(AutonomousRobot robot) { return new ClipSpecimen(robot); }
 }

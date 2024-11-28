@@ -68,8 +68,8 @@ public final class Controls {
 
     public class Outtake {
         public boolean toggle_state() { return g1.A.press(); }
-        public boolean retract() { return g1.X.press(); }
         public boolean reset() { return g1.DR.isPressed(); }
+        public boolean pullDown() { return g1.DL.isPressed(); }
     } public Outtake outtake = new Outtake();
 
     public boolean util_button_press() { return g1.Y.press(); }

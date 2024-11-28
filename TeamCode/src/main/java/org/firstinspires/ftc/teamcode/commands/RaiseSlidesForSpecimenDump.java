@@ -17,6 +17,7 @@ public class RaiseSlidesForSpecimenDump extends CommandBase {
     @Override
     public void initialize() {
         robot.raiseSlidesForSpecimenDump();
+        robot.outtakeTimer.resetTimer();
     }
 
     @Override
@@ -24,7 +25,7 @@ public class RaiseSlidesForSpecimenDump extends CommandBase {
         if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.3) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
         }
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.7) {
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.8) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenFlipped;
         }
     }

@@ -19,10 +19,17 @@ public class AutonomousRobot extends SubsystemBase {
     public Timer intakeTimer = new Timer();
     public Timer outtakeTimer = new Timer();
     public Follower follower;
+    public boolean rh = false;
     public double clawPos = RobotParameters.ServoBounds.intakeYawZero;
 
     public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f) {
         robot = new Robot(hardwareMap, t, null, null, Team.Red);
+        follower = f;
+    }
+
+    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, boolean raiseHigher) {
+        robot = new Robot(hardwareMap, t, null, null, Team.Red);
+        rh = raiseHigher;
         follower = f;
     }
 
@@ -49,13 +56,14 @@ public class AutonomousRobot extends SubsystemBase {
     }
 
     public void update() {
-        if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown) {
+        if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown || robot.state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown) {
             if (outtakeTimer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
         }
+
         follower.update();
         robot.telemetry.update();
-        robot.drivetrain.moveIntake(0.5);
-        robot.drivetrain.moveOuttake(0.8, true);
+        robot.drivetrain.moveIntake(0.5, true);
+        robot.drivetrain.moveOuttake(0.8, true, rh);
         robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, clawPos, 0.0, true);
         robot.drivetrain.motors.setOtherPowers();
     }
@@ -88,13 +96,13 @@ public class AutonomousRobot extends SubsystemBase {
     public boolean isIntakeExtended() {
         if (robot.drivetrain.motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 50.0 && (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen || robot.state.intake.intakeState == IntakeState.ExtendedClawDown)) {
             if (robot.state.intake.intakeState == IntakeState.ExtendedClawDown) {
-                if (intakeTimer.getElapsedTimeSeconds() > 0.6) {
+                if (intakeTimer.getElapsedTimeSeconds() > 1.6) {
                     intakeTimer.resetTimer();
                     return true;
                 }
             }
             if (robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) {
-                if (intakeTimer.getElapsedTimeSeconds() > 1.0) {
+                if (intakeTimer.getElapsedTimeSeconds() > 2.0) {
                     intakeTimer.resetTimer();
                     return true;
                 }

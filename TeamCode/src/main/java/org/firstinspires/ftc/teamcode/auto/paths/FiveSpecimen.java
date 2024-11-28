@@ -19,8 +19,8 @@ public class FiveSpecimen {
     private static final Point start = pointmm(0,0);
     private static final Point int2 = pointmm(650, -400);
 
-    private static final Point grab1 = pointmm(400, -560);
-    private static final Point grab2 = pointmm(400, -770);
+    private static final Point grab1 = pointmm(440, -560);
+    private static final Point grab2 = pointmm(440, -800);
     private static final Point give = pointmm(450, -600);
 
     private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -330);
