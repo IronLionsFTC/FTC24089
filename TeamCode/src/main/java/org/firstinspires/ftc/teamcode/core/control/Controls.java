@@ -57,25 +57,25 @@ public final class Controls {
     } public Movement movement = new Movement();
 
     public class Intake {
-        public boolean toggle_state() { return g1.X.press(); }
+        public boolean toggle_state() { return g1.X.press() || g2.X.press(); }
 
         public class Claw {
             public double CW_rotation() { return g1.RT(); }
             public double CCW_rotation() { return g1.LT(); }
-            public boolean deposit() { return g1.DD.press(); }
+            public boolean deposit() { return g1.DD.press() || g2.DD.press(); }
         } public Claw claw = new Claw();
     } public Intake intake = new Intake();
 
     public class Outtake {
-        public boolean toggle_state() { return g1.A.press(); }
-        public boolean reset() { return g1.DR.isPressed(); }
-        public boolean pullDown() { return g1.DL.isPressed(); }
+        public boolean toggle_state() { return g1.A.press() || g2.A.press(); }
+        public boolean reset() { return g1.DR.isPressed() || g2.DR.isPressed(); }
+        public boolean pullDown() { return g1.DL.isPressed() || g2.DL.isPressed(); }
     } public Outtake outtake = new Outtake();
 
-    public boolean util_button_press() { return g1.Y.press(); }
+    public boolean util_button_press() { return g1.Y.press() || g2.Y.press(); }
     public boolean use_cv() { return g1.Y.isPressed(); }
 
     // Emergency overrides
     public boolean RESET() { return g1.B.isPressed(); }
-    public boolean EMERGENCY_STOP() { return g1.BACK.isPressed(); }
+    public boolean EMERGENCY_STOP() { return g1.BACK.isPressed() || g2.BACK.isPressed(); }
 }

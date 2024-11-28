@@ -39,7 +39,9 @@ public class Robot {
         computerVision = new ComputerVision(hardwareMap, colour);
 
         state = new RobotState(computerVision);
-        if (g1 != null && g2 != null) controls = new Controls(g1, g2);
+        if (g1 != null && g2 != null) {
+            controls = new Controls(g1, g2);
+        }
 
         drivetrain = new Drivetrain(hardwareMap);
         imu = new RobotIMU(hardwareMap);
