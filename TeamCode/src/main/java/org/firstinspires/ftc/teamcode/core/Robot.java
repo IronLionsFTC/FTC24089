@@ -32,6 +32,7 @@ public class Robot {
     public RobotState state;
     public PID_settings pidSettings = new PID_settings();
     public ComputerVision computerVision;
+    public org.firstinspires.ftc.teamcode.core.state.Orientation orientation;
 
     public Robot(HardwareMap h, Telemetry t, Gamepad g1, Gamepad g2, Team colour) {
         hardwareMap = h;
@@ -47,6 +48,8 @@ public class Robot {
         imu = new RobotIMU(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         team = colour;
+
+        orientation = new org.firstinspires.ftc.teamcode.core.state.Orientation(drivetrain.motors);
     }
 
     public void sleep(int ms) {
@@ -111,6 +114,7 @@ public class Robot {
                 forwardPower -= normalisedSampleY * 1.5;
                 rightPower += normalisedSampleX * 1.5;
             }
+            telemetry.addData("yaw", orientation.getYaw());
             Double r = yawCorrection() + manualYaw;
             if (r.isNaN()) {
                 r = manualYaw;
@@ -338,6 +342,7 @@ public class Robot {
         }
 
         public boolean drive(GamepadEx gamepad) {
+            orientation.update();
             Vec2 samplePosition = null;
             double rotation = 0.0;
 

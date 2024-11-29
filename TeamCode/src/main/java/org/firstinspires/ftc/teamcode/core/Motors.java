@@ -67,6 +67,14 @@ public class Motors {
         public double rightIntakeSlide = 0.0;
     }
 
+    public double leftOdometry() {
+        return rightBack.getCurrentPosition();
+    }
+
+    public double rightOdometry() {
+        return leftFront.getCurrentPosition();
+    }
+
     public void setDrivePowers() {
         leftFront.set(Math.abs(powers.leftFront) > 0.1 ? powers.leftFront : 0.0);
         rightFront.set(Math.abs(powers.rightFront) > 0.1 ? powers.rightFront : 0.0);
