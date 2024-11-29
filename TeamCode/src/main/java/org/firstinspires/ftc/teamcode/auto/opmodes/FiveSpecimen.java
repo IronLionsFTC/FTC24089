@@ -85,6 +85,7 @@ public class FiveSpecimen extends CommandOpMode {
                                 )
                         ),
                         // First
+                        Commands.sleep(300),
                         Commands.Hold(robot),
                         Commands.fastPath(follower, Paths.fiveSpecimen_give_1),
                         Commands.Release(robot),

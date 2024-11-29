@@ -76,6 +76,9 @@ public final class Controls {
     public boolean use_cv() { return g1.Y.isPressed(); }
 
     // Emergency overrides
-    public boolean RESET() { return g1.B.isPressed(); }
+    public boolean RESET() { return g1.B.isPressed() || g2.B.isPressed(); }
     public boolean EMERGENCY_STOP() { return g1.BACK.isPressed() || g2.BACK.isPressed(); }
+    public boolean RESETYAW() {
+        return g2.DU.isPressed();
+    }
 }

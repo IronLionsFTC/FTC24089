@@ -104,14 +104,18 @@ public class Robot {
         }
 
 
-        public void componentDrive(double forwardPower, double rightPower, Vec2 samplePosition, boolean useCV) {
+        public void componentDrive(double forwardPower, double rightPower, Vec2 samplePosition, boolean useCV, double manualYaw) {
             if (samplePosition != null && useCV) {
                 double normalisedSampleX = samplePosition.x / 30.0;
                 double normalisedSampleY = samplePosition.y / 25.0 + 0.1;
                 forwardPower -= normalisedSampleY * 1.5;
                 rightPower += normalisedSampleX * 1.5;
             }
-            double r = yawCorrection();
+            Double r = yawCorrection() + manualYaw;
+            if (r.isNaN()) {
+                r = manualYaw;
+            }
+            telemetry.addData("r", r);
             double movementMultiplier = 1.0;
             if (state.intake.intakeState == IntakeState.ExtendedClawDown || state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawOpen) movementMultiplier = 0.4;
             motors.powers.leftFront = ((rightPower - forwardPower) * movementMultiplier + r);
@@ -126,14 +130,14 @@ public class Robot {
 
             // Automatically lower outtake, auto functions do this separately
             if (!auto && (state.outtake.outtakeState == OuttakeState.UpClawOpen || state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown)) {
-                if (state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.3) {
+                if (state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.5) {
                     state.outtake.toggle();
                 }
             }
 
             // Automatically perform transfer, auto functions do this separately
             if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
-                if (motors.intakePosition() < 10.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.0) {
+                if (motors.intakePosition() < 15.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.3) {
                     state.outtake.outtakeState = OuttakeState.DownClawShut;
                 }
             }
@@ -215,7 +219,9 @@ public class Robot {
         }
 
         public double yawCorrection() {
-            double rawError = imu.targetYaw - imu.getYawDegrees();
+            double rawError;
+            if (imu.getYawDegrees() == 0.0) rawError = 0.000001;
+            else rawError = imu.targetYaw - imu.getYawDegrees();
             if (rawError <= -180.0) { rawError += 360.0; }
             if (rawError > 180.0) { rawError -= 360.0; }
             double response = pidSettings.yawController.calculate(rawError, 0.0);
@@ -235,7 +241,7 @@ public class Robot {
             double yaw = controls.movement.yaw();
             double pitch = controls.movement.pitch();
 
-            imu.targetYaw -= yaw * 6.0;
+            // imu.targetYaw -= yaw * 6.0;
 
             if (Math.abs(yaw) < 0.01) {
                 if (lastYawWasAnalog) {
@@ -270,6 +276,13 @@ public class Robot {
                 motors.rightOuttakeSlide.resetEncoder();
             }
 
+            if (controls.RESET()) {
+                state.intake.intakeState = IntakeState.Retracted;
+                motors.intakeSlide.resetEncoder();
+                motors.powers.leftIntakeSlide = -1.0;
+                motors.powers.rightIntakeSlide = -1.0;
+            }
+
             if (controls.movement.CW45()) {
                 imu.targetYaw -= 45.0;
                 lastYawWasAnalog = false;
@@ -293,7 +306,12 @@ public class Robot {
                 }
             }
 
-            componentDrive(my, mx, samplePosition, controls.use_cv());
+            if (controls.RESETYAW()) {
+                imu.resetYaw();
+                imu.targetYaw = 0.0;
+            }
+
+            componentDrive(my, mx, samplePosition, controls.use_cv(), yaw);
 
             state.intake.clawYaw -= (controls.intake.claw.CW_rotation() - controls.intake.claw.CCW_rotation()) * 0.02;
 
@@ -315,6 +333,7 @@ public class Robot {
 
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset, false);
             motors.setDrivePowers();
+            telemetry.update();
             motors.setOtherPowers();
         }
 
@@ -364,10 +383,12 @@ public class Robot {
 
         public void resetYaw() {
             imu.resetYaw();
+            imu.resetDeviceConfigurationForOpMode();
         }
 
         public double getYawDegrees() {
             Orientation angles = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            if (angles == null) return -0.00001;
             return AngleUnit.DEGREES.normalize(angles.firstAngle);
         }
     }

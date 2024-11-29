@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
-@Autonomous(name = "5 Specimen", group = "MAIN")
+@Autonomous(name = "4+0", group = "MAIN")
 public class FourPlusZero extends CommandOpMode {
     public PathChain chain;
     public Follower follower;
@@ -85,9 +85,12 @@ public class FourPlusZero extends CommandOpMode {
                                 )
                         ),
                         // First
+                        Commands.sleep(800),
                         Commands.Hold(robot),
                         Commands.fastPath(follower, Paths.fiveSpecimen_give_1),
+                        Commands.sleep(2000),
                         Commands.Release(robot),
+                        Commands.sleep(2000),
 
                         // Prepare for intaking
                         Commands.RetractIntakeForTransfer(robot).alongWith(

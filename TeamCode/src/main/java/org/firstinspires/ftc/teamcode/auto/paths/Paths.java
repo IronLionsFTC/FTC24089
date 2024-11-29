@@ -17,7 +17,11 @@ public class Paths {
     public static PathChain fiveSpecimen_driveOntoSpecimen = FiveSpecimen.driveOntoSpecimen();
 
     public static PathChain fourSpecimen_initial = FourPlusZero.initial_dump();
-    public static PathChain fourSpecimen_pushes = FourPlusZero.pushes();
+    public static PathChain fourSpecimen_goto_1 = FourPlusZero.goto_first_spike();
+    public static PathChain fourSpecimen_give_1 = FourPlusZero.give_first_spike();
+    public static PathChain fourSpecimen_goto_2 = FourPlusZero.goto_second_spike();
+    public static PathChain fourSpecimen_give_2 = FourPlusZero.give_second_spike();
+    public static PathChain fourSpecimen_prepare = FourPlusZero.prepare_for_cycles();
     public static PathChain fourSpecimen_intake(int s) { return FourPlusZero.intake(s); }
     public static PathChain fourSpecimen_outtake(int s) { return FourPlusZero.outtake(s); }
     public static PathChain fourSpecimen_driveOntoSpecimen = FourPlusZero.driveOntoSpecimen();
