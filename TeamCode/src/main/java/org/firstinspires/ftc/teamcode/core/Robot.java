@@ -114,6 +114,11 @@ public class Robot {
                 forwardPower -= normalisedSampleY * 1.5;
                 rightPower += normalisedSampleX * 1.5;
             }
+
+            if (manualYaw != 0.0) {
+                orientation.zeroYaw();
+            }
+
             telemetry.addData("yaw", orientation.getYaw());
             Double r = yawCorrection() + manualYaw;
             if (r.isNaN()) {
@@ -223,9 +228,7 @@ public class Robot {
         }
 
         public double yawCorrection() {
-            double rawError;
-            if (imu.getYawDegrees() == 0.0) rawError = 0.000001;
-            else rawError = imu.targetYaw - imu.getYawDegrees();
+            double rawError = imu.targetYaw - orientation.getYaw();
             if (rawError <= -180.0) { rawError += 360.0; }
             if (rawError > 180.0) { rawError -= 360.0; }
             double response = pidSettings.yawController.calculate(rawError, 0.0);

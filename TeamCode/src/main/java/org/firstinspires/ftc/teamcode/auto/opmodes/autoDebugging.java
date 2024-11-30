@@ -26,25 +26,25 @@ public class autoDebugging extends CommandOpMode {
         this.follower = new Follower(hardwareMap);
         this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
         this.follower.setStartingPose(new Pose(0.0, 0.0, 0.0));
-        this.chain = Paths.onePlusThree; // This is also a valid path for a simple sample run, just forwards then back
+        this.chain = Paths.debug;
 
         schedule(
                 new RunCommand(robot::update),
                 new SequentialCommandGroup(
                         Commands.sleepUntil(this::opModeIsActive),
-                        Commands.ExtendIntakeToGripSample(robot),
-                        Commands.GrabGameObjectWithIntake(robot),
-                        Commands.RetractIntakeForTransfer(robot),
-                        Commands.RaiseSlidesForSampleDump(robot),
-                        Commands.DumpSample(robot),
-                        //Commands.sleep(2000),
-                        Commands.ExtendIntakeToGripSample(robot),
-                        Commands.GrabGameObjectWithIntake(robot),
-                        Commands.RetractIntakeForTransfer(robot),
-                        Commands.RaiseSlidesForSampleDump(robot),
-                        Commands.DumpSample(robot),
-                        Commands.sleep(2000),
-                        Commands.reset(robot)
+                        Commands.followPath(follower, this.chain.getPath(0)).alongWith(
+                                Commands.ExtendIntakeToGripSample(robot)
+                        ),
+                        Commands.Hold(robot),
+                        Commands.followPath(follower, this.chain.getPath(1)),
+                        Commands.Release(robot),
+                        Commands.sleep(500),
+                        Commands.sleepUntil(this::opModeIsActive),
+                        Commands.followPath(follower, this.chain.getPath(0)),
+                        Commands.Hold(robot),
+                        Commands.followPath(follower, this.chain.getPath(1)),
+                        Commands.Release(robot),
+                        Commands.sleep(500)
                 )
         );
     }

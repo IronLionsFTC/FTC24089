@@ -16,11 +16,8 @@ public class Release extends CommandBase {
     @Override
     public void initialize() {
         robot.intakeTimer.resetTimer();
-    }
-
-    @Override
-    public void execute() {
-        robot.robot.state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawOpen;
+        if (robot.robot.state.intake.intakeState == IntakeState.Grabbing) robot.robot.state.intake.intakeState = IntakeState.ExtendedClawDown;
+        else if (robot.robot.state.intake.intakeState == IntakeState.ExtendedGrabbingOffWallClawShut) robot.robot.state.intake.intakeState = IntakeState.ExtendedGrabbingOffWallClawOpen;
     }
 
     @Override

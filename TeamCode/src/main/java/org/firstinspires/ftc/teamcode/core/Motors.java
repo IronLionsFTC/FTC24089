@@ -54,6 +54,12 @@ public class Motors {
 
         // Initialize Tracking Classes
         powers = new MotorPowers();
+
+    }
+
+    public void zeroEncoders() {
+        rightBack.resetEncoder();
+        leftFront.resetEncoder();
     }
 
     public static class MotorPowers {

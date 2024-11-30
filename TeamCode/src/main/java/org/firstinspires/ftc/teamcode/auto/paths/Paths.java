@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 public class Paths {
     public static PathChain onePlusThree = OnePlusThree.path();
     public static PathChain zeroPlusFour = ZeroPlusFour.path();
+    public static PathChain debug = Debug.path();
 
     public static PathChain fiveSpecimen_initial = FiveSpecimen.initial_dump();
     public static PathChain fiveSpecimen_goto_1 = FiveSpecimen.goto_first_spike();
