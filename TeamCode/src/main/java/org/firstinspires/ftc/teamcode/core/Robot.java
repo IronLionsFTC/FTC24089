@@ -116,6 +116,7 @@ public class Robot {
             }
 
             if (manualYaw != 0.0) {
+                imu.targetYaw = 0.0;
                 orientation.zeroYaw();
             }
 
