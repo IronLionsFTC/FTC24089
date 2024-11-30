@@ -11,6 +11,8 @@ public class Orientation {
         motors = m;
         motors.leftFront.resetEncoder();
         motors.rightBack.resetEncoder();
+        motors.leftBack.resetEncoder();
+        motors.rightFront.resetEncoder();
         yaw = 0.0;
         multiplier = 0.00925;
     }
@@ -22,5 +24,11 @@ public class Orientation {
     public double getYaw() {
         return yaw * multiplier;
     }
-    public void zeroYaw() { motors.zeroEncoders(); }
+    public void zeroYaw() {
+        yaw = 0.0;
+        motors.leftFront.resetEncoder();
+        motors.rightBack.resetEncoder();
+        motors.leftBack.resetEncoder();
+        motors.rightFront.resetEncoder();
+    }
 }

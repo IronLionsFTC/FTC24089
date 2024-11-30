@@ -118,9 +118,13 @@ public class Robot {
             if (manualYaw != 0.0) {
                 imu.targetYaw = 0.0;
                 orientation.zeroYaw();
+                orientation.update();
             }
 
             telemetry.addData("yaw", orientation.getYaw());
+            telemetry.addData("e1", motors.leftOdometry());
+            telemetry.addData("e2", motors.rightOdometry());
+            telemetry.addData("t", imu.targetYaw);
             Double r = yawCorrection() + manualYaw;
             if (r.isNaN()) {
                 r = manualYaw;
@@ -253,7 +257,7 @@ public class Robot {
 
             if (Math.abs(yaw) < 0.01) {
                 if (lastYawWasAnalog) {
-                    imu.targetYaw = imu.getYawDegrees();
+                    imu.targetYaw = orientation.getYaw();
                     lastYawWasAnalog = false;
                 }
             } else {
