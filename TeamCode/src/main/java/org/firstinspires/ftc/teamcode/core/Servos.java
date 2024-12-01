@@ -9,25 +9,25 @@ import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Servos {
 	// Define motors
-    public Servo intakeLiftServo;
-    public Servo intakeYawServo;
-    public Servo intakeClawServo;
-    public Servo outtakeClawServo;
-    public Servo leftArmServo;
-    public Servo rightArmServo;
-    public Servo latchServo;
+    public CachedServo intakeLiftServo;
+    public CachedServo intakeYawServo;
+    public CachedServo intakeClawServo;
+    public CachedServo outtakeClawServo;
+    public CachedServo leftArmServo;
+    public CachedServo rightArmServo;
+    public CachedServo latchServo;
     public Timer transferTimer = new Timer();
     public double intakeOverridePower = 0.0;
 
 	// Initialize the motors with hardwaremap
     public Servos(HardwareMap hardwareMap) {
-        intakeLiftServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
-        intakeYawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeYawServo);
-        intakeClawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.intakeClawServo);
-        outtakeClawServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.outtakeClawServo);
-        leftArmServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.leftArmServo);
-        rightArmServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.rightArmServo);
-        latchServo = hardwareMap.get(Servo.class, RobotParameters.Motors.HardwareMapNames.latchServo);
+        intakeLiftServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeLiftServo);
+        intakeYawServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeYawServo);
+        intakeClawServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.intakeClawServo);
+        outtakeClawServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.outtakeClawServo);
+        leftArmServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftArmServo);
+        rightArmServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightArmServo);
+        latchServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.latchServo);
     }
 
     public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset, boolean auto) {

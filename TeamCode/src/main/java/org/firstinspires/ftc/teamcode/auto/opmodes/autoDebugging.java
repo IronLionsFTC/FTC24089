@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
 import org.firstinspires.ftc.teamcode.commands.Commands;
+import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -24,7 +25,7 @@ public class autoDebugging extends CommandOpMode {
     @Override
     public void initialize() {
         this.follower = new Follower(hardwareMap);
-        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower);
+        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower, Team.Red);
         this.follower.setStartingPose(new Pose(0.0, 0.0, 0.0));
         this.chain = Paths.debug;
 
@@ -35,16 +36,12 @@ public class autoDebugging extends CommandOpMode {
                         Commands.followPath(follower, this.chain.getPath(0)).alongWith(
                                 Commands.ExtendIntakeToGripSample(robot)
                         ),
-                        Commands.Hold(robot),
-                        Commands.followPath(follower, this.chain.getPath(1)),
-                        Commands.Release(robot),
+                        Commands.WaitForSampleDetection(robot),
                         Commands.sleep(500),
-                        Commands.sleepUntil(this::opModeIsActive),
-                        Commands.followPath(follower, this.chain.getPath(0)),
-                        Commands.Hold(robot),
-                        Commands.followPath(follower, this.chain.getPath(1)),
-                        Commands.Release(robot),
-                        Commands.sleep(500)
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.sleep(500),
+                        Commands.RetractIntakeForTransfer(robot),
+                        Commands.followPath(follower, this.chain.getPath(1))
                 )
         );
     }

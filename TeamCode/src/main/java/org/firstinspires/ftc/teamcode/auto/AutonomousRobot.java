@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.core.Robot;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
+import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.Intake;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
@@ -21,14 +22,16 @@ public class AutonomousRobot extends SubsystemBase {
     public Follower follower;
     public boolean rh = false;
     public double clawPos = RobotParameters.ServoBounds.intakeYawZero;
+    public ComputerVision cv;
+    public boolean disablePedro = false;
 
-    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f) {
-        robot = new Robot(hardwareMap, t, null, null, Team.Red);
+    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, Team team) {
+        robot = new Robot(hardwareMap, t, null, null, team);
         follower = f;
     }
 
-    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, boolean raiseHigher) {
-        robot = new Robot(hardwareMap, t, null, null, Team.Red);
+    public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, Team team, boolean raiseHigher) {
+        robot = new Robot(hardwareMap, t, null, null, team);
         rh = raiseHigher;
         follower = f;
     }
@@ -60,7 +63,7 @@ public class AutonomousRobot extends SubsystemBase {
             if (outtakeTimer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
         }
 
-        follower.update();
+        if (!disablePedro) follower.update();
         robot.telemetry.update();
         robot.drivetrain.moveIntake(0.5, true);
         robot.drivetrain.moveOuttake(0.8, true, rh);

@@ -5,29 +5,29 @@ import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 
 public class Motors {
     // Drive motors
-    public Motor leftFront;
-    public Motor leftBack;
-    public Motor rightFront;
-    public Motor rightBack;
+    public CachedMotor leftFront;
+    public CachedMotor leftBack;
+    public CachedMotor rightFront;
+    public CachedMotor rightBack;
 
     // Intake motors
-    public Motor intakeSlide;
+    public CachedMotor intakeSlide;
 
     // Outake motors
-    public Motor leftOuttakeSlide;
-    public Motor rightOuttakeSlide;
+    public CachedMotor leftOuttakeSlide;
+    public CachedMotor rightOuttakeSlide;
 
     // Motor Powers
     public MotorPowers powers;
 
     public Motors(HardwareMap hardwareMap) {
-        leftFront = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftFront);
-        leftBack = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftBack);
-        rightFront = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightFront);
-        rightBack = new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightBack);
-        intakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightIntakeSlide);
-        leftOuttakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftOuttakeSlide);
-        rightOuttakeSlide =  new Motor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightOuttakeSlide);
+        leftFront = new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftFront);
+        leftBack = new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftBack);
+        rightFront = new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightFront);
+        rightBack = new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightBack);
+        intakeSlide =  new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightIntakeSlide);
+        leftOuttakeSlide =  new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftOuttakeSlide);
+        rightOuttakeSlide =  new CachedMotor(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightOuttakeSlide);
 
         // Set motor directions
         leftFront.setInverted(RobotParameters.Motors.Reversed.leftFront);
@@ -86,11 +86,18 @@ public class Motors {
         rightFront.set(Math.abs(powers.rightFront) > 0.1 ? powers.rightFront : 0.0);
         leftBack.set(Math.abs(powers.leftBack) > 0.1 ? powers.leftBack : 0.0);
         rightBack.set(Math.abs(powers.rightBack) > 0.1 ? powers.rightBack : 0.0);
+        leftFront.updatePosition();
+        rightFront.updatePosition();
+        leftBack.updatePosition();
+        rightBack.updatePosition();
     }
     public void setOtherPowers() {
         leftOuttakeSlide.set(Math.abs(powers.leftOuttakeSlide) > 0.1 ? powers.leftOuttakeSlide : 0.0);
         rightOuttakeSlide.set(Math.abs(powers.rightOuttakeSlide) > 0.1 ? powers.rightOuttakeSlide : 0.0);
         intakeSlide.set(Math.abs(powers.leftIntakeSlide) > 0.1 ? powers.leftIntakeSlide : 0.0);
+        leftOuttakeSlide.updatePosition();
+        rightOuttakeSlide.updatePosition();
+        intakeSlide.updatePosition();
     }
 
     public void stopMotors() {

@@ -33,6 +33,7 @@ public class Robot {
     public PID_settings pidSettings = new PID_settings();
     public ComputerVision computerVision;
     public org.firstinspires.ftc.teamcode.core.state.Orientation orientation;
+    private double cv_rotation = 0.0;
 
     public Robot(HardwareMap h, Telemetry t, Gamepad g1, Gamepad g2, Team colour) {
         hardwareMap = h;
@@ -121,10 +122,14 @@ public class Robot {
                 orientation.update();
             }
 
-            telemetry.addData("yaw", orientation.getYaw());
-            telemetry.addData("e1", motors.leftOdometry());
-            telemetry.addData("e2", motors.rightOdometry());
-            telemetry.addData("t", imu.targetYaw);
+            if (lastYawWasAnalog) {
+                if (orientation.getVelocity() > 10.0) {
+                    imu.targetYaw = 0.0;
+                    orientation.zeroYaw();
+                    orientation.update();
+                }
+            }
+
             Double r = yawCorrection() + manualYaw;
             if (r.isNaN()) {
                 r = manualYaw;
@@ -352,11 +357,9 @@ public class Robot {
         public boolean drive(GamepadEx gamepad) {
             orientation.update();
             Vec2 samplePosition = null;
-            double rotation = 0.0;
-
             if (state.intake.intakeState == IntakeState.ExtendedClawDown) {
                 samplePosition = computerVision.getSamplePosition(computerVision.analyse());
-                rotation = computerVision.sample.currentRotation;
+                if (computerVision.sample.currentRotation != 0.0) cv_rotation = computerVision.sample.currentRotation;
                 if (samplePosition != null) {
                     if (controls.use_cv()) {
                         LLResult analysis = computerVision.analyse();
@@ -366,12 +369,14 @@ public class Robot {
                         }
                     }
                 }
+            } else {
+                cv_rotation = 0.0;
             }
             telemetry.update();
 
             // Calculate drive movement
             if (calculateMovement(gamepad, samplePosition)) return true;
-            this.update_teleop(gamepad, rotation);
+            this.update_teleop(gamepad, cv_rotation);
             return false;
         }
     }

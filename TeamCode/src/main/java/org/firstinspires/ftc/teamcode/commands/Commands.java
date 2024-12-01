@@ -55,4 +55,7 @@ public class Commands {
     public static Command DumpSample(AutonomousRobot robot) { return new DumpSample(robot); }
     public static Command DropSample(AutonomousRobot robot) { return new DropSample(robot); }
     public static Command ClipSpecimen(AutonomousRobot robot) { return new ClipSpecimen(robot); }
+
+    // COMPUTER VISION -----------------------------------------------------------------------------------------------------
+    public static Command WaitForSampleDetection(AutonomousRobot robot) { return  new WaitForSampleDetection(robot); }
 }

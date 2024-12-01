@@ -57,7 +57,8 @@ public class ComputerVision {
                 average.add(sample);
             }
             average.divide(RobotParameters.Thresholds.CVSmoothing);
-            if (sampling.size() >= RobotParameters.Thresholds.CVSmoothing) return average;
+            // Account for the camera being rotated 180 degrees to fit the camera cable
+            if (sampling.size() >= RobotParameters.Thresholds.CVSmoothing) return new Vec2(average.x * -1, average.y * -1);
             else return null;
         } else {
             sampling.clear();
