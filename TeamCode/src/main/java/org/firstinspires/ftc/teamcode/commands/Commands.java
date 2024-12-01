@@ -58,4 +58,6 @@ public class Commands {
 
     // COMPUTER VISION -----------------------------------------------------------------------------------------------------
     public static Command WaitForSampleDetection(AutonomousRobot robot) { return  new WaitForSampleDetection(robot); }
+    public static Command SlightForwards(AutonomousRobot robot) { return new SlightForwards(robot); }
+    public static Command LookForSampleForRaceCondition(AutonomousRobot robot) { return new LookForSampleForRaceCondition(robot); }
 }

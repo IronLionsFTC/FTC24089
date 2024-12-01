@@ -42,8 +42,16 @@ public class WaitForSampleDetection extends CommandBase {
                     homingTimer.resetTimer();
                 }
 
-                double rightPower = (sample_position.x * 1.2) / 30;
-                double forwardPower = (sample_position.y * -1.2) / 25;
+                double rightPower = (sample_position.x * 0.7) / 30;
+                double forwardPower = (sample_position.y * -0.7) / 25;
+
+                if (forwardPower != 0.0) forwardPower -= 0.2;
+
+                if (forwardPower != 0.0) forwardPower += (Math.abs(forwardPower) / forwardPower) * 0.15;
+                if (rightPower != 0.0) rightPower += (Math.abs(rightPower) / rightPower) * 0.15;
+
+                if (Math.abs(forwardPower) > 0.5) forwardPower = Math.abs(forwardPower) / forwardPower * 0.5;
+                if (Math.abs(rightPower) > 0.5) rightPower = Math.abs(rightPower) / rightPower * 0.5;
 
                 robot.robot.drivetrain.motors.powers.leftFront = (rightPower - forwardPower);
                 robot.robot.drivetrain.motors.powers.rightFront = (-rightPower - forwardPower);
@@ -55,19 +63,21 @@ public class WaitForSampleDetection extends CommandBase {
                 robot.robot.computerVision.sample.getDirection(); // This DOES return rotation, but also caches it so can be treated as void
                 last_distance = sample_position.magnitude;
             } else frames_of_valid_detection = 0;
-        } else frames_of_valid_detection = 0;
+        } else {
+            frames_of_valid_detection = 0;
+            robot.robot.drivetrain.motors.stopMotors();
+        }
         if (frames_of_valid_detection == 0) sample_position = new Vec2(0.0,0.0);
 
-
+        robot.robot.drivetrain.motors.stopMotors();
         robot.clawPos = 0.64 + cv_rotation * 0.5; // rotate slower and abuse margin of error of claw
     }
 
     @Override
     public boolean isFinished() {
-        if (frames_of_valid_detection > 35 && last_distance < 3.0 && homingTimer.getElapsedTimeSeconds() > 1.0) {
+        if (frames_of_valid_detection > 15 && last_distance < 7.0) {
             robot.robot.computerVision.stop();
             robot.robot.drivetrain.motors.stopMotors();
-            robot.robot.drivetrain.motors.setDrivePowers();
             return true;
         }
         return false;

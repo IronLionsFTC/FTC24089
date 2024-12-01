@@ -9,7 +9,7 @@ public class Debug {
     public static PathChain path() {
         PathBuilder builder = new PathBuilder();
         Point start = new Point(0.0, 0.0, Point.CARTESIAN);
-        Point end = new Point(0.0, -5.0, Point.CARTESIAN);
+        Point end = new Point(0.0, -15.0, Point.CARTESIAN);
         BezierLine start_to_end = new BezierLine(
                 start,
                 end

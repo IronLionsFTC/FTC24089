@@ -33,10 +33,12 @@ public class autoDebugging extends CommandOpMode {
                 new RunCommand(robot::update),
                 new SequentialCommandGroup(
                         Commands.sleepUntil(this::opModeIsActive),
-                        Commands.followPath(follower, this.chain.getPath(0)).alongWith(
-                                Commands.ExtendIntakeToGripSample(robot)
+                        Commands.ExtendIntakeToGripSample(robot),
+                        Commands.followPath(follower, this.chain.getPath(0)).setSpeed(0.3).raceWith(
+                            Commands.LookForSampleForRaceCondition(robot)
                         ),
                         Commands.WaitForSampleDetection(robot),
+                        Commands.SlightForwards(robot),
                         Commands.sleep(500),
                         Commands.GrabGameObjectWithIntake(robot),
                         Commands.sleep(500),
