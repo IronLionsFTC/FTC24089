@@ -167,10 +167,10 @@ public class Robot {
             }
 
             // Automatically fold down when reaches a certain height with specimen to avoid damage
-            if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.5) {
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 1.5) {
                 state.outtake.toggle();
             }
-            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) {
+            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar && !auto) {
                 if (state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 1.5 || motors.outtakePosition() > AutonomousRobot.AutonomousTune.outtakeHeightToCancel) {
                     state.outtake.toggle();
                 }
@@ -213,6 +213,7 @@ public class Robot {
             if (slideTarget < 10.0 && outtakeSlidePos < 5) { outtakeSlidePower = 0.0; }
             if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 600.0) { outtakeSlidePower = 0.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
+            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && !auto) { outtakeSlidePower = 0.0; }
             motors.powers.leftOuttakeSlide = outtakeSlidePower * powerMul;
             motors.powers.rightOuttakeSlide = outtakeSlidePower * powerMul;
         }
