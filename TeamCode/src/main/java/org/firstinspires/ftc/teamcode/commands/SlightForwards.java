@@ -36,7 +36,7 @@ public class SlightForwards extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (timer.getElapsedTimeSeconds() > 0.06) {
+        if (timer.getElapsedTimeSeconds() > 0.08) {
             robot.robot.drivetrain.motors.stopMotors();
             return true;
         }

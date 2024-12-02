@@ -190,7 +190,7 @@ public class Robot {
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
             if (slideTarget < 10.0 && outtakeSlidePos < 5) { outtakeSlidePower = 0.0; }
-            if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 200.0) { outtakeSlidePower = 0.0; }
+            if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 600.0) { outtakeSlidePower = 0.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
             motors.powers.leftOuttakeSlide = outtakeSlidePower * powerMul;
             motors.powers.rightOuttakeSlide = outtakeSlidePower * powerMul;
@@ -219,9 +219,9 @@ public class Robot {
             if (intakeTarget < 5 && intakeSlidePos <= 15) { intakeSlideResponse = 0.0; }
 
             // Let go of sample with intake when outtake has grabbed
-            if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawShut) {
-                state.intake.toggle();
-            }
+            // if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawShut) {
+              //   state.intake.toggle();
+            // }
 
             if (state.intake.intakeState == IntakeState.Retracted || state.intake.intakeState == IntakeState.Transfer) {
                 if (motors.intakePosition() < 15.0) {

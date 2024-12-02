@@ -45,8 +45,6 @@ public class WaitForSampleDetection extends CommandBase {
                 double rightPower = (sample_position.x * 0.7) / 30;
                 double forwardPower = (sample_position.y * -0.7) / 25;
 
-                if (forwardPower != 0.0) forwardPower -= 0.2;
-
                 if (forwardPower != 0.0) forwardPower += (Math.abs(forwardPower) / forwardPower) * 0.15;
                 if (rightPower != 0.0) rightPower += (Math.abs(rightPower) / rightPower) * 0.15;
 
@@ -70,12 +68,12 @@ public class WaitForSampleDetection extends CommandBase {
         if (frames_of_valid_detection == 0) sample_position = new Vec2(0.0,0.0);
 
         robot.robot.drivetrain.motors.stopMotors();
-        robot.clawPos = 0.64 + cv_rotation * 0.5; // rotate slower and abuse margin of error of claw
+        robot.clawPos = 0.64 + cv_rotation * 0.75; // rotate slower and abuse margin of error of claw
     }
 
     @Override
     public boolean isFinished() {
-        if (frames_of_valid_detection > 15 && last_distance < 7.0) {
+        if (frames_of_valid_detection > 20 || homingTimer.getElapsedTimeSeconds() > 3.0) {
             robot.robot.computerVision.stop();
             robot.robot.drivetrain.motors.stopMotors();
             return true;

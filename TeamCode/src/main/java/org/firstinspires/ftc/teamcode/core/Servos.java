@@ -28,6 +28,9 @@ public class Servos {
         leftArmServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftArmServo);
         rightArmServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightArmServo);
         latchServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.latchServo);
+
+        intakeClawServo.setPosition(RobotParameters.ServoBounds.clawWideOpen);
+        outtakeClawServo.setPosition(RobotParameters.ServoBounds.outtakeClawClosed);
     }
 
     public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset, boolean auto) {
@@ -63,11 +66,11 @@ public class Servos {
 
         switch (outtakeState) {
             case DownClawShut: case UpWaitingToFlip: case UpWithSpecimenWaitingToFlip:
-                outtakeClaw = RobotParameters.ServoBounds.clawClosed;
+                outtakeClaw = RobotParameters.ServoBounds.outtakeClawClosed;
                 break;
             case UpFlipped: case UpWithSpecimenFlipped: case UpWithSpecimenOnBar:
-                outtakeClaw = RobotParameters.ServoBounds.clawClosed;
-                outtakeLift = RobotParameters.ServoBounds.armUp + 0.07;
+                outtakeClaw = RobotParameters.ServoBounds.outtakeClawClosed;
+                outtakeLift = RobotParameters.ServoBounds.armUp + 0.12;
                 break;
             case UpClawOpen: case UpWithSpecimentGoingDown:
                 outtakeLift = RobotParameters.ServoBounds.armUp;

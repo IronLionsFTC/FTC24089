@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.auto.paths.Paths;
 import org.firstinspires.ftc.teamcode.commands.Commands;
+import org.firstinspires.ftc.teamcode.commands.RetractIntakeForTransfer;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
@@ -43,6 +44,7 @@ public class FourPlusZero extends CommandOpMode {
 //                        ),
 //                Commands.ClipSpecimen(robot)
 //        );
+        /*
         return Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
                 Commands.ExtendIntakeToGripSpecimen(robot)
         ).andThen(
@@ -50,11 +52,28 @@ public class FourPlusZero extends CommandOpMode {
                 Commands.sleep(outtakePathDelay).andThen(
                         Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s))
                 ).alongWith(
-                        Commands.GrabGameObjectWithIntake(robot).andThen(
-                                Commands.RetractIntakeForTransfer(robot)
+                        Commands.sleep(800).andThen(
+                            Commands.GrabGameObjectWithIntake(robot)
+                        .andThen(
+                            Commands.RetractIntakeForTransfer(robot)
                         ).andThen(
-                                Commands.RaiseSlidesForSpecimenDump(robot)
-                        )
+                            Commands.RaiseSlidesForSpecimenDump(robot)
+                        ))
+                ),
+                Commands.ClipSpecimen(robot)
+        );
+         */
+        return new SequentialCommandGroup(
+                Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
+                        Commands.ExtendIntakeToGripSpecimen(robot)
+                ),
+                Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
+                Commands.sleep(800),
+                Commands.GrabGameObjectWithIntake(robot),
+                Commands.RetractIntakeForTransfer(robot).andThen(
+                        Commands.RaiseSlidesForSpecimenDump(robot)
+                ).alongWith(
+                        Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s))
                 ),
                 Commands.ClipSpecimen(robot)
         );
@@ -88,10 +107,8 @@ public class FourPlusZero extends CommandOpMode {
                         // First
                         Commands.sleep(800),
                         Commands.Hold(robot),
-                        Commands.fastPath(follower, Paths.fiveSpecimen_give_1),
-                        Commands.sleep(2000),
+                        Commands.followPath(follower, Paths.fiveSpecimen_give_1.getPath(0)),
                         Commands.Release(robot),
-                        Commands.sleep(2000),
 
                         // Prepare for intaking
                         Commands.RetractIntakeForTransfer(robot).alongWith(

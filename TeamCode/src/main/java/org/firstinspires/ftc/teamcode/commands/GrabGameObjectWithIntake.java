@@ -15,12 +15,8 @@ public class GrabGameObjectWithIntake extends CommandBase {
 
     @Override
     public void initialize() {
-        robot.intakeTimer.resetTimer();
-    }
-
-    @Override
-    public void execute() {
         robot.closeIntakeClaw();
+        robot.intakeTimer.resetTimer();
     }
 
     @Override

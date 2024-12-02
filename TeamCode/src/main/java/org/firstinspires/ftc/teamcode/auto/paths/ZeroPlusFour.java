@@ -2,11 +2,14 @@ package org.firstinspires.ftc.teamcode.auto.paths;
 
 import android.provider.Telephony;
 
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.auto.paths.Points.SampleStart;
+
+import java.net.BindException;
 
 public class ZeroPlusFour {
     public static PathChain path() {
@@ -64,19 +67,34 @@ public class ZeroPlusFour {
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-135), Math.toRadians(-235))
                 .addPath(
-                        new BezierLine(
+                        new BezierCurve(
                                 SampleStart.basket,
-                                SampleStart.parkCorner
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(-235), Math.toRadians(90))
-                .addPath(
-                        new BezierLine(
-                                SampleStart.parkCorner,
+                                SampleStart.controlPoint,
                                 SampleStart.park
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(90))
+                .setTangentHeadingInterpolation()
+                .addPath(
+                        new BezierLine(
+                                SampleStart.park,
+                                SampleStart.strafeEnd
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(90))
+                .addPath(
+                        new BezierLine(
+                                SampleStart.strafeEnd,
+                                SampleStart.park
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(90))
+                .addPath(
+                        new BezierCurve(
+                                SampleStart.park,
+                                SampleStart.controlPoint,
+                                new Point(-12, -28, Point.CARTESIAN),
+                                SampleStart.basket
+                        )
+                ).setTangentHeadingInterpolation()
+                .setReversed(true)
         ;
         return builder.build();
     }

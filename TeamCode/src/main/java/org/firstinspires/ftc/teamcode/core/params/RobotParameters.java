@@ -98,9 +98,10 @@ public class RobotParameters {
         public static final double armDown = 1.0;
         public static final double armUp = 0.3;
 
-        public static final double clawClosed = 0.0;
-        public static final double clawOpen = 0.035;
-        public static final double clawWideOpen = 0.45;
+        public static final double clawClosed = 0.03;
+        public static final double outtakeClawClosed = 0.72;
+        public static final double clawOpen = 0.5;
+        public static final double clawWideOpen = 0.5;
 
         public static final double intakeFolded = 1.0;
         public static final double intakeDown = 0.0;
@@ -109,7 +110,7 @@ public class RobotParameters {
         public static final double intakeYawFlipped = 0.09;
         public static final double intakeGrabOffWall = 0.0;
 
-        public static final double latchOpen = 0.17;
+        public static final double latchOpen = 0.13;
         public static final double latchShut = 0.4;
     }
 
@@ -119,7 +120,7 @@ public class RobotParameters {
         public static final double intakeIn = 0.0;
         public static final double intakeExtended = 150;
 
-        public static final double outtakeBelowSpecimenBar = 180.0;
+        public static final double outtakeBelowSpecimenBar = 130.0;
         public static final double outtakeOnSpecimenBar = 550.0;
     }
 
@@ -132,7 +133,7 @@ public class RobotParameters {
         public static final double ticksInDegree = 8.33;
 
         // Outtake Slide Settings
-        public static final double outtakeSlideP = 0.004;
+        public static final double outtakeSlideP = 0.006;
         public static final double outtakeSlideI = 0.0;
         public static final double outtakeSlideD = 0.0;
         public static final double outtakeSlideF = 0.15;
