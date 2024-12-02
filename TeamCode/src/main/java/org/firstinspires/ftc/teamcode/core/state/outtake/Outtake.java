@@ -36,12 +36,14 @@ public class Outtake {
                 break;
             case UpWithSpecimenFlipped:
                 set(OuttakeState.UpWithSpecimenOnBar);
+                outtakeAutomaticFoldDown.resetTimer();
                 break;
             case UpWithSpecimenOnBar:
                 set(OuttakeState.UpWithSpecimentGoingDown);
                 break;
             case UpWithSpecimentGoingDown:
                 set(OuttakeState.DownClawOpen);
+                outtakeAutomaticFoldDown.resetTimer();
                 break;
 
             default:

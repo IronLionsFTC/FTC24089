@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
+import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.core.control.Controls;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
@@ -165,6 +166,16 @@ public class Robot {
                 }
             }
 
+            // Automatically fold down when reaches a certain height with specimen to avoid damage
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.5) {
+                state.outtake.toggle();
+            }
+            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) {
+                if (state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 1.5 || motors.outtakePosition() > AutonomousRobot.AutonomousTune.outtakeHeightToCancel) {
+                    state.outtake.toggle();
+                }
+            }
+
             // Automatically flip outtake on raise, auto functions do this separately
             if (!auto && state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && motors.outtakePosition() > RobotParameters.SlideBounds.outtakeUp - 150) {
                 state.outtake.toggle();
@@ -173,6 +184,12 @@ public class Robot {
             // If waiting to flip up do so, auto functions do this separately
             if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimenWaitingToFlip && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.3) {
                 state.outtake.toggle();
+            }
+
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWaitingToFlip) {
+                if (outtakeColour.getDistance() < 30) {
+                    state.outtake.toggle();
+                }
             }
 
             switch (state.outtake.outtakeState) {
