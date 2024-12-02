@@ -48,6 +48,7 @@ public class ServoTuning extends LinearOpMode
         Servos servos = new Servos(hardwareMap);
         Motors motors = new Motors(hardwareMap);
 
+        gamepad1.rumbleBlips(10);
         if (isStopRequested()) return;
         waitForStart();
 

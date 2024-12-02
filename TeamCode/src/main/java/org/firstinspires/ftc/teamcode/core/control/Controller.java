@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.core.control.Button;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Controller {
     public GamepadEx gamepad;
@@ -23,6 +24,9 @@ public class Controller {
     // Special buttons
     public Button START = new Button(ButtonEnum.START);
     public Button BACK = new Button(ButtonEnum.BACK);
+
+    private boolean waitingToRumble = false;
+    private Timer rumbleDelay = new Timer();
 
     public Controller(GamepadEx g) { this.gamepad = g; }
     public Controller(Gamepad g) { this.gamepad = new GamepadEx(g); }
@@ -48,6 +52,11 @@ public class Controller {
         // Special buttons
         this.START.update(gamepad);
         this.BACK.update(gamepad);
+
+        if (rumbleDelay.getElapsedTimeSeconds() > 0.3 && waitingToRumble) {
+            gamepad.gamepad.rumble(500);
+            waitingToRumble = false;
+        }
     }
 
     public class Stick {
@@ -60,4 +69,10 @@ public class Controller {
 
     public double LT() { return gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER); }
     public double RT() { return gamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER); }
+
+    public void rumble() {
+        gamepad.gamepad.rumble(1000);
+        rumbleDelay.resetTimer();
+        waitingToRumble = true;
+    }
 }

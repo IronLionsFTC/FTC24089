@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.core.control.Controls;
 import org.firstinspires.ftc.teamcode.core.params.RobotParameters;
 import org.firstinspires.ftc.teamcode.core.state.ComputerVision;
+import org.firstinspires.ftc.teamcode.core.state.ProximitySensor;
 import org.firstinspires.ftc.teamcode.core.state.RobotState;
 import org.firstinspires.ftc.teamcode.core.state.Team;
 import org.firstinspires.ftc.teamcode.core.state.intake.IntakeState;
@@ -30,9 +31,11 @@ public class Robot {
     public Drivetrain drivetrain;
     public RobotIMU imu;
     public RobotState state;
+    public ProximitySensor outtakeColour;
     public PID_settings pidSettings = new PID_settings();
     public ComputerVision computerVision;
     public org.firstinspires.ftc.teamcode.core.state.Orientation orientation;
+    public Timer flashTimer = new Timer();
     private double cv_rotation = 0.0;
 
     public Robot(HardwareMap h, Telemetry t, Gamepad g1, Gamepad g2, Team colour) {
@@ -49,7 +52,7 @@ public class Robot {
         imu = new RobotIMU(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         team = colour;
-
+        outtakeColour = new ProximitySensor(hardwareMap);
         orientation = new org.firstinspires.ftc.teamcode.core.state.Orientation(drivetrain.motors);
     }
 
@@ -158,6 +161,7 @@ public class Robot {
             if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
                 if (motors.intakePosition() < 15.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.3) {
                     state.outtake.outtakeState = OuttakeState.DownClawShut;
+                    flashTimer.resetTimer();
                 }
             }
 
@@ -350,6 +354,8 @@ public class Robot {
 
             servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset, false);
             motors.setDrivePowers();
+            telemetry.addData("dist", outtakeColour.getDistance());
+            telemetry.addData("LED", outtakeColour.getLED());
             telemetry.update();
             motors.setOtherPowers();
         }
