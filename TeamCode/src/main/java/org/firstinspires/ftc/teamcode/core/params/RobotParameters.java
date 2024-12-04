@@ -106,7 +106,7 @@ public class RobotParameters {
         public static final double clawWideOpen = 0.5;
 
         public static final double intakeFolded = 1.0;
-        public static final double intakeDown = 0.0;
+        public static final double intakeDown = 0.05;
         public static final double intakeYawZero = 0.64;
 
         public static final double intakeYawFlipped = 0.09;

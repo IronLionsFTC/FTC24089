@@ -369,14 +369,13 @@ public class Robot {
             return controls.EMERGENCY_STOP();
         }
 
-        public void update_teleop(GamepadEx gamepad, double sampleOffset) {
+        public void update_teleop() {
             moveOuttake(1.0, false, false);
             moveIntake(1.0, false);
 
             // DEPRECATED | will be removed soon
             // servos.intakeOverridePower = controller.RT() - controller.LT();
 
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset, false, controls.RESET());
             telemetry.addData("dist", outtakeColour.getDistance());
             telemetry.addData("LED", outtakeColour.getLED());
             telemetry.update();
@@ -403,10 +402,11 @@ public class Robot {
             telemetry.update();
 
             // Calculate drive movement
-            this.update_teleop(gamepad, cv_rotation);
+            this.update_teleop(); // Cv rotation | disabled so I can use in teleop.
             if (calculateMovement(gamepad, samplePosition)) return true;
             motors.setOtherPowers();
             motors.setDrivePowers();
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, 0.0, false, controls.RESET());
             return false;
         }
     }

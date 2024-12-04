@@ -45,7 +45,7 @@ public class DriveToCachedPoint extends CommandBase {
         double x = follower.getPose().getX();
         double y = follower.getPose().getY();
 
-        double tx = x + robot.sampleY + 1;
+        double tx = x + robot.sampleY + 1.6;
         double ty = y - robot.sampleX;
 
         PathBuilder builder = new PathBuilder();
@@ -62,7 +62,7 @@ public class DriveToCachedPoint extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return follower.getCurrentTValue() > 0.95;
+        return follower.getCurrentTValue() > 0.99;
     }
 
     @Override

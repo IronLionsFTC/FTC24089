@@ -38,7 +38,11 @@ public class LookForSampleForRaceCondition extends CommandBase {
             LLResult analysis = robot.robot.computerVision.analyse();
             if (analysis != null) {
                 robot.robot.computerVision.sample.update(robot.robot.computerVision.getSampleCornerPositions(analysis));
-                robot.setSampleXYR(x / 14, y / 14, robot.robot.computerVision.sample.getDirection() * -355);
+                double rot = robot.robot.computerVision.sample.getDirection() * -355;
+                if (Math.abs(rot - robot.sampleR) > 15.0) {
+                    frames_of_valid_detection = 0;
+                }
+                robot.setSampleXYR(x / 14, y / 14, rot);
                 frames_of_valid_detection += 1;
                 a = robot.robot.computerVision.getSampleArea(analysis);
                 robot.logDouble("area", a);
@@ -50,7 +54,7 @@ public class LookForSampleForRaceCondition extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (frames_of_valid_detection > 15 && x != 0.0 && Math.abs(robot.sampleR) < 25.0 && a < 20.0 && !(a < 12.0 && y < -6.0)) {
+        if (frames_of_valid_detection > 10 && x != 0.0 && a < 25.0 && !(a < 8.0 && y < -6.0)) {
             follower.breakFollowing();
             return true;
         }
