@@ -24,20 +24,25 @@ public class FindSampleWithCV extends CommandBase {
     @Override
     public boolean isFinished() {
         Vec2 sample_position = robot.robot.computerVision.getSamplePosition(robot.robot.computerVision.analyse());
-        if (robot.robot.computerVision.sample.currentRotation != 0.0) cv_rotation = robot.robot.computerVision.sample.currentRotation;
+        if (robot.robot.computerVision.sample.currentRotation == 0.0) frames_of_valid_detection = 0;
         if (sample_position != null) {
             LLResult analysis = robot.robot.computerVision.analyse();
             if (analysis != null) {
                 robot.robot.computerVision.sample.update(robot.robot.computerVision.getSampleCornerPositions(analysis));
-                robot.robot.computerVision.sample.getDirection(); // This DOES return rotation, but also caches it so can be treated as void
+                cv_rotation = robot.robot.computerVision.sample.getDirection(); // This DOES return rotation, but also caches it so can be treated as void
                 frames_of_valid_detection += 1;
-                robot.sampleX = ((sample_position.x + 30.0) / 60.0) * (15.0 / 2.54);
-                robot.sampleY = ((sample_position.y + 25.0) / 50.0) * (11.0 / 2.54);
+                robot.sampleX = (sample_position.x / 24.0) * (7.5 / 2.54);
+                robot.sampleY = (sample_position.y / 20.0) * (6.5 / 2.54);
                 robot.sampleR = cv_rotation;
-                return true;
+            } else {
+                frames_of_valid_detection = 0;
             }
         } else {
             frames_of_valid_detection = 0;
+        }
+        if (frames_of_valid_detection > 15 && robot.sampleX != 0.0) {
+            robot.robot.computerVision.stop();
+            return true;
         }
         return false;
     }

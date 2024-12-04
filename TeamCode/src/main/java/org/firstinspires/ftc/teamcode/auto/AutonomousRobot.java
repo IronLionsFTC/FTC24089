@@ -24,19 +24,37 @@ public class AutonomousRobot extends SubsystemBase {
     public double clawPos = RobotParameters.ServoBounds.intakeYawZero;
     public ComputerVision cv;
     public boolean disablePedro = false;
-    public Double sampleX = null;
-    public Double sampleY = null;
-    public Double sampleR = null;
+    public double sampleX;
+    public double sampleY;
+    public double sampleR;
 
     public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, Team team) {
         robot = new Robot(hardwareMap, t, null, null, team);
         follower = f;
+        sampleX = 0.0;
+        sampleY = 0.0;
+        sampleR = 0.0;
     }
 
     public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, Team team, boolean raiseHigher) {
         robot = new Robot(hardwareMap, t, null, null, team);
         rh = raiseHigher;
         follower = f;
+        sampleX = 0.0;
+        sampleY = 0.0;
+        sampleR = 0.0;
+    }
+
+    public void logRotation() {
+        logDouble("new ROT", sampleR);
+        logDouble("new X", sampleX);
+        logDouble("new Y", sampleY);
+    }
+
+    public void setSampleXYR(double x, double y, double r) {
+        sampleX = x;
+        sampleY = y;
+        sampleR = r;
     }
 
     @Override

@@ -63,4 +63,6 @@ public class Commands {
     public static Command LookForSampleForRaceCondition(AutonomousRobot robot) { return new LookForSampleForRaceCondition(robot); }
     public static Command FindSampleWithCV(AutonomousRobot robot) { return new FindSampleWithCV(robot); }
     public static Command DriveToPoint(Follower f, Double x, Double y) { return new DriveToPoint(f, x, y); }
+    public static Command DriveToCachedPoint(AutonomousRobot robot, Follower f) { return new DriveToCachedPoint(robot, f); }
+    public static Command RotateClawToCache(AutonomousRobot robot) { return new RotateClawToCache(robot); }
 }

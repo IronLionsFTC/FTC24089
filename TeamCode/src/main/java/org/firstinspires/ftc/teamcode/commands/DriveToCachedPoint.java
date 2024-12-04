@@ -2,25 +2,21 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
-public class DriveToPoint extends CommandBase {
+public class DriveToCachedPoint extends CommandBase {
     private final Follower follower;
     private boolean holdEnd = true;
     private double maxSpeed = 1;
-    private double relX;
-    private double relY;
+    private AutonomousRobot robot;
 
-    public DriveToPoint(Follower f, double rX, double rY) {
+    public DriveToCachedPoint(AutonomousRobot r, Follower f) {
+        robot = r;
         follower = f;
-        relX = rX;
-        relY = rY;
     }
 
     /**
@@ -29,7 +25,7 @@ public class DriveToPoint extends CommandBase {
      * @param holdEnd If the robot should maintain its ending position
      * @return This command for compatibility in command groups
      */
-    public DriveToPoint setHoldEnd(boolean holdEnd) {
+    public DriveToCachedPoint setHoldEnd(boolean holdEnd) {
         this.holdEnd = holdEnd;
         return this;
     }
@@ -39,7 +35,7 @@ public class DriveToPoint extends CommandBase {
      * @param speed Between 0 and 1
      * @return This command for compatibility in command groups
      */
-    public DriveToPoint setSpeed(double speed) {
+    public DriveToCachedPoint setSpeed(double speed) {
         this.maxSpeed = speed;
         return this;
     }
@@ -49,8 +45,8 @@ public class DriveToPoint extends CommandBase {
         double x = follower.getPose().getX();
         double y = follower.getPose().getY();
 
-        double tx = x + relY;
-        double ty = y - relX;
+        double tx = x + robot.sampleY + 1.5;
+        double ty = y - robot.sampleX;
 
         PathBuilder builder = new PathBuilder();
         builder.addPath(
