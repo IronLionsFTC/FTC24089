@@ -66,6 +66,19 @@ public class ComputerVision {
         return null;
     }
 
+    public double getSampleArea(LLResult analysis) {
+        if (analysis != null) {
+            Double a = analysis.getTa();
+            if (a != null) {
+                return a;
+            } else {
+                return 0.0;
+            }
+        } else {
+            return 0.0;
+        }
+    }
+
     // Failure - always returns 0.0
     public Double sampleYaw() {
         LLResult analysis = analyse();

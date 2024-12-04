@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
 @Autonomous(name = "0+5 CV [BLUE]", group = "Complete")
-public class autoZeroPlusFiveBlue extends CommandOpMode {
+public class autoZeroPlusFiveBlueNew extends CommandOpMode {
     public PathChain chain;
     public Follower follower;
     public AutonomousRobot robot;
@@ -73,11 +73,15 @@ public class autoZeroPlusFiveBlue extends CommandOpMode {
                     Commands.followPath(follower, chain.getPath(8)).setSpeed(0.4).andThen(
                             Commands.followPath(follower, chain.getPath(9)).setSpeed(0.4)
                     ).raceWith(
-                            Commands.LookForSampleForRaceCondition(robot)
+                            Commands.LookForSampleForRaceCondition(robot, follower)
                     ),
-                    Commands.WaitForSampleDetection(robot),
-                    Commands.sleep(500),
-                    Commands.SlightForwards(robot),
+
+
+                    // CV
+                    Commands.RotateClawToCache(robot),
+                    Commands.DriveToCachedPoint(robot, follower),
+
+
                     Commands.GrabGameObjectWithIntake(robot),
                     Commands.RetractIntakeForTransfer(robot),
                     Commands.followPath(follower, chain.getPath(10)).alongWith(

@@ -45,7 +45,7 @@ public class DriveToCachedPoint extends CommandBase {
         double x = follower.getPose().getX();
         double y = follower.getPose().getY();
 
-        double tx = x + robot.sampleY + 1.5;
+        double tx = x + robot.sampleY + 1;
         double ty = y - robot.sampleX;
 
         PathBuilder builder = new PathBuilder();

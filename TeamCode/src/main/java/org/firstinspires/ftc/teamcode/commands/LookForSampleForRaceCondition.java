@@ -6,16 +6,20 @@ import com.qualcomm.robotcore.eventloop.SyncdDevice;
 
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.core.Vec2;
+import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class LookForSampleForRaceCondition extends CommandBase {
     private final AutonomousRobot robot;
+    private final Follower follower;
     private int frames_of_valid_detection = 0;
     private double x = 0.0;
     private double y = 0.0;
+    private double a = 0.0;
 
-    public LookForSampleForRaceCondition(AutonomousRobot autonomousRobot) {
+    public LookForSampleForRaceCondition(AutonomousRobot autonomousRobot, Follower f) {
         robot = autonomousRobot;
+        follower = f;
         addRequirements(robot);
     }
 
@@ -36,6 +40,8 @@ public class LookForSampleForRaceCondition extends CommandBase {
                 robot.robot.computerVision.sample.update(robot.robot.computerVision.getSampleCornerPositions(analysis));
                 robot.setSampleXYR(x / 14, y / 14, robot.robot.computerVision.sample.getDirection() * -355);
                 frames_of_valid_detection += 1;
+                a = robot.robot.computerVision.getSampleArea(analysis);
+                robot.logDouble("area", a);
             }
         } else {
             frames_of_valid_detection = 0;
@@ -44,7 +50,8 @@ public class LookForSampleForRaceCondition extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (frames_of_valid_detection > 15 && x != 0.0) {
+        if (frames_of_valid_detection > 15 && x != 0.0 && Math.abs(robot.sampleR) < 25.0 && a < 20.0 && !(a < 12.0 && y < -6.0)) {
+            follower.breakFollowing();
             return true;
         }
         return false;
