@@ -21,8 +21,8 @@ public class ServoTuning extends LinearOpMode
         public static double intakeYawPosition = RobotParameters.ServoBounds.intakeYawZero;
         public static double intakeClawPosition = 0.0;
 
-        public static double armServo = 0.0;
-        public static double outtakeClaw = 0.0;
+        public static double armServo = 1.0;
+        public static double outtakeClaw = 0.65;
 
         public static double aP = 0.02;
         public static double bI = 0.0;
@@ -38,6 +38,7 @@ public class ServoTuning extends LinearOpMode
         public static double odTarget = 0.0;
 
         public static double latchPos = 0.0;
+        public static double flagPos = 0.0;
     }
 
     @Override
@@ -72,6 +73,7 @@ public class ServoTuning extends LinearOpMode
             servos.intakeLiftServo.setPosition(Tune.intakeLiftPosition);
             servos.intakeYawServo.setPosition(Tune.intakeYawPosition);
             servos.intakeClawServo.setPosition(Tune.intakeClawPosition);
+            servos.flagServo.setPosition(Tune.flagPos);
 
             servos.outtakeClawServo.setPosition(Tune.outtakeClaw);
             servos.leftArmServo.setPosition(1.0 - Tune.armServo);

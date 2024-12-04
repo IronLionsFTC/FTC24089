@@ -37,6 +37,7 @@ public class Robot {
     public ComputerVision computerVision;
     public org.firstinspires.ftc.teamcode.core.state.Orientation orientation;
     public Timer flashTimer = new Timer();
+    public Timer outtakePullDown = new Timer();
     private double cv_rotation = 0.0;
 
     public Robot(HardwareMap h, Telemetry t, Gamepad g1, Gamepad g2, Team colour) {
@@ -160,7 +161,7 @@ public class Robot {
 
             // Automatically perform transfer, auto functions do this separately
             if (!auto && state.intake.intakeState == IntakeState.Transfer && state.outtake.outtakeState == OuttakeState.DownClawOpen) {
-                if (motors.intakePosition() < 15.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.3) {
+                if (motors.intakePosition() < 15.0 && state.intake.foldIntakeBeforeRetraction.getElapsedTimeSeconds() > 1.0) {
                     state.outtake.outtakeState = OuttakeState.DownClawShut;
                     flashTimer.resetTimer();
                 }
@@ -181,23 +182,22 @@ public class Robot {
                 state.outtake.toggle();
             }
 
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWaitingToFlip && state.outtake.useLowBasket && motors.outtakePosition() > RobotParameters.SlideBounds.outtakeLowBasket - 150) {
+                state.outtake.toggle();
+            }
+
             // If waiting to flip up do so, auto functions do this separately
             if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimenWaitingToFlip && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.3) {
                 state.outtake.toggle();
             }
 
-            if (!auto && state.outtake.outtakeState == OuttakeState.UpWaitingToFlip) {
-                if (outtakeColour.getDistance() < 30) {
-                    state.outtake.toggle();
-                }
-            }
-
             switch (state.outtake.outtakeState) {
                 case UpWaitingToFlip: case UpFlipped: case UpWaitingToGoDown: case UpClawOpen:
-                    slideTarget = RobotParameters.SlideBounds.outtakeUp;
+                    if (state.outtake.useLowBasket) slideTarget = RobotParameters.SlideBounds.outtakeLowBasket;
+                    else slideTarget = RobotParameters.SlideBounds.outtakeUp;
                     break;
                 case UpWithSpecimenWaitingToFlip: case UpWithSpecimenFlipped: case UpWithSpecimentGoingDown:
-                    if (auto && raiseHigher) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar + 130;
+                    if (auto && raiseHigher) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar + 62;
                     else slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
                     break;
                 case UpWithSpecimenOnBar:
@@ -210,10 +210,10 @@ public class Robot {
             double outtakeSlidePower = outtakeSlideResponse + outtakeSlideFeedForward;
 
             // Stop the outtake slides from pulling against hard stop, gives 30 degrees of encoder error freedom
-            if (slideTarget < 10.0 && outtakeSlidePos < 5) { outtakeSlidePower = 0.0; }
+            if (slideTarget < 2.0 && outtakeSlidePos < 5) { outtakeSlidePower = 0.0; }
             if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 600.0) { outtakeSlidePower = 0.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
-            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && !auto) { outtakeSlidePower = 0.0; }
+            if (state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown) { outtakeSlidePower = 0.0; }
             motors.powers.leftOuttakeSlide = outtakeSlidePower * powerMul;
             motors.powers.rightOuttakeSlide = outtakeSlidePower * powerMul;
         }
@@ -234,6 +234,8 @@ public class Robot {
             // Delay slide retraction until intake has folded. Teleop & Auto
             if (state.intake.intakeState == IntakeState.Transfer && state.intake.foldIntakeBeforeRetraction.getElapsedTime() < 500) {
                 intakeTarget = RobotParameters.SlideBounds.intakeExtended;
+                motors.powers.leftOuttakeSlide = -0.2;
+                motors.powers.rightOuttakeSlide = -0.2;
             }
 
             double intakeSlidePos = motors.intakePosition();
@@ -350,6 +352,10 @@ public class Robot {
                 imu.targetYaw = 0.0;
             }
 
+            if (controls.outtake.swapBasket()) {
+                state.outtake.useLowBasket = !state.outtake.useLowBasket;
+            }
+
             componentDrive(my, mx, samplePosition, controls.use_cv(), yaw);
 
             state.intake.clawYaw -= (controls.intake.claw.CW_rotation() - controls.intake.claw.CCW_rotation()) * 0.02;
@@ -370,12 +376,10 @@ public class Robot {
             // DEPRECATED | will be removed soon
             // servos.intakeOverridePower = controller.RT() - controller.LT();
 
-            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset, false);
-            motors.setDrivePowers();
+            servos.setPositions(state.outtake.outtakeState, state.intake.intakeState, motors, state.intake.clawYaw, sampleOffset, false, controls.RESET());
             telemetry.addData("dist", outtakeColour.getDistance());
             telemetry.addData("LED", outtakeColour.getLED());
             telemetry.update();
-            motors.setOtherPowers();
         }
 
         public boolean drive(GamepadEx gamepad) {
@@ -399,8 +403,10 @@ public class Robot {
             telemetry.update();
 
             // Calculate drive movement
-            if (calculateMovement(gamepad, samplePosition)) return true;
             this.update_teleop(gamepad, cv_rotation);
+            if (calculateMovement(gamepad, samplePosition)) return true;
+            motors.setOtherPowers();
+            motors.setDrivePowers();
             return false;
         }
     }

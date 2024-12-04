@@ -70,6 +70,7 @@ public final class Controls {
         public boolean toggle_state() { return g1.A.press() || g2.A.press(); }
         public boolean reset() { return g1.DR.isPressed() || g2.DR.isPressed(); }
         public boolean pullDown() { return g1.DL.isPressed() || g2.DL.isPressed(); }
+        public boolean swapBasket() { return g1.DU.press() || g2.DU.press(); }
     } public Outtake outtake = new Outtake();
 
     public boolean util_button_press() { return g1.Y.press() || g2.Y.press(); }

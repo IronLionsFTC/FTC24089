@@ -35,15 +35,9 @@ public class autoDebugging extends CommandOpMode {
                         Commands.sleepUntil(this::opModeIsActive),
                         Commands.ExtendIntakeToGripSample(robot),
                         Commands.followPath(follower, this.chain.getPath(0)).setSpeed(0.3).raceWith(
-                            Commands.LookForSampleForRaceCondition(robot)
+                            Commands.FindSampleWithCV(robot)
                         ),
-                        Commands.WaitForSampleDetection(robot),
-                        Commands.SlightForwards(robot),
-                        Commands.sleep(500),
-                        Commands.GrabGameObjectWithIntake(robot),
-                        Commands.sleep(500),
-                        Commands.RetractIntakeForTransfer(robot),
-                        Commands.followPath(follower, this.chain.getPath(1))
+                        Commands.DriveToPoint(follower, robot.sampleX, robot.sampleY)
                 )
         );
     }

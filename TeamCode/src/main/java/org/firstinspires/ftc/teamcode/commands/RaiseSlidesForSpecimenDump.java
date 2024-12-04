@@ -25,7 +25,7 @@ public class RaiseSlidesForSpecimenDump extends CommandBase {
         if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.3) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenWaitingToFlip;
         }
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.8) {
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.5) { // 0.8
             robot.robot.state.outtake.outtakeState = OuttakeState.UpWithSpecimenFlipped;
         }
     }

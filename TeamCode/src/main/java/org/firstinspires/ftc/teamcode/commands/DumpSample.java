@@ -20,14 +20,14 @@ public class DumpSample extends CommandBase {
 
     @Override
     public void execute() {
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.4) {
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.5) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpClawOpen;
         }
     }
 
     @Override
     public boolean isFinished() {
-        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.7) {
+        if (robot.outtakeTimer.getElapsedTimeSeconds() > 0.8) {
             robot.robot.state.outtake.outtakeState = OuttakeState.UpWaitingToGoDown;
             return true;
         }

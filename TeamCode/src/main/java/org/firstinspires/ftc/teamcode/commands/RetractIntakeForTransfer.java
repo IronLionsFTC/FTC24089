@@ -16,11 +16,19 @@ public class RetractIntakeForTransfer extends CommandBase {
     @Override
     public void initialize() {
         robot.intakeTimer.resetTimer();
+        robot.robot.drivetrain.motors.leftOuttakeSlide.set(-0.6);
+        robot.robot.drivetrain.motors.rightOuttakeSlide.set(-0.6);
         robot.retractIntake();
     }
 
     @Override
     public boolean isFinished() {
-        return robot.isTransferReady() && robot.intakeTimer.getElapsedTimeSeconds() > 0.5; // 1.5
+        robot.disablePedro = false;
+        if (robot.isTransferReady() && robot.intakeTimer.getElapsedTimeSeconds() > 0.6) {
+            robot.robot.drivetrain.motors.leftOuttakeSlide.set(0);
+            robot.robot.drivetrain.motors.rightOuttakeSlide.set(0);
+            return true;
+        }
+        return false;
     }
 }

@@ -24,6 +24,9 @@ public class AutonomousRobot extends SubsystemBase {
     public double clawPos = RobotParameters.ServoBounds.intakeYawZero;
     public ComputerVision cv;
     public boolean disablePedro = false;
+    public Double sampleX = null;
+    public Double sampleY = null;
+    public Double sampleR = null;
 
     public AutonomousRobot(Telemetry t, HardwareMap hardwareMap, Follower f, Team team) {
         robot = new Robot(hardwareMap, t, null, null, team);
@@ -60,14 +63,14 @@ public class AutonomousRobot extends SubsystemBase {
 
     public void update() {
         if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown || robot.state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown) {
-            if (outtakeTimer.getElapsedTimeSeconds() > 0.5) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
+            if (outtakeTimer.getElapsedTimeSeconds() > 1.0) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
         }
 
         if (!disablePedro) follower.update();
         robot.telemetry.update();
         robot.drivetrain.moveIntake(0.5, true);
         robot.drivetrain.moveOuttake(0.8, true, rh);
-        robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, clawPos, 0.0, true);
+        robot.drivetrain.servos.setPositions(robot.state.outtake.outtakeState, robot.state.intake.intakeState, robot.drivetrain.motors, clawPos, 0.0, true, false);
         robot.drivetrain.motors.setOtherPowers();
     }
 

@@ -5,6 +5,8 @@ public class Outtake {
     public OuttakeState outtakeState = OuttakeState.DownClawShut;
     public Timer outtakeAutomaticFoldDown = new Timer();
 
+    public boolean useLowBasket = false;
+
     public void set(OuttakeState state) {
         outtakeState = state;
     }

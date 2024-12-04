@@ -16,6 +16,7 @@ public class Servos {
     public CachedServo leftArmServo;
     public CachedServo rightArmServo;
     public CachedServo latchServo;
+    public CachedServo flagServo;
     public Timer transferTimer = new Timer();
     public double intakeOverridePower = 0.0;
 
@@ -28,17 +29,17 @@ public class Servos {
         leftArmServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.leftArmServo);
         rightArmServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.rightArmServo);
         latchServo = new CachedServo(hardwareMap, RobotParameters.Motors.HardwareMapNames.latchServo);
+        flagServo = new CachedServo(hardwareMap, "flag");
 
-        intakeClawServo.setPosition(RobotParameters.ServoBounds.clawWideOpen);
-        outtakeClawServo.setPosition(RobotParameters.ServoBounds.outtakeClawClosed);
     }
 
-    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset, boolean auto) {
+    public void setPositions(OuttakeState outtakeState, IntakeState intakeState, Motors motors, double intakeYaw, double sampleOffset, boolean auto, boolean openLatch) {
         double intakeLift = RobotParameters.ServoBounds.intakeFolded;
         double intakeClaw = RobotParameters.ServoBounds.clawWideOpen;
         double outtakeLift = RobotParameters.ServoBounds.armDown;
         double outtakeClaw = RobotParameters.ServoBounds.clawOpen;
         double yaw = RobotParameters.ServoBounds.intakeYawZero;
+        double flag = 0.0;
 
         switch (intakeState) {
             case ExtendedClawDown: case ExtendedClawOpen:
@@ -70,18 +71,26 @@ public class Servos {
                 break;
             case UpFlipped: case UpWithSpecimenFlipped: case UpWithSpecimenOnBar:
                 outtakeClaw = RobotParameters.ServoBounds.outtakeClawClosed;
-                outtakeLift = RobotParameters.ServoBounds.armUp + 0.12;
+                outtakeLift = RobotParameters.ServoBounds.armUp + 0.1;
                 break;
             case UpClawOpen: case UpWithSpecimentGoingDown:
                 outtakeLift = RobotParameters.ServoBounds.armUp;
                 break;
         }
 
+        if (outtakeState == OuttakeState.DownClawShut) {
+            flag = RobotParameters.ServoBounds.flagUp;
+        }
+
         if (outtakeState != OuttakeState.DownClawOpen && outtakeState != OuttakeState.DownClawShut) {
             intakeClaw = RobotParameters.ServoBounds.clawOpen;
         }
 
-        if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Transfer) {
+        if (outtakeState == OuttakeState.UpFlipped || outtakeState == OuttakeState.UpWaitingToFlip && !auto) {
+            outtakeClaw = RobotParameters.ServoBounds.outtakeClawClosed + 0.03;
+        }
+
+        if (intakeState == IntakeState.Retracted || intakeState == IntakeState.Transfer && !openLatch) {
             if (motors.intakePosition() < 20.0) {
                 latchServo.setPosition(RobotParameters.ServoBounds.latchShut);
             } else {
@@ -91,6 +100,11 @@ public class Servos {
             latchServo.setPosition(RobotParameters.ServoBounds.latchOpen);
         }
 
+        if (outtakeState == OuttakeState.UpFlipped || outtakeState == OuttakeState.UpClawOpen) {
+            outtakeLift = RobotParameters.ServoBounds.armUp - 0.05;
+        }
+
+        flagServo.setPosition(flag);
         outtakeClawServo.setPosition(outtakeClaw);
         rightArmServo.setPosition(outtakeLift);
         leftArmServo.setPosition(1.0 - outtakeLift);

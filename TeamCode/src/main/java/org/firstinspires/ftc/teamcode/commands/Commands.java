@@ -50,6 +50,7 @@ public class Commands {
     public static Command RaiseSlidesForSampleDump(AutonomousRobot robot)  { return new RaiseSlidesForSampleDump(robot); }
     public static Command RaiseSlidesForSampleDumpAndFlip(AutonomousRobot robot)  { return new RaiseSlidesForSampleDumpAndFlip(robot); }
     public static Command RaiseSlidesForSpecimenDump(AutonomousRobot robot) { return new RaiseSlidesForSpecimenDump(robot); }
+    public static Command ZeroOuttakeSlides(AutonomousRobot robot) { return new ZeroOuttakeSlides(robot); }
 
     // Clip / dump commands, clip automatically lets go when reached to be idiot proof and not damage slides
     public static Command DumpSample(AutonomousRobot robot) { return new DumpSample(robot); }
@@ -60,4 +61,6 @@ public class Commands {
     public static Command WaitForSampleDetection(AutonomousRobot robot) { return  new WaitForSampleDetection(robot); }
     public static Command SlightForwards(AutonomousRobot robot) { return new SlightForwards(robot); }
     public static Command LookForSampleForRaceCondition(AutonomousRobot robot) { return new LookForSampleForRaceCondition(robot); }
+    public static Command FindSampleWithCV(AutonomousRobot robot) { return new FindSampleWithCV(robot); }
+    public static Command DriveToPoint(Follower f, Double x, Double y) { return new DriveToPoint(f, x, y); }
 }

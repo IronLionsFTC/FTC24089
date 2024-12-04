@@ -95,11 +95,13 @@ public class RobotParameters {
     }
 
     public static final class ServoBounds {
+        public static final double flagDown = 0.0;
+        public static final double flagUp = 0.7;
         public static final double armDown = 1.0;
         public static final double armUp = 0.3;
 
         public static final double clawClosed = 0.03;
-        public static final double outtakeClawClosed = 0.72;
+        public static final double outtakeClawClosed = 0.7;
         public static final double clawOpen = 0.5;
         public static final double clawWideOpen = 0.5;
 
@@ -117,6 +119,7 @@ public class RobotParameters {
     public static final class SlideBounds {
         public static final double outtakeDown = 0.02;
         public static final double outtakeUp = 1000.0;
+        public static final double outtakeLowBasket = 350.0;
         public static final double intakeIn = 0.0;
         public static final double intakeExtended = 150;
 

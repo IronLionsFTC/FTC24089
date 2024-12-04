@@ -23,7 +23,7 @@ public class FourPlusZero extends CommandOpMode {
     public Follower follower;
     public AutonomousRobot robot;
 
-    private static double movementSpeedToIntake = 0.5;
+    private static double movementSpeedToIntake = 0.7;
     public static int outtakePathDelay = 500;
     public static int slideRaiseDelay = 1000;
 
@@ -67,13 +67,15 @@ public class FourPlusZero extends CommandOpMode {
                 Commands.fastPath(follower, Paths.fiveSpecimen_intake(s)).alongWith(
                         Commands.ExtendIntakeToGripSpecimen(robot)
                 ),
-                Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake),
-                Commands.sleep(800),
+                Commands.followPath(follower, Paths.fiveSpecimen_driveOntoSpecimen).setSpeed(movementSpeedToIntake).alongWith(
+                        Commands.ZeroOuttakeSlides(robot)
+                ),
+                // There was a 500ms sleep here but I got hungry
                 Commands.GrabGameObjectWithIntake(robot),
                 Commands.RetractIntakeForTransfer(robot).andThen(
                         Commands.RaiseSlidesForSpecimenDump(robot)
                 ).alongWith(
-                        Commands.fastPath(follower, Paths.fiveSpecimen_outtake(s))
+                        Commands.followPath(follower, Paths.fiveSpecimen_outtake(s)).setSpeed(0.5)
                 ),
                 Commands.ClipSpecimen(robot)
         );
@@ -82,8 +84,8 @@ public class FourPlusZero extends CommandOpMode {
     @Override
     public void initialize() {
         this.follower = new Follower(hardwareMap);
-        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower, Team.Blue);
-        this.follower.setStartingPose(new Pose(0, 0, Math.PI));
+        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower, Team.Blue, true);
+        this.follower.setStartingPose(new Pose(0.2, 0, Math.PI));
 
 
         schedule(
@@ -92,7 +94,7 @@ public class FourPlusZero extends CommandOpMode {
                         Commands.sleepUntil(this::opModeIsActive),
 
                         // Dump preloaded specimen
-                        Commands.fastPath(follower, Paths.fiveSpecimen_initial).alongWith(
+                        Commands.followPath(follower, Paths.fiveSpecimen_initial).setSpeed(0.5).alongWith(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         ),
                         Commands.ClipSpecimen(robot),
@@ -105,9 +107,15 @@ public class FourPlusZero extends CommandOpMode {
                                 )
                         ),
                         // First
-                        Commands.sleep(800),
+                        Commands.sleep(300),
                         Commands.Hold(robot),
                         Commands.followPath(follower, Paths.fiveSpecimen_give_1.getPath(0)),
+                        Commands.Release(robot),
+
+                        Commands.fastPath(follower, Paths.fiveSpecimen_goto_2),
+                        Commands.sleep(300),
+                        Commands.Hold(robot),
+                        Commands.fastPath(follower, Paths.fiveSpecimen_give_2),
                         Commands.Release(robot),
 
                         // Prepare for intaking
