@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
-@Autonomous(name = "0+5 CV [BLUE]", group = "Complete")
-public class autoZeroPlusFiveBlueNew extends CommandOpMode {
+@Autonomous(name = "0+5 CV [RED]", group = "Complete")
+public class autoZeroPlusFiveRedNew extends CommandOpMode {
     public PathChain chain;
     public Follower follower;
     public AutonomousRobot robot;
@@ -23,7 +23,7 @@ public class autoZeroPlusFiveBlueNew extends CommandOpMode {
     @Override
     public void initialize() {
         this.follower = new Follower(hardwareMap);
-        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower, Team.Blue);
+        this.robot = new AutonomousRobot(telemetry, hardwareMap, follower, Team.Red);
         this.follower.setStartingPose(new Pose(0.0, 0.0, 0.0));
         this.chain = Paths.zeroPlusFour; // This is also a valid path for a simple sample run, just forwards then back
 
