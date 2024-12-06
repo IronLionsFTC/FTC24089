@@ -40,7 +40,7 @@ public class autoDebugging extends CommandOpMode {
                                 Commands.LookForSampleForRaceCondition(robot, follower)
                         ),
                         Commands.RotateClawToCache(robot),
-                        Commands.DriveToCachedPoint(robot, follower).setSpeed(0.3),
+                        Commands.DriveToCachedPoint(robot, follower).setSpeed(0.5),
                         Commands.sleep(500),
                         Commands.GrabGameObjectWithIntake(robot),
                         Commands.DriveToAbsolutePoint(follower, 0.0, 0.0).setSpeed(0.3)

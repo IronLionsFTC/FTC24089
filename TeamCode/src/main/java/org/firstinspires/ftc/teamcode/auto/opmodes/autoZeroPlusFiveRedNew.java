@@ -28,69 +28,69 @@ public class autoZeroPlusFiveRedNew extends CommandOpMode {
         this.chain = Paths.zeroPlusFour; // This is also a valid path for a simple sample run, just forwards then back
 
         schedule(
-            new RunCommand(robot::update),
-            new SequentialCommandGroup(
-                    new WaitUntilCommand(this::opModeIsActive),
-                    Commands.sleep(100),
-                    Commands.followPath(follower, chain.getPath(0)).alongWith(
-                            Commands.RaiseSlidesForSampleDump(robot)
-                    ),
-                    Commands.sleep(500),
-                    Commands.DumpSample(robot),
-                    Commands.followPath(follower, chain.getPath(1)).alongWith(
-                            Commands.ExtendIntakeToGripSample(robot)
-                    ),
-                    Commands.GrabGameObjectWithIntake(robot),
-                    Commands.RetractIntakeForTransfer(robot).alongWith(
-                            Commands.followPath(follower, chain.getPath(2))
-                    ).andThen(
-                        Commands.RaiseSlidesForSampleDump(robot)
-                    ),
-                    Commands.DumpSample(robot),
-                    Commands.followPath(follower, chain.getPath(3)).alongWith(
-                            Commands.ExtendIntakeToGripSample(robot)
-                    ),
-                    Commands.GrabGameObjectWithIntake(robot),
-                    Commands.RetractIntakeForTransfer(robot).alongWith(
-                            Commands.followPath(follower, chain.getPath(4))
-                    ).andThen(
-                            Commands.RaiseSlidesForSampleDump(robot)
-                    ),
-                    Commands.DumpSample(robot),
-                    Commands.followPath(follower, chain.getPath(5)).alongWith(
-                            Commands.ExtendIntakeToGripSample(robot)
-                    ),
-                    Commands.RotateClaw45Degrees(robot),
-                    Commands.GrabGameObjectWithIntake(robot),
-                    Commands.RetractIntakeForTransfer(robot).alongWith(
-                            Commands.followPath(follower, chain.getPath(6))
-                    ).andThen(
-                            Commands.RaiseSlidesForSampleDump(robot)
-                    ),
-                    Commands.DumpSample(robot),
-                    Commands.fastPath(follower, chain.getPath(7)),
-                    Commands.ExtendIntakeToGripSample(robot),
-                    Commands.followPath(follower, chain.getPath(8)).setSpeed(0.4).andThen(
-                            Commands.followPath(follower, chain.getPath(9)).setSpeed(0.25)
-                    ).raceWith(
-                            Commands.LookForSampleForRaceCondition(robot, follower)
-                    ),
+                new RunCommand(robot::update),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(this::opModeIsActive),
+                        Commands.sleep(100),
+                        Commands.followPath(follower, chain.getPath(0)).alongWith(
+                                Commands.RaiseSlidesForSampleDump(robot)
+                        ),
+                        Commands.sleep(500),
+                        Commands.DumpSample(robot),
+                        Commands.followPath(follower, chain.getPath(1)).alongWith(
+                                Commands.ExtendIntakeToGripSample(robot)
+                        ),
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.RetractIntakeForTransfer(robot).alongWith(
+                                Commands.followPath(follower, chain.getPath(2))
+                        ).andThen(
+                                Commands.RaiseSlidesForSampleDump(robot)
+                        ),
+                        Commands.DumpSample(robot),
+                        Commands.followPath(follower, chain.getPath(3)).alongWith(
+                                Commands.ExtendIntakeToGripSample(robot)
+                        ),
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.RetractIntakeForTransfer(robot).alongWith(
+                                Commands.followPath(follower, chain.getPath(4))
+                        ).andThen(
+                                Commands.RaiseSlidesForSampleDump(robot)
+                        ),
+                        Commands.DumpSample(robot),
+                        Commands.followPath(follower, chain.getPath(5)).alongWith(
+                                Commands.ExtendIntakeToGripSample(robot)
+                        ),
+                        Commands.RotateClaw45Degrees(robot),
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.RetractIntakeForTransfer(robot).alongWith(
+                                Commands.followPath(follower, chain.getPath(6))
+                        ).andThen(
+                                Commands.RaiseSlidesForSampleDump(robot)
+                        ),
+                        Commands.DumpSample(robot),
+                        Commands.fastPath(follower, chain.getPath(7)),
+                        Commands.ExtendIntakeToGripSample(robot),
+                        Commands.followPath(follower, chain.getPath(8)).setSpeed(0.4).andThen(
+                                Commands.followPath(follower, chain.getPath(9)).setSpeed(0.35)
+                        ).raceWith(
+                                Commands.LookForSampleForRaceCondition(robot, follower)
+                        ),
 
 
-                    // CV
-                    Commands.RotateClawToCache(robot),
-                    Commands.DriveToCachedPoint(robot, follower),
-                    Commands.sleep(500),
+                        // CV
+                        Commands.RotateClawToCache(robot),
+                        Commands.DriveToCachedPoint(robot, follower).setSpeed(0.4),
+                        Commands.ZeroOuttakeSlides(robot),
 
 
-                    Commands.GrabGameObjectWithIntake(robot),
-                    Commands.RetractIntakeForTransfer(robot),
-                    Commands.followPath(follower, chain.getPath(10)).alongWith(
-                            Commands.RaiseSlidesForSampleDump(robot)
-                    ),
-                    Commands.DumpSample(robot),
-                    Commands.followPath(follower, chain.getPath(7))
-            )
+                        Commands.GrabGameObjectWithIntake(robot),
+                        Commands.RetractIntakeForTransfer(robot),
+                        Commands.followPath(follower, chain.getPath(10)).alongWith(
+                                Commands.RaiseSlidesForSampleDump(robot)
+                        ),
+                        Commands.DumpSample(robot),
+                        Commands.followPath(follower, chain.getPath(7))
+                )
         );
     }
 }

@@ -71,7 +71,7 @@ public class autoZeroPlusFiveBlueNew extends CommandOpMode {
                     Commands.fastPath(follower, chain.getPath(7)),
                     Commands.ExtendIntakeToGripSample(robot),
                     Commands.followPath(follower, chain.getPath(8)).setSpeed(0.4).andThen(
-                            Commands.followPath(follower, chain.getPath(9)).setSpeed(0.25)
+                            Commands.followPath(follower, chain.getPath(9)).setSpeed(0.35)
                     ).raceWith(
                             Commands.LookForSampleForRaceCondition(robot, follower)
                     ),
@@ -79,7 +79,7 @@ public class autoZeroPlusFiveBlueNew extends CommandOpMode {
 
                     // CV
                     Commands.RotateClawToCache(robot),
-                    Commands.DriveToCachedPoint(robot, follower),
+                    Commands.DriveToCachedPoint(robot, follower).setSpeed(0.4),
                     Commands.ZeroOuttakeSlides(robot),
 
 
