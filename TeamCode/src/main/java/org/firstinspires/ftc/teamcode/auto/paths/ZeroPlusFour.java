@@ -79,13 +79,13 @@ public class ZeroPlusFour {
                                 SampleStart.park,
                                 SampleStart.strafeEnd
                         )
-                ).setConstantHeadingInterpolation(Math.toRadians(90))
+                ).setConstantHeadingInterpolation(Math.toRadians(100))
                 .addPath(
                         new BezierLine(
                                 SampleStart.strafeEnd,
                                 SampleStart.park
                         )
-                ).setConstantHeadingInterpolation(Math.toRadians(90))
+                ).setConstantHeadingInterpolation(Math.toRadians(100))
                 .addPath(
                         new BezierCurve(
                                 SampleStart.park,

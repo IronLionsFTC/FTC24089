@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.SyncdDevice;
 import org.firstinspires.ftc.teamcode.auto.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.core.Vec2;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierPoint;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class LookForSampleForRaceCondition extends CommandBase {
@@ -42,7 +44,7 @@ public class LookForSampleForRaceCondition extends CommandBase {
                 if (Math.abs(rot - robot.sampleR) > 15.0) {
                     frames_of_valid_detection = 0;
                 }
-                robot.setSampleXYR(x / 14, y / 14, rot);
+                robot.setSampleXYR(x / 14, y / 14 + 1.0, rot);
                 frames_of_valid_detection += 1;
                 a = robot.robot.computerVision.getSampleArea(analysis);
                 robot.logDouble("area", a);
@@ -54,8 +56,10 @@ public class LookForSampleForRaceCondition extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (frames_of_valid_detection > 10 && x != 0.0 && a < 25.0 && !(a < 8.0 && y < -6.0)) {
+        if (frames_of_valid_detection > 5 && x != 0.0 && a < 30.0 && !(a < 8.0 && y < -6.0)) {
             follower.breakFollowing();
+            BezierPoint point = new BezierPoint(new Point(follower.getPose().getX(), follower.getPose().getY(), 1));
+            follower.holdPoint(point, follower.getPose().getHeading());
             return true;
         }
         return false;

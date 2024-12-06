@@ -62,7 +62,8 @@ public class Commands {
     public static Command SlightForwards(AutonomousRobot robot) { return new SlightForwards(robot); }
     public static Command LookForSampleForRaceCondition(AutonomousRobot robot, Follower follower) { return new LookForSampleForRaceCondition(robot, follower); }
     public static Command FindSampleWithCV(AutonomousRobot robot) { return new FindSampleWithCV(robot); }
-    public static Command DriveToPoint(Follower f, Double x, Double y) { return new DriveToPoint(f, x, y); }
-    public static Command DriveToCachedPoint(AutonomousRobot robot, Follower f) { return new DriveToCachedPoint(robot, f); }
+    public static DriveToPoint DriveToPoint(Follower f, Double x, Double y) { return new DriveToPoint(f, x, y); }
+    public static DriveToAbsolutePoint DriveToAbsolutePoint(Follower f, Double x, Double y) { return new DriveToAbsolutePoint(f, x, y); }
+    public static DriveToCachedPoint DriveToCachedPoint(AutonomousRobot robot, Follower f) { return new DriveToCachedPoint(robot, f); }
     public static Command RotateClawToCache(AutonomousRobot robot) { return new RotateClawToCache(robot); }
 }

@@ -38,6 +38,7 @@ public class Robot {
     public org.firstinspires.ftc.teamcode.core.state.Orientation orientation;
     public Timer flashTimer = new Timer();
     public Timer outtakePullDown = new Timer();
+    private boolean resetActive = false;
     private double cv_rotation = 0.0;
 
     public Robot(HardwareMap h, Telemetry t, Gamepad g1, Gamepad g2, Team colour) {
@@ -168,7 +169,7 @@ public class Robot {
             }
 
             // Automatically fold down when reaches a certain height with specimen to avoid damage
-            if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 1.5) {
+            if (!auto && state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown && state.outtake.outtakeAutomaticFoldDown.getElapsedTimeSeconds() > 0.5) {
                 state.outtake.toggle();
             }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar && !auto) {
@@ -191,6 +192,13 @@ public class Robot {
                 state.outtake.toggle();
             }
 
+            if (!auto && state.intake.intakeState == IntakeState.ExtendedClawShut) {
+                if (motors.intakePosition() > RobotParameters.SlideBounds.intakeExtended - 50.0) {
+                    state.intake.intakeState = IntakeState.Retracted;
+                    state.outtake.outtakeAutomaticFoldDown.resetTimer();
+                }
+            }
+
             switch (state.outtake.outtakeState) {
                 case UpWaitingToFlip: case UpFlipped: case UpWaitingToGoDown: case UpClawOpen:
                     if (state.outtake.useLowBasket) slideTarget = RobotParameters.SlideBounds.outtakeLowBasket;
@@ -198,7 +206,8 @@ public class Robot {
                     break;
                 case UpWithSpecimenWaitingToFlip: case UpWithSpecimenFlipped: case UpWithSpecimentGoingDown:
                     if (auto && raiseHigher) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar + 62;
-                    else slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
+                    else if (auto) slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar;
+                    else slideTarget = RobotParameters.SlideBounds.outtakeBelowSpecimenBar + 65.0;
                     break;
                 case UpWithSpecimenOnBar:
                     slideTarget = RobotParameters.SlideBounds.outtakeOnSpecimenBar;
@@ -214,6 +223,9 @@ public class Robot {
             if (outtakeSlideResponse < 0.0 && outtakeSlidePos > 600.0) { outtakeSlidePower = 0.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimenOnBar) { outtakeSlidePower *= 2.0; }
             if (state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown) { outtakeSlidePower = 0.0; }
+            if (state.outtake.outtakeState == OuttakeState.DownClawOpen && motors.outtakePosition() > 10) {
+                outtakeSlidePower = -0.5;
+            }
             motors.powers.leftOuttakeSlide = outtakeSlidePower * powerMul;
             motors.powers.rightOuttakeSlide = outtakeSlidePower * powerMul;
         }
@@ -294,6 +306,7 @@ public class Robot {
             }
 
             if (state.intake.intakeState == IntakeState.Transfer && controls.intake.claw.deposit()) {
+                state.outtake.outtakeAutomaticFoldDown.resetTimer();
                 state.intake.intakeState = IntakeState.ExtendedClawShut;
             }
 
@@ -332,6 +345,23 @@ public class Robot {
             if (controls.movement.CCW45()) {
                 imu.targetYaw += 45.0;
                 lastYawWasAnalog = false;
+            }
+
+            if (controls.intake.claw.emergencyReset()) {
+                if (!resetActive) {
+                    resetActive = true;
+                    servos.intakeLiftServo.kill();
+                    servos.intakeClawServo.kill();
+                    servos.outtakeClawServo.kill();
+                    servos.intakeYawServo.kill();
+                    state.intake.intakeState = IntakeState.ExtendedClawDown;
+                } else {
+                    resetActive = false;
+                    servos.intakeYawServo.revive();
+                    servos.outtakeClawServo.revive();
+                    servos.intakeClawServo.revive();
+                    servos.intakeLiftServo.revive();
+                }
             }
 
             // Wrap target rotation

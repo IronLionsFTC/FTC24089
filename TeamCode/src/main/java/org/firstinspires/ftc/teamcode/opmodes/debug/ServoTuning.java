@@ -24,11 +24,11 @@ public class ServoTuning extends LinearOpMode
         public static double armServo = 1.0;
         public static double outtakeClaw = 0.65;
 
-        public static double aP = 0.02;
+        public static double aP = 0.0;
         public static double bI = 0.0;
         public static double cD = 0.0;
 
-        public static double oP = 0.002;
+        public static double oP = 0.0;
         public static double pI = 0.0;
         public static double qD = 0.0;
 
@@ -49,13 +49,30 @@ public class ServoTuning extends LinearOpMode
         Servos servos = new Servos(hardwareMap);
         Motors motors = new Motors(hardwareMap);
 
-        gamepad1.rumbleBlips(10);
+        boolean cutPower = false;
+        int count = 0;
+
         if (isStopRequested()) return;
         waitForStart();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         // Main loop
         while (opModeIsActive()) {
+
+            if (gamepad1.a) count += 1;
+            else count = 0;
+
+            if (count == 1) {
+                cutPower = !cutPower;
+                if (cutPower) {
+                    servos.intakeLiftServo.kill();
+                } else {
+                    servos.intakeLiftServo.revive();
+                }
+            }
+
+            telemetry.addData("ENABLED", cutPower);
+
             intakeController.setPID(Tune.aP, Tune.bI, Tune.cD);
             outtakeController.setPID(Tune.oP, Tune.pI, Tune.qD);
             double intakeResponse = intakeController.calculate(motors.intakePosition(), Tune.idTarget);

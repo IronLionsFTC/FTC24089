@@ -63,6 +63,7 @@ public final class Controls {
             public double CW_rotation() { return g1.RT(); }
             public double CCW_rotation() { return g1.LT(); }
             public boolean deposit() { return g1.DD.press() || g2.DD.press(); }
+            public boolean emergencyReset() { return g1.B.isPressed(); }
         } public Claw claw = new Claw();
     } public Intake intake = new Intake();
 
@@ -77,7 +78,7 @@ public final class Controls {
     public boolean use_cv() { return g1.Y.isPressed(); }
 
     // Emergency overrides
-    public boolean RESET() { return g1.B.isPressed() || g2.B.isPressed(); }
+    public boolean RESET() { return g2.B.isPressed(); }
     public boolean EMERGENCY_STOP() { return g1.BACK.isPressed() || g2.BACK.isPressed(); }
     public boolean RESETYAW() {
         return g2.DU.isPressed();

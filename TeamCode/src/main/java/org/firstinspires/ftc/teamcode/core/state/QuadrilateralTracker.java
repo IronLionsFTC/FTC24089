@@ -44,9 +44,9 @@ public class QuadrilateralTracker {
         double dy2 = smoothedCorners.get(0).y - smoothedCorners.get(1).y;
         double mag1 = dx*dx + dy*dy;
         double mag2 = dx2*dx2 + dy2*dy2;
-        double new_rot = 0.0;
-        if (mag1 > mag2) new_rot = Math.toDegrees(Math.atan2(dx, dy)) / 355.0;
-        else new_rot = Math.toDegrees(Math.atan2(dx2, dy2)) / 355.0;
+        double new_rot;
+        if (mag2 > mag1 * 1.5) new_rot = Math.toDegrees(Math.atan2(dx2, dy2)) / 355.0;
+        else new_rot = Math.toDegrees(Math.atan2(dx, dy)) / 355.0;
         currentRotation = new_rot;
         return currentRotation;
     }

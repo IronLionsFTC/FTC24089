@@ -13,8 +13,8 @@ public class Points {
         public static final Point sampleB = new Point(-8.8, -42.2, 1);
         public static final Point sampleC = new Point(-15.7, -35.0, 1);
         public static final Point parkCorner = new Point(-45.0, -34.0, 1);
-        public static final Point park = new Point(-47.0, -20.0, 1);
+        public static final Point park = new Point(-49.0, -18.0, 1);
         public static final Point strafeEnd = new Point(-54.0, -15.0, 1);
-        public static final Point controlPoint = new Point(-45.0, -38.0, 1);
+        public static final Point controlPoint = new Point(-52.0, -38.0, 1);
     }
 }

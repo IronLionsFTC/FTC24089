@@ -22,8 +22,8 @@ public class ZeroOuttakeSlides extends CommandBase {
 
     @Override
     public void execute() {
-        robot.robot.drivetrain.motors.leftOuttakeSlide.set(-1.0);
-        robot.robot.drivetrain.motors.rightOuttakeSlide.set(-1.0);
+        robot.robot.drivetrain.motors.leftOuttakeSlide.set(-0.7);
+        robot.robot.drivetrain.motors.rightOuttakeSlide.set(-0.7);
     }
 
     @Override

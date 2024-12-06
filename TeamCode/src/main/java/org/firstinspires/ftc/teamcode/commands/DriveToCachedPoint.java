@@ -44,9 +44,13 @@ public class DriveToCachedPoint extends CommandBase {
     public void initialize() {
         double x = follower.getPose().getX();
         double y = follower.getPose().getY();
+        double r = follower.getPose().getHeading();
 
-        double tx = x + robot.sampleY + 1.6;
-        double ty = y - robot.sampleX;
+        double rx = robot.sampleY * Math.cos(r) + robot.sampleX * Math.sin(r);
+        double ry = robot.sampleX * Math.cos(r) + robot.sampleY * Math.sin(r);
+
+        double tx = x + rx;
+        double ty = y - ry;
 
         PathBuilder builder = new PathBuilder();
         builder.addPath(
@@ -54,9 +58,10 @@ public class DriveToCachedPoint extends CommandBase {
                         new Point(x, y, 1),
                         new Point(tx, ty, 1)
                 )
-        ).setConstantHeadingInterpolation(0.0);
+        //).setConstantHeadingInterpolation(Math.toRadians(100));
+        ).setConstantHeadingInterpolation(follower.getPose().getHeading());
         follower.breakFollowing();
-        follower.followPath(builder.build());
+        follower.followPath(builder.build(), true);
         follower.setMaxPower(this.maxSpeed);
     }
 

@@ -19,8 +19,8 @@ public class FiveSpecimen {
     private static final Point start = pointmm(0,0);
     private static final Point int2 = pointmm(650, -400);
 
-    private static final Point grab1 = pointmm(430, -605);
-    private static final Point grab2 = pointmm(450, -840);
+    private static final Point grab1 = pointmm(415, -605);
+    private static final Point grab2 = pointmm(415, -840);
     private static final Point give = pointmm(400, -620);
 
     private static final Point humanPlayerSpecimenIntake_prep = pointmm(600, -400);
@@ -54,7 +54,7 @@ public class FiveSpecimen {
         return new PathBuilder()
                 .addPath(
                         line(grab1, give)
-                ).setLinearHeadingInterpolation(rad(-45), rad(-135))
+                ).setConstantHeadingInterpolation(rad(-135))
                 .build();
     }
 
@@ -62,7 +62,7 @@ public class FiveSpecimen {
         return new PathBuilder()
                 .addPath(
                         line(give, grab2)
-                ).setLinearHeadingInterpolation(rad(-135), rad(-45))
+                ).setConstantHeadingInterpolation(rad(-45))
                 .build();
     }
 
@@ -70,7 +70,7 @@ public class FiveSpecimen {
         return new PathBuilder()
                 .addPath(
                         line(grab2, give)
-                ).setLinearHeadingInterpolation(rad(-45), rad(-135))
+                ).setConstantHeadingInterpolation(rad(-135))
                 .build();
     }
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import android.sax.StartElementListener;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -83,6 +85,8 @@ public class AutonomousRobot extends SubsystemBase {
         if (robot.state.outtake.outtakeState == OuttakeState.UpWithSpecimentGoingDown || robot.state.outtake.outtakeState == OuttakeState.UpWaitingToGoDown) {
             if (outtakeTimer.getElapsedTimeSeconds() > 1.0) robot.state.outtake.outtakeState = OuttakeState.DownClawOpen; // Automatically finish cycle
         }
+
+        robot.telemetry.addData("rotation", follower.getPose().getHeading());
 
         if (!disablePedro) follower.update();
         robot.telemetry.update();
@@ -185,7 +189,6 @@ public class AutonomousRobot extends SubsystemBase {
     }
 
     public void raiseSlidesForSampleDump () {
-        robot.state.intake.intakeState = IntakeState.Retracted;
         robot.state.outtake.outtakeState = OuttakeState.DownClawShut;
         outtakeTimer.resetTimer();
     }

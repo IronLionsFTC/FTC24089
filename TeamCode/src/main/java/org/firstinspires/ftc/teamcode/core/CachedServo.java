@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.core;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
+
 public class CachedServo {
     Servo hardware;
     double positionValue;
@@ -17,5 +19,13 @@ public class CachedServo {
             positionValue = position;
             hardware.setPosition(positionValue);
         }
+    }
+
+    public void kill() {
+        hardware.getController().pwmDisable();
+    }
+
+    public void revive() {
+        hardware.getController().pwmEnable();
     }
 }

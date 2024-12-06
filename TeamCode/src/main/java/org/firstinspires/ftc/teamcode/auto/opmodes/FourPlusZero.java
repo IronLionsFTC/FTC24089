@@ -75,7 +75,9 @@ public class FourPlusZero extends CommandOpMode {
                 Commands.RetractIntakeForTransfer(robot).andThen(
                         Commands.RaiseSlidesForSpecimenDump(robot)
                 ).alongWith(
-                        Commands.followPath(follower, Paths.fiveSpecimen_outtake(s)).setSpeed(0.7)
+                        Commands.sleep(100).andThen(
+                                Commands.followPath(follower, Paths.fiveSpecimen_outtake(s)).setSpeed(0.5)
+                        )
                 ),
                 Commands.ClipSpecimen(robot)
         );
@@ -94,7 +96,7 @@ public class FourPlusZero extends CommandOpMode {
                         Commands.sleepUntil(this::opModeIsActive),
 
                         // Dump preloaded specimen
-                        Commands.followPath(follower, Paths.fiveSpecimen_initial).setSpeed(0.5).alongWith(
+                        Commands.followPath(follower, Paths.fiveSpecimen_initial).setSpeed(0.7).alongWith(
                                 Commands.RaiseSlidesForSpecimenDump(robot)
                         ),
                         Commands.ClipSpecimen(robot),
@@ -107,20 +109,20 @@ public class FourPlusZero extends CommandOpMode {
                                 )
                         ),
                         // First
-                        Commands.sleep(300),
+                        Commands.sleep(200),
                         Commands.Hold(robot),
                         Commands.followPath(follower, Paths.fiveSpecimen_give_1.getPath(0)),
                         Commands.Release(robot),
 
                         Commands.fastPath(follower, Paths.fiveSpecimen_goto_2),
-                        Commands.sleep(300),
+                        Commands.sleep(200),
                         Commands.Hold(robot),
                         Commands.fastPath(follower, Paths.fiveSpecimen_give_2),
                         Commands.Release(robot),
 
                         // Prepare for intaking
                         Commands.RetractIntakeForTransfer(robot).alongWith(
-                                Commands.fastPath(follower, Paths.fiveSpecimen_prepare)
+                                Commands.followPath(follower, Paths.fiveSpecimen_prepare)
                         ),
 
 

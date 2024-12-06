@@ -80,7 +80,7 @@ public class autoZeroPlusFiveBlueNew extends CommandOpMode {
                     // CV
                     Commands.RotateClawToCache(robot),
                     Commands.DriveToCachedPoint(robot, follower),
-                    Commands.sleep(500),
+                    Commands.ZeroOuttakeSlides(robot),
 
 
                     Commands.GrabGameObjectWithIntake(robot),
