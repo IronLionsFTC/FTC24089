@@ -75,7 +75,7 @@ public class FourPlusZero extends CommandOpMode {
                 Commands.RetractIntakeForTransfer(robot).andThen(
                         Commands.RaiseSlidesForSpecimenDump(robot)
                 ).alongWith(
-                        Commands.followPath(follower, Paths.fiveSpecimen_outtake(s)).setSpeed(0.5)
+                        Commands.followPath(follower, Paths.fiveSpecimen_outtake(s)).setSpeed(0.7)
                 ),
                 Commands.ClipSpecimen(robot)
         );
